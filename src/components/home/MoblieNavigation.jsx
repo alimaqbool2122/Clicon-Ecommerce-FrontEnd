@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { assets } from "../../../constants/assets";
@@ -10,6 +10,7 @@ import {
   Youtube,
   Instragram,
 } from "../svg/Icons";
+import ROUTES from "../../../constants/routes";
 
 const MoblieNavigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,13 +25,24 @@ const MoblieNavigation = () => {
   ];
 
   const navItems = ["Home", "Pages", "Blogs", "Contact"];
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [menuOpen]);
   return (
     <>
       <div className="bg-[#1B6392] lg:hidden">
         {/* Container */}
         <div className="container flex items-center justify-between py-2">
           <div className="logo">
-            <Link href="#">
+            <Link href={ROUTES.HOME}>
               <Image
                 src={assets.logo_white}
                 alt="logo-pic"

@@ -111,7 +111,7 @@ const MobileCategory = () => {
 
       {/* Filter Navbar */}
       <nav
-        className={`fixed top-0 left-0 w-100 max-w-full border-r border-black/75 bg-white h-screen overflow-y-auto transform transition-all duration-500 ease-in-out z-1045 
+        className={`fixed top-0 left-0 w-100 max-w-full border-r border-black/75 bg-white h-screen transform transition-all duration-500 ease-in-out z-1045 
                         ${
                           filterOpen
                             ? "translate-x-0 opacity-100 visible"
@@ -135,7 +135,7 @@ const MobileCategory = () => {
         </div>
 
         {/* Sidebar Data */}
-        <div className="grid grid-cols-12 gap-6 p-4">
+        <div className="grid grid-cols-12 gap-6 p-4 overflow-y-auto h-screen">
           {/* Category */}
           <div className="space-y-4 col-span-12 border-b border-[#E4E7E9] pb-6">
             <h6 className="text-base text-[#191C1F] font-medium uppercase">
@@ -502,7 +502,7 @@ const MobileCategory = () => {
           </div>
 
           {/* Brand Watch */}
-          <div className="col-span-12">
+          <div className="col-span-12 mb-24">
             <div className="p-8 border-4 border-[#FFE7D6] rounded-sm space-y-6">
               <Image
                 src={assets.apple_watch}
@@ -536,7 +536,7 @@ const MobileCategory = () => {
               <div className="flex flex-col gap-3">
                 <Link
                   href="#"
-                  className="group/icon relative flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white py-[13px] px-[22.4px] text-[14px] uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F]"
+                  className="group/icon relative flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white py-3.25 px-[22.4px] text-[14px] uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F]"
                 >
                   {/* ICON WRAPPER — FIXED SIZE */}
                   <span className="relative w-6 h-6 flex items-center justify-center">
