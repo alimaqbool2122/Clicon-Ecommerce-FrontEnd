@@ -5,10 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "../svg/Icons";
 import { shoppageContent } from "../../../data/shop/shop";
-import { set } from "react-hook-form";
+import { useId } from "react";
+import { useSliderInput } from "@/hooks/use-slider-input";
+import { Slider, SliderThumb } from "@/components/ui/slider";
+import { useShopFilter } from "@/contexts/ShopFilterContext";
+const items = [
+  { id: 1, price: 80 },
+  { id: 2, price: 95 },
+  { id: 3, price: 110 },
+  { id: 4, price: 125 },
+  { id: 5, price: 130 },
+  { id: 120, price: 900 },
+];
 
 const MobileCategory = () => {
-  const [selected, setSelected] = useState(["Electronics Devices"]);
+  const { selectedCategories, toggleCategory } = useShopFilter();
+  const selected = selectedCategories;
   const [selectedPrices, setSelectedPrices] = useState(["$300 to $500"]);
   const [selectedBrands, setselectedBrands] = useState([
     "Apple",
@@ -18,41 +30,25 @@ const MobileCategory = () => {
     "Panasonic",
     "LG",
   ]);
-  const [minPrice, setMinPrice] = useState(2500);
-  const [maxPrice, setMaxPrice] = useState(7500);
-  const [activeThumb, setActiveThumb] = useState(null);
   const popularLink = shoppageContent.popularLinkCol;
   const categories = shoppageContent.categories;
   const priceRanges = shoppageContent.priceRanges;
   const brands = shoppageContent.brands;
+  const id = useId();
+  const minValue = Math.min(...items.map((item) => item.price));
+  const maxValue = Math.max(...items.map((item) => item.price));
+  const {
+    sliderValues,
+    inputValues,
+    handleSliderChange,
+    handleInputChange,
+    validateAndUpdateValue,
+  } = useSliderInput({
+    minValue,
+    maxValue,
+    initialValue: [200, 800],
+  });
   const [filterOpen, setFilterOpen] = useState(false);
-
-  // Reset active thumb when mouse is released anywhere
-  useEffect(() => {
-    const handleMouseUp = () => {
-      setActiveThumb(null);
-    };
-    const handleTouchEnd = () => {
-      setActiveThumb(null);
-    };
-
-    if (activeThumb) {
-      document.addEventListener("mouseup", handleMouseUp);
-      document.addEventListener("touchend", handleTouchEnd);
-    }
-
-    return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [activeThumb]);
-  const toggleCategory = (category) => {
-    if (selected.includes(category)) {
-      setSelected(selected.filter((item) => item !== category));
-    } else {
-      setSelected([...selected, category]);
-    }
-  };
 
   const togglePrice = (price) => {
     if (price === "All Price") {
@@ -190,200 +186,50 @@ const MobileCategory = () => {
             <h6 className="text-base text-[#191C1F] font-medium uppercase">
               Price Range
             </h6>
-            {/* price wrapperc */}
-            <div className="slider-wrapper flex flex-col gap-6">
-              <div className="relative">
-                {/* Background track - gray beam */}
-                <div className="slider relative h-0.5 bg-[#E4E7E9] rounded-full"></div>
-
-                {/* Active progress bar - orange beam */}
-                <div
-                  className="progress absolute top-0 h-0.5 bg-[#FA8232] rounded-full"
-                  style={{
-                    left: `${(minPrice / 10000) * 100}%`,
-                    width: `${((maxPrice - minPrice) / 10000) * 100}%`,
-                  }}
-                ></div>
-
-                {/* Range inputs with custom handles */}
-                <div className="range-input relative -mt-0.5">
-                  {/* Min range input */}
+            {/* price wrapper */}
+            <div className="space-y-3.5">
+              {/* Slider */}
+              <div className="flex flex-col gap-2.5">
+                <Slider
+                  value={sliderValues}
+                  onValueChange={handleSliderChange}
+                  min={minValue}
+                  max={maxValue}
+                  step={10}
+                  aria-label="Price Range Slider"
+                >
+                  <SliderThumb />
+                  <SliderThumb />
+                </Slider>
+              </div>
+              {/* Inputs */}
+              <div className="flex items-center gap-3">
+                <div>
                   <input
-                    type="range"
-                    min="0"
-                    max="10000"
-                    value={minPrice}
-                    step="100"
-                    onChange={(e) => {
-                      const newValue = Math.min(
-                        Number(e.target.value),
-                        maxPrice - 100
-                      );
-                      setMinPrice(newValue);
-                    }}
-                    onMouseDown={(e) => {
-                      setActiveThumb("min");
-                      e.stopPropagation();
-                    }}
-                    onTouchStart={(e) => {
-                      setActiveThumb("min");
-                      e.stopPropagation();
-                    }}
-                    className="absolute top-0 left-0 w-full h-0.5 appearance-none bg-transparent cursor-pointer range-min"
-                    style={{
-                      zIndex:
-                        activeThumb === "min"
-                          ? 5
-                          : activeThumb === "max"
-                          ? 2
-                          : 3,
-                    }}
+                    id={`${id}-min`}
+                    type="text"
+                    readOnly
+                    value={inputValues[0]}
+                    onChange={(e) => handleInputChange(e, 0)}
+                    onBlur={() => validateAndUpdateValue(inputValues[0], 0)}
+                    placeholder={`$${minValue}`}
+                    className="w-37.5 h-10 bg-white border border-[#E4E7E9] rounded-[3px] outline-none px-3 placeholder-text"
                   />
-
-                  {/* Max range input */}
+                </div>
+                <div>
                   <input
-                    type="range"
-                    min="0"
-                    max="10000"
-                    value={maxPrice}
-                    step="100"
-                    onChange={(e) => {
-                      const newValue = Math.max(
-                        Number(e.target.value),
-                        minPrice + 100
-                      );
-                      setMaxPrice(newValue);
-                    }}
-                    onMouseDown={(e) => {
-                      setActiveThumb("max");
-                      e.stopPropagation();
-                    }}
-                    onTouchStart={(e) => {
-                      setActiveThumb("max");
-                      e.stopPropagation();
-                    }}
-                    className="absolute top-0 left-0 w-full h-0.5 appearance-none bg-transparent cursor-pointer range-max"
-                    style={{
-                      zIndex:
-                        activeThumb === "max"
-                          ? 5
-                          : activeThumb === "min"
-                          ? 2
-                          : 4,
-                    }}
+                    id={`${id}-max`}
+                    type="text"
+                    readOnly
+                    value={inputValues[1]}
+                    onChange={(e) => handleInputChange(e, 1)}
+                    onBlur={() => validateAndUpdateValue(inputValues[1], 1)}
+                    placeholder={`$${maxValue}`}
+                    className="w-37.5 h-10 bg-white border border-[#E4E7E9] rounded-[3px] outline-none px-3 placeholder-text"
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="text"
-                  value={minPrice}
-                  onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (!isNaN(value) && value >= 0 && value <= maxPrice) {
-                      setMinPrice(Math.min(value, maxPrice - 100));
-                    }
-                  }}
-                  className="w-37.5 h-10 bg-white border border-[#E4E7E9] rounded-[3px] outline-none px-3 placeholder-text"
-                />
-                <input
-                  type="text"
-                  value={maxPrice}
-                  onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (!isNaN(value) && value >= minPrice && value <= 10000) {
-                      setMaxPrice(Math.max(value, minPrice + 100));
-                    }
-                  }}
-                  className="w-37.5 h-10 bg-white border border-[#E4E7E9] rounded-[3px] outline-none px-3 placeholder-text"
-                />
-              </div>
             </div>
-
-            {/* Custom styles for slider handles - matching the optical component look */}
-            <style jsx>{`
-              .range-min::-webkit-slider-thumb,
-              .range-max::-webkit-slider-thumb {
-                appearance: none;
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-                background: radial-gradient(
-                  circle at 30% 30%,
-                  #ffffff 0%,
-                  #f8f8f8 40%,
-                  #ffffff 100%
-                );
-                border: 2.5px solid #fa8232;
-                cursor: pointer;
-                position: relative;
-                box-shadow: 0 0 0 1px rgba(250, 130, 50, 0.3),
-                  0 0 4px rgba(250, 130, 50, 0.5),
-                  0 0 8px rgba(250, 130, 50, 0.3),
-                  inset 0 0 8px rgba(255, 255, 255, 0.9),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.8);
-                transition: all 0.2s ease;
-              }
-
-              .range-min::-webkit-slider-thumb:hover,
-              .range-max::-webkit-slider-thumb:hover {
-                box-shadow: 0 0 0 1px rgba(250, 130, 50, 0.4),
-                  0 0 6px rgba(250, 130, 50, 0.6),
-                  0 0 12px rgba(250, 130, 50, 0.4),
-                  inset 0 0 10px rgba(255, 255, 255, 1),
-                  inset -2px -2px 6px rgba(255, 255, 255, 0.9);
-              }
-
-              .range-min::-webkit-slider-thumb:active,
-              .range-max::-webkit-slider-thumb:active {
-                transform: scale(1.15);
-                box-shadow: 0 0 0 2px rgba(250, 130, 50, 0.5),
-                  0 0 8px rgba(250, 130, 50, 0.7),
-                  0 0 16px rgba(250, 130, 50, 0.5),
-                  inset 0 0 12px rgba(255, 255, 255, 1),
-                  inset -3px -3px 8px rgba(255, 255, 255, 1);
-              }
-
-              .range-min::-moz-range-thumb,
-              .range-max::-moz-range-thumb {
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-                background: radial-gradient(
-                  circle at 30% 30%,
-                  #ffffff 0%,
-                  #f8f8f8 40%,
-                  #ffffff 100%
-                );
-                border: 2.5px solid #fa8232;
-                cursor: pointer;
-                box-shadow: 0 0 0 1px rgba(250, 130, 50, 0.3),
-                  0 0 4px rgba(250, 130, 50, 0.5),
-                  0 0 8px rgba(250, 130, 50, 0.3),
-                  inset 0 0 8px rgba(255, 255, 255, 0.9),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.8);
-                transition: all 0.2s ease;
-              }
-
-              .range-min::-moz-range-thumb:hover,
-              .range-max::-moz-range-thumb:hover {
-                box-shadow: 0 0 0 1px rgba(250, 130, 50, 0.4),
-                  0 0 6px rgba(250, 130, 50, 0.6),
-                  0 0 12px rgba(250, 130, 50, 0.4),
-                  inset 0 0 10px rgba(255, 255, 255, 1),
-                  inset -2px -2px 6px rgba(255, 255, 255, 0.9);
-              }
-
-              .range-min::-moz-range-thumb:active,
-              .range-max::-moz-range-thumb:active {
-                transform: scale(1.15);
-                box-shadow: 0 0 0 2px rgba(250, 130, 50, 0.5),
-                  0 0 8px rgba(250, 130, 50, 0.7),
-                  0 0 16px rgba(250, 130, 50, 0.5),
-                  inset 0 0 12px rgba(255, 255, 255, 1),
-                  inset -3px -3px 8px rgba(255, 255, 255, 1);
-              }
-            `}</style>
             <div className="space-y-3.5">
               {priceRanges.map((range, index) => {
                 const isChecked = selectedPrices.includes(range);

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { assets } from "../../../constants/assets";
 import Link from "next/link";
 
-const SearchFilter = () => {
+const SearchFilter = ({ searchQuery, setSearchQuery, onSearch }) => {
   const [active, setActive] = useState(false);
   const btnRef = useRef(null);
 
@@ -19,6 +19,15 @@ const SearchFilter = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch();
+  };
+
+  const handleSearchClick = () => {
+    onSearch();
+  };
+
   const options = [
     "Most Popular",
     "Best Rating",
@@ -29,15 +38,21 @@ const SearchFilter = () => {
   return (
     <>
       <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:justify-between">
-        <form className="relative">
+        <form className="relative" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Search for anything..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="outline-0 font-normal text-[14px] leading-5 text-[#212529] placeholder-text border border-[#E4E7E9] rounded-xs py-3 px-4 w-full sm:min-w-106!"
           />
-          <div className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer z-10 bg-white">
+          <button
+            type="button"
+            onClick={handleSearchClick}
+            className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer z-10 bg-white border-none outline-none"
+          >
             <Search />
-          </div>
+          </button>
         </form>
         <div className="flex items-center justify-center gap-5.5">
           <p className="text-sm text-black shrink-0">Sort by:</p>

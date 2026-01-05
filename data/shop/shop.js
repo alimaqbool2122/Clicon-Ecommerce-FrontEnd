@@ -12,6 +12,7 @@ export const shoppageContent = {
       price: "$70",
       badge: "HOT",
       rating: "(738))",
+      category: "Headphone",
     },
     {
       id: "2",
@@ -20,6 +21,7 @@ export const shoppageContent = {
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       rating: "(994)",
+      category: "Computer Accessories",
     },
     {
       id: "3",
@@ -29,6 +31,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Computer Accessories",
     },
     {
       id: "4",
@@ -38,6 +41,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Electronics Devices",
     },
     {
       id: "5",
@@ -47,6 +51,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Computer & Laptop",
     },
     {
       id: "6",
@@ -56,6 +61,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "SmartPhone",
     },
     {
       id: "7",
@@ -65,6 +71,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Computer & Laptop",
     },
     {
       id: "8",
@@ -74,6 +81,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Electronics Devices",
     },
     {
       id: "9",
@@ -83,6 +91,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Mobile Accessories",
     },
     {
       id: "10",
@@ -92,6 +101,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Gaming Console",
     },
     {
       id: "11",
@@ -101,6 +111,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Camera & Photo",
     },
     {
       id: "12",
@@ -110,6 +121,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "TV & Homes Appliances",
     },
     {
       id: "13",
@@ -119,6 +131,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Watchs & Accessories",
     },
     {
       id: "14",
@@ -128,6 +141,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Headphone",
     },
     {
       id: "15",
@@ -137,6 +151,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Computer & Laptop",
     },
     {
       id: "16",
@@ -146,6 +161,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Electronics Devices",
     },
     {
       id: "17",
@@ -155,6 +171,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Computer Accessories",
     },
     {
       id: "18",
@@ -164,6 +181,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "SmartPhone",
     },
     {
       id: "19",
@@ -173,6 +191,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "GPS & Navigation",
     },
     {
       id: "20",
@@ -182,6 +201,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Warable Technology",
     },
     {
       id: "21",
@@ -191,6 +211,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Computer & Laptop",
     },
     {
       id: "22",
@@ -200,6 +221,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Electronics Devices",
     },
     {
       id: "23",
@@ -209,6 +231,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Headphone",
     },
     {
       id: "24",
@@ -218,6 +241,7 @@ export const shoppageContent = {
       price: "$2,300",
       badge: "BEST DEALS",
       rating: "(994)",
+      category: "Mobile Accessories",
     },
   ],
   categories: [
