@@ -13,6 +13,7 @@ export const shoppageContent = {
       badge: "HOT",
       rating: "(738))",
       category: "Headphone",
+      brand: "Apple",
     },
     {
       id: "2",
@@ -22,6 +23,7 @@ export const shoppageContent = {
       price: "$2,300",
       rating: "(994)",
       category: "Computer Accessories",
+      brand: "Samsung",
     },
     {
       id: "3",
@@ -32,6 +34,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Computer Accessories",
+      brand: "Microsoft",
     },
     {
       id: "4",
@@ -42,6 +45,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Electronics Devices",
+      brand: "Google",
     },
     {
       id: "5",
@@ -52,6 +56,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Computer & Laptop",
+      brand: "HP",
     },
     {
       id: "6",
@@ -62,6 +67,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "SmartPhone",
+      brand: "Sony",
     },
     {
       id: "7",
@@ -72,6 +78,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Computer & Laptop",
+      brand: "Dell",
     },
     {
       id: "8",
@@ -82,6 +89,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Electronics Devices",
+      brand: "Panasonic",
     },
     {
       id: "9",
@@ -92,6 +100,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Mobile Accessories",
+      brand: "LG",
     },
     {
       id: "10",
@@ -102,6 +111,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Gaming Console",
+      brand: "Xiaomi",
     },
     {
       id: "11",
@@ -112,6 +122,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Camera & Photo",
+      brand: "Sony",
     },
     {
       id: "12",
@@ -122,6 +133,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "TV & Homes Appliances",
+      brand: "Samsung",
     },
     {
       id: "13",
@@ -132,6 +144,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Watchs & Accessories",
+      brand: "Apple",
     },
     {
       id: "14",
@@ -142,6 +155,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Headphone",
+      brand: "Sony",
     },
     {
       id: "15",
@@ -152,6 +166,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Computer & Laptop",
+      brand: "HP",
     },
     {
       id: "16",
@@ -162,6 +177,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Electronics Devices",
+      brand: "Google",
     },
     {
       id: "17",
@@ -172,6 +188,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Computer Accessories",
+      brand: "Microsoft",
     },
     {
       id: "18",
@@ -182,6 +199,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "SmartPhone",
+      brand: "One Plus",
     },
     {
       id: "19",
@@ -192,6 +210,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "GPS & Navigation",
+      brand: "Intel",
     },
     {
       id: "20",
@@ -202,6 +221,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Warable Technology",
+      brand: "Samsung",
     },
     {
       id: "21",
@@ -212,6 +232,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Computer & Laptop",
+      brand: "Dell",
     },
     {
       id: "22",
@@ -222,6 +243,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Electronics Devices",
+      brand: "Apple",
     },
     {
       id: "23",
@@ -232,6 +254,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Headphone",
+      brand: "Sony",
     },
     {
       id: "24",
@@ -242,6 +265,7 @@ export const shoppageContent = {
       badge: "BEST DEALS",
       rating: "(994)",
       category: "Mobile Accessories",
+      brand: "Samsung",
     },
   ],
   categories: [

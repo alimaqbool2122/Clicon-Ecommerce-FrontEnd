@@ -13,6 +13,8 @@ export const useShopFilter = () => {
 
 export const ShopFilterProvider = ({ children }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
 
   const toggleCategory = (category) => {
     setSelectedCategories((prev) => {
@@ -24,9 +26,45 @@ export const ShopFilterProvider = ({ children }) => {
     });
   };
 
+  const togglePriceRange = (priceRangeOption) => {
+    setSelectedPriceRanges((prev) => {
+      if (priceRangeOption === "All Price") {
+        if (prev.includes("All Price")) {
+          return [];
+        } else {
+          return ["All Price"];
+        }
+      } else {
+        if (prev.includes(priceRangeOption)) {
+          return prev.filter((item) => item !== priceRangeOption && item !== "All Price");
+        } else {
+          return [...prev.filter((item) => item !== "All Price"), priceRangeOption];
+        }
+      }
+    });
+  };
+
+  const toggleBrand = (brand) => {
+    setSelectedBrands((prev) => {
+      if (prev.includes(brand)) {
+        return prev.filter((item) => item !== brand);
+      } else {
+        return [...prev, brand];
+      }
+    });
+  };
+
   return (
     <ShopFilterContext.Provider
-      value={{ selectedCategories, setSelectedCategories, toggleCategory }}
+      value={{
+        selectedCategories,
+        setSelectedCategories,
+        toggleCategory,
+        selectedPriceRanges,
+        togglePriceRange,
+        selectedBrands,
+        toggleBrand,
+      }}
     >
       {children}
     </ShopFilterContext.Provider>

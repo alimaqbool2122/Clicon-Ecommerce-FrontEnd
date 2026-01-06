@@ -19,17 +19,16 @@ const items = [
 ];
 
 const MobileCategory = () => {
-  const { selectedCategories, toggleCategory } = useShopFilter();
+  const {
+    selectedCategories,
+    toggleCategory,
+    selectedPriceRanges,
+    togglePriceRange,
+    selectedBrands,
+    toggleBrand,
+  } = useShopFilter();
   const selected = selectedCategories;
-  const [selectedPrices, setSelectedPrices] = useState(["$300 to $500"]);
-  const [selectedBrands, setselectedBrands] = useState([
-    "Apple",
-    "Microsoft",
-    "Google",
-    "HP",
-    "Panasonic",
-    "LG",
-  ]);
+  const selectedPrices = selectedPriceRanges;
   const popularLink = shoppageContent.popularLinkCol;
   const categories = shoppageContent.categories;
   const priceRanges = shoppageContent.priceRanges;
@@ -50,38 +49,6 @@ const MobileCategory = () => {
   });
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const togglePrice = (price) => {
-    if (price === "All Price") {
-      if (selectedPrices.includes("All Price")) {
-        // Deselect all.
-        setSelectedPrices([]);
-      } else {
-        // Select all prices
-        setSelectedPrices([...priceRanges]);
-      }
-    } else {
-      if (selectedPrices.includes(price)) {
-        const updated = selectedPrices.filter((item) => item !== price);
-        setSelectedPrices(updated.filter((item) => item !== "All Price")); // Remove "All Price" if any other is deselected
-      } else {
-        const updated = [...selectedPrices, price];
-        // If all other prices are selected, automatically select "All Price"
-        if (updated.length === priceRanges.length - 1) {
-          setSelectedPrices([...priceRanges]);
-        } else {
-          setSelectedPrices(updated);
-        }
-      }
-    }
-  };
-
-  const togglebrands = (brand) => {
-    if (selectedBrands.includes(brand)) {
-      setselectedBrands(selectedBrands.filter((item) => item !== brand));
-    } else {
-      setselectedBrands([...selectedBrands, brand]);
-    }
-  };
 
   useEffect(() => {
     if (filterOpen) {
@@ -242,7 +209,7 @@ const MobileCategory = () => {
                     <input
                       type="checkbox"
                       checked={isChecked}
-                      onChange={() => togglePrice(range)}
+                      onChange={() => togglePriceRange(range)}
                       className="hidden!"
                     />
 
@@ -291,7 +258,7 @@ const MobileCategory = () => {
                     <input
                       type="checkbox"
                       checked={isChecked}
-                      onChange={() => togglebrands(brand)}
+                      onChange={() => toggleBrand(brand)}
                       className="hidden!"
                     />
 

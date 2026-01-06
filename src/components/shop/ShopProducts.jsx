@@ -15,8 +15,40 @@ const ShopProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
-  const { selectedCategories } = useShopFilter();
+  const { selectedCategories, selectedPriceRanges, selectedBrands } = useShopFilter();
   const totalPages = 6;
+
+  // Helper function to parse price string to number
+  const parsePrice = (priceString) => {
+    if (!priceString) return 0;
+    // Remove $ and commas, then parse to number
+    return parseFloat(priceString.replace(/[$,]/g, "")) || 0;
+  };
+
+  // Helper function to check if price matches a price range checkbox
+  const matchesPriceRangeCheckbox = (productPrice) => {
+    // If no checkboxes selected, show all products (don't filter by price checkboxes)
+    if (selectedPriceRanges.length === 0) return true;
+
+    return selectedPriceRanges.some((range) => {
+      if (range === "All Price") return true;
+      
+      if (range === "Under $20") {
+        return productPrice < 20;
+      } else if (range === "$25 to $100") {
+        return productPrice >= 25 && productPrice <= 100;
+      } else if (range === "$100 to $300") {
+        return productPrice >= 100 && productPrice <= 300;
+      } else if (range === "$300 to $500") {
+        return productPrice >= 300 && productPrice <= 500;
+      } else if (range === "$500 to $1000") {
+        return productPrice >= 500 && productPrice <= 1000;
+      } else if (range === "$1,000 to $10,000") {
+        return productPrice >= 1000 && productPrice <= 10000;
+      }
+      return false;
+    });
+  };
 
   // Clear active search when input is cleared
   useEffect(() => {
@@ -31,16 +63,33 @@ const ShopProducts = () => {
       .toLowerCase()
       .includes(activeSearchQuery.toLowerCase());
 
-    // If no categories selected, show all products (only filter by search)
-    if (selectedCategories.length === 0) {
-      return matchesSearch;
+    // Filter by categories - works independently
+    // If no categories selected, don't filter by category (show all)
+    let matchesCategory = true;
+    if (selectedCategories.length > 0) {
+      matchesCategory =
+        product.category && selectedCategories.includes(product.category);
     }
 
-    // If categories are selected, filter by both search and categories
-    const matchesCategory =
-      product.category && selectedCategories.includes(product.category);
+    // Filter by price range checkboxes - works independently
+    // If no price ranges selected, don't filter by price (show all)
+    const productPrice = parsePrice(product.price);
+    const matchesPriceCheckbox = matchesPriceRangeCheckbox(productPrice);
 
-    return matchesSearch && matchesCategory;
+    // Filter by brands - works independently
+    // If no brands selected, don't filter by brand (show all)
+    let matchesBrand = true;
+    if (selectedBrands.length > 0) {
+      matchesBrand = product.brand && selectedBrands.includes(product.brand);
+    }
+
+    // All filters work independently:
+    // - If only category selected → filter by category only
+    // - If only price selected → filter by price only
+    // - If only brand selected → filter by brand only
+    // - If multiple selected → filter by all (AND logic)
+    // - If none selected → show all products
+    return matchesSearch && matchesCategory && matchesPriceCheckbox && matchesBrand;
   });
 
   const handleSearch = () => {
