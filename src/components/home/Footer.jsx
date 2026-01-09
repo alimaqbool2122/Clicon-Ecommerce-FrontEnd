@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { homepageContent } from "../../../data/home/home";
 import { ArrowRight } from "../svg/Icons";
+import ROUTES from "../../../constants/routes";
 
 const Footer = () => {
   const footerbrand = homepageContent.footer.footerBrandCol;
@@ -23,7 +24,7 @@ const Footer = () => {
                 <div className="mb-6 sm:mb-0">
                   {footerbrand.map((footerbrand, index) => (
                     <div key={index}>
-                      <Link href="#">
+                      <Link href={ROUTES.HOME}>
                         <Image
                           src={footerbrand.image}
                           width={177}

@@ -15,7 +15,14 @@ const ShopProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
-  const { selectedCategories, selectedPriceRanges, selectedBrands } = useShopFilter();
+  const {
+    selectedCategories,
+    selectedPriceRanges,
+    selectedBrands,
+    toggleCategory,
+    togglePriceRange,
+    toggleBrand,
+  } = useShopFilter();
   const totalPages = 6;
 
   // Helper function to parse price string to number
@@ -32,7 +39,7 @@ const ShopProducts = () => {
 
     return selectedPriceRanges.some((range) => {
       if (range === "All Price") return true;
-      
+
       if (range === "Under $20") {
         return productPrice < 20;
       } else if (range === "$25 to $100") {
@@ -58,38 +65,46 @@ const ShopProducts = () => {
   }, [searchQuery]);
 
   const filteredProducts = products.filter((product) => {
-    // Filter by search query
+    // Filter by search query (always applies)
     const matchesSearch = product.title
       .toLowerCase()
       .includes(activeSearchQuery.toLowerCase());
 
-    // Filter by categories - works independently
-    // If no categories selected, don't filter by category (show all)
-    let matchesCategory = true;
-    if (selectedCategories.length > 0) {
+    if (!matchesSearch) return false;
+
+    // Check if any filters are selected
+    const hasCategoryFilter = selectedCategories.length > 0;
+    const hasPriceFilter = selectedPriceRanges.length > 0;
+    const hasBrandFilter = selectedBrands.length > 0;
+    const hasAnyFilter = hasCategoryFilter || hasPriceFilter || hasBrandFilter;
+
+    // If no filters selected, show all products (only filtered by search)
+    if (!hasAnyFilter) {
+      return true;
+    }
+
+    // Check if product matches any of the selected filter types (OR logic)
+    let matchesCategory = false;
+    if (hasCategoryFilter) {
       matchesCategory =
         product.category && selectedCategories.includes(product.category);
     }
 
-    // Filter by price range checkboxes - works independently
-    // If no price ranges selected, don't filter by price (show all)
     const productPrice = parsePrice(product.price);
-    const matchesPriceCheckbox = matchesPriceRangeCheckbox(productPrice);
+    let matchesPriceCheckbox = false;
+    if (hasPriceFilter) {
+      matchesPriceCheckbox = matchesPriceRangeCheckbox(productPrice);
+    }
 
-    // Filter by brands - works independently
-    // If no brands selected, don't filter by brand (show all)
-    let matchesBrand = true;
-    if (selectedBrands.length > 0) {
+    let matchesBrand = false;
+    if (hasBrandFilter) {
       matchesBrand = product.brand && selectedBrands.includes(product.brand);
     }
 
-    // All filters work independently:
-    // - If only category selected → filter by category only
-    // - If only price selected → filter by price only
-    // - If only brand selected → filter by brand only
-    // - If multiple selected → filter by all (AND logic)
-    // - If none selected → show all products
-    return matchesSearch && matchesCategory && matchesPriceCheckbox && matchesBrand;
+    // Product matches if it satisfies ANY of the selected filter types (OR logic)
+    // If category is selected but product doesn't match category, check brand or price
+    // If brand is selected but product doesn't match brand, check category or price
+    return matchesCategory || matchesPriceCheckbox || matchesBrand;
   });
 
   const handleSearch = () => {
@@ -99,6 +114,26 @@ const ShopProducts = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  // Remove filter handlers
+  const removeCategoryFilter = (category) => {
+    toggleCategory(category);
+  };
+
+  const removePriceRangeFilter = (priceRange) => {
+    togglePriceRange(priceRange);
+  };
+
+  const removeBrandFilter = (brand) => {
+    toggleBrand(brand);
+  };
+
+  // Get all active filters
+  const activeFilters = [
+    ...selectedCategories.map((cat) => ({ type: "category", value: cat })),
+    ...selectedPriceRanges.map((price) => ({ type: "price", value: price })),
+    ...selectedBrands.map((brand) => ({ type: "brand", value: brand })),
+  ];
 
   return (
     <>
@@ -115,26 +150,30 @@ const ShopProducts = () => {
           <div className="bg-[#f2f4f5] flex flex-wrap items-center md:justify-between gap-3 py-3 px-6 mt-4 mb-6">
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-sm text-[#6c757d]">Active Filters:</p>
-              <p className="text-sm text-[#212529] flex items-center gap-1.5">
-                Electronics Devices
-                <Image
-                  src={assets.x}
-                  alt="x"
-                  width={13}
-                  height={13}
-                  className="cursor-pointer"
-                />
-              </p>
-              <p className="text-sm text-[#212529] flex items-center gap-1.5">
-                5 Star Rating
-                <Image
-                  src={assets.x}
-                  alt="x"
-                  width={13}
-                  height={13}
-                  className="cursor-pointer"
-                />
-              </p>
+              {activeFilters.map((filter, index) => (
+                <p
+                  key={index}
+                  className="text-sm text-[#212529] flex items-center gap-1.5"
+                >
+                  {filter.value}
+                  <Image
+                    src={assets.x}
+                    alt="x"
+                    width={13}
+                    height={13}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      if (filter.type === "category") {
+                        removeCategoryFilter(filter.value);
+                      } else if (filter.type === "price") {
+                        removePriceRangeFilter(filter.value);
+                      } else if (filter.type === "brand") {
+                        removeBrandFilter(filter.value);
+                      }
+                    }}
+                  />
+                </p>
+              ))}
             </div>
             <div className="flex flex-wrap items-center gap-1">
               <p className="text-sm text-[#212529] font-semibold">

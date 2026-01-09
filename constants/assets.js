@@ -36,14 +36,14 @@ import news_2 from "../public/image/news/2.webp";
 import news_3 from "../public/image/news/3.webp";
 import favicon from "../public/image/favicon.webp";
 import payment_method from "../public/image/payment-method.webp";
-import gallery_01 from "../public/image/product/gallery/01.webp";
-import gallery_02 from "../public/image/product/gallery/02.webp";
-import gallery_03 from "../public/image/product/gallery/03.webp";
-import gallery_04 from "../public/image/product/gallery/04.webp";
-import gallery_05 from "../public/image/product/gallery/05.webp";
+import gallery_01 from "../public/image/product/gallery/gallery_01.png";
+import gallery_02 from "../public/image/product/gallery/gallery_02.png";
+import gallery_03 from "../public/image/product/gallery/gallery_03.png";
+import gallery_04 from "../public/image/product/gallery/gallery_04.png";
+import gallery_05 from "../public/image/product/gallery/gallery_05.png";
 import gallery_06 from "../public/image/product/gallery/06.webp";
 import apple from "../public/image/product/apple.webp";
-import mac from "../public/image/product/mac.webp";
+import macbook from "../public/image/product/gallery/main-img.png";
 import product_1 from "../public/image/product/product-1.webp";
 import product_2 from "../public/image/product/product-2.webp";
 import product_3 from "../public/image/product/product-3.webp";
@@ -113,8 +113,32 @@ import EyeSlash from "../public/image/svg/EyeSlash.svg";
 import Check_white from "../public/image/svg/Check_white.svg";
 import Filter_icon from "../public/image/svg/Filter-icon.svg";
 import cross_icon from "../public/image/svg/cross-icon.svg";
+import Heart_Green from "../public/image/svg/Heart_Green.svg";
+import ArrowsClockwise from "../public/image/svg/ArrowsClockwise.svg";
+import Copy from "../public/image/svg/Copy.svg";
+import Facebook from "../public/image/svg/Facebook.svg";
+import Twitter from "../public/image/svg/Twitter.svg";
+import Pinterest from "../public/image/svg/Pinterest.svg";
+import Payment_Method from "../public/image/svg/Payment-Method.svg";
+import CreditCard from "../public/image/svg/CreditCard.svg";
+import Truck from "../public/image/svg/Truck.svg";
+import Headphones from "../public/image/svg/Headphones.svg";
+import Handshake from "../public/image/svg/Handshake.svg";
+import Medal from "../public/image/svg/Medal.svg";
 
 export const assets = {
+  CreditCard,
+  Truck,
+  Headphones,
+  Handshake,
+  Medal,
+  Payment_Method,
+  Copy,
+  Facebook,
+  Twitter,
+  Pinterest,
+  ArrowsClockwise,
+  Heart_Green,
   cross_icon,
   Filter_icon,
   Check_white,
@@ -183,7 +207,7 @@ export const assets = {
   gallery_05,
   gallery_06,
   apple,
-  mac,
+  macbook,
   product_1,
   product_2,
   product_3,
