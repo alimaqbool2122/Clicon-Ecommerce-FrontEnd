@@ -1,0 +1,351 @@
+"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import SearchFilter from "./SearchFilter";
+import { ArrowLeft, ArrowRight, Cross } from "../svg/Icons";
+import { assets } from "../../constants/assets";
+import { shoppageContent } from "../../data/shop/shop";
+import ROUTES from "../../constants/routes";
+import CustomPagination from "../ui/CustomPagination";
+import { useShopFilter } from "@/contexts/ShopFilterContext";
+import ProductDetailsDialog from "../product-details/ProductDetailsDialog";
+
+const ShopProducts = () => {
+  const products = shoppageContent.productsList;
+  const [openDialog, setOpenDialog] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSearchQuery, setActiveSearchQuery] = useState("");
+  const {
+    selectedCategories,
+    selectedPriceRanges,
+    selectedBrands,
+    toggleCategory,
+    togglePriceRange,
+    toggleBrand,
+  } = useShopFilter();
+  const totalPages = 6;
+
+  // Helper function to parse price string to number
+  const parsePrice = (priceString) => {
+    if (!priceString) return 0;
+    // Remove $ and commas, then parse to number
+    return parseFloat(priceString.replace(/[$,]/g, "")) || 0;
+  };
+
+  // Helper function to check if price matches a price range checkbox
+  const matchesPriceRangeCheckbox = (productPrice) => {
+    // If no checkboxes selected, show all products (don't filter by price checkboxes)
+    if (selectedPriceRanges.length === 0) return true;
+
+    return selectedPriceRanges.some((range) => {
+      if (range === "All Price") return true;
+
+      if (range === "Under $20") {
+        return productPrice < 20;
+      } else if (range === "$25 to $100") {
+        return productPrice >= 25 && productPrice <= 100;
+      } else if (range === "$100 to $300") {
+        return productPrice >= 100 && productPrice <= 300;
+      } else if (range === "$300 to $500") {
+        return productPrice >= 300 && productPrice <= 500;
+      } else if (range === "$500 to $1000") {
+        return productPrice >= 500 && productPrice <= 1000;
+      } else if (range === "$1,000 to $10,000") {
+        return productPrice >= 1000 && productPrice <= 10000;
+      }
+      return false;
+    });
+  };
+
+  // Clear active search when input is cleared
+  useEffect(() => {
+    if (searchQuery === "") {
+      setActiveSearchQuery("");
+    }
+  }, [searchQuery]);
+
+  const filteredProducts = products.filter((product) => {
+    // Filter by search query (always applies)
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(activeSearchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    // Check if any filters are selected
+    const hasCategoryFilter = selectedCategories.length > 0;
+    const hasPriceFilter = selectedPriceRanges.length > 0;
+    const hasBrandFilter = selectedBrands.length > 0;
+    const hasAnyFilter = hasCategoryFilter || hasPriceFilter || hasBrandFilter;
+
+    // If no filters selected, show all products (only filtered by search)
+    if (!hasAnyFilter) {
+      return true;
+    }
+
+    // Check if product matches any of the selected filter types (OR logic)
+    let matchesCategory = false;
+    if (hasCategoryFilter) {
+      matchesCategory =
+        product.category && selectedCategories.includes(product.category);
+    }
+
+    const productPrice = parsePrice(product.price);
+    let matchesPriceCheckbox = false;
+    if (hasPriceFilter) {
+      matchesPriceCheckbox = matchesPriceRangeCheckbox(productPrice);
+    }
+
+    let matchesBrand = false;
+    if (hasBrandFilter) {
+      matchesBrand = product.brand && selectedBrands.includes(product.brand);
+    }
+
+    // Product matches if it satisfies ANY of the selected filter types (OR logic)
+    // If category is selected but product doesn't match category, check brand or price
+    // If brand is selected but product doesn't match brand, check category or price
+    return matchesCategory || matchesPriceCheckbox || matchesBrand;
+  });
+
+  const handleSearch = () => {
+    setActiveSearchQuery(searchQuery);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Remove filter handlers
+  const removeCategoryFilter = (category) => {
+    toggleCategory(category);
+  };
+
+  const removePriceRangeFilter = (priceRange) => {
+    togglePriceRange(priceRange);
+  };
+
+  const removeBrandFilter = (brand) => {
+    toggleBrand(brand);
+  };
+
+  // Get all active filters
+  const activeFilters = [
+    ...selectedCategories.map((cat) => ({ type: "category", value: cat })),
+    ...selectedPriceRanges.map((price) => ({ type: "price", value: price })),
+    ...selectedBrands.map((brand) => ({ type: "brand", value: brand })),
+  ];
+
+  return (
+    <>
+      <div className="grid grid-cols-12">
+        <div className="col-span-12">
+          {/* Search & Filter */}
+          <SearchFilter
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onSearch={handleSearch}
+          />
+
+          {/* Active Filter */}
+          <div className="bg-[#f2f4f5] flex flex-wrap items-center md:justify-between gap-3 py-3 px-6 mt-4 mb-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm text-[#6c757d]">Active Filters:</p>
+              {activeFilters.map((filter, index) => (
+                <p
+                  key={index}
+                  className="text-sm text-[#212529] flex items-center gap-1.5"
+                >
+                  {filter.value}
+                  <Image
+                    src={assets.x}
+                    alt="x"
+                    width={13}
+                    height={13}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      if (filter.type === "category") {
+                        removeCategoryFilter(filter.value);
+                      } else if (filter.type === "price") {
+                        removePriceRangeFilter(filter.value);
+                      } else if (filter.type === "brand") {
+                        removeBrandFilter(filter.value);
+                      }
+                    }}
+                  />
+                </p>
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-1">
+              <p className="text-sm text-[#212529] font-semibold">
+                {filteredProducts.length}
+              </p>
+              {filteredProducts.length > 0 && (
+                <p className="text-sm text-[#6c757d]">
+                  {filteredProducts.length > 1
+                    ? "Results found."
+                    : "Result found."}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* All Products */}
+          {filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-12 gap-4">
+              {filteredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 group p-4 bg-white border border-[#E4E7E9] mx-7.5 sm:mx-0 relative duration-500 ease-linear hover:shadow-[0px_8px_24px_rgba(25,28,31,0.12)]"
+                >
+                  {/* Product Image */}
+                  <div className="mb-3 relative">
+                    <div className="relative aspect-202/172">
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        fill
+                        className="mx-auto"
+                      />
+                    </div>
+                    <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 bg-black/20 flex items-center justify-center w-full h-full duration-500 ease-linear opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+                      <button className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white">
+                        <Image
+                          src={assets.Heart_Black}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
+                        />
+                        <Image
+                          src={assets.Heart_White}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
+                        />
+                      </button>
+
+                      <button className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white">
+                        <Image
+                          src={assets.Cart_Black}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
+                        />
+                        <Image
+                          src={assets.Cart_White}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
+                        />
+                      </button>
+
+                      <button
+                        onClick={() => setOpenDialog(true)}
+                        className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                      >
+                        <Image
+                          src={assets.Eye_Black}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
+                        />
+                        <Image
+                          src={assets.Eye_White}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Product Rating */}
+                  <ul className="flex items-center mb-2">
+                    {Array(5)
+                      .fill(null)
+                      .map((_, i) => (
+                        <li key={i}>{product.startIcon}</li>
+                      ))}
+                    <li className="text-[12px] leading-4 font-normal text-[#77878F] ml-1 mt-0.5">
+                      {product.rating}
+                    </li>
+                  </ul>
+
+                  {/* Product Title + Price */}
+                  <Link
+                    href={ROUTES.PRODUCT_DETAILS(product.id)}
+                    className="text-[14px] leading-5 text-[#191C1F] font-normal mb-2 line-clamp-2 duration-400 ease-linear hover:text-[#FA8232]"
+                  >
+                    {product.title}
+                  </Link>
+                  <p className="text-[#2DA5F3] text-[14px] leading-5 font-semibold">
+                    {product.priceOld && (
+                      <del className="text-[#929FA5] mr-1">
+                        {product.priceOld}
+                      </del>
+                    )}
+                    {product.price}
+                  </p>
+
+                  {/* Badge */}
+                  {product.badge && (
+                    <p
+                      className={`absolute top-3 left-3 py-1.25 px-2.5 text-white bg-[#EE5858] text-[12px] leading-4 font-semibold rounded-[3px] uppercase
+                                                            ${
+                                                              product.badge ===
+                                                              "SOLD OUT"
+                                                                ? "bg-[#929FA5]!"
+                                                                : product.badge ===
+                                                                    "HOT"
+                                                                  ? "bg-[#EE5858]!"
+                                                                  : product.badge ===
+                                                                      "BEST DEALS"
+                                                                    ? "bg-[#2DA5F3]!" // 🔹 Blue for Best Deals
+                                                                    : product.badge ===
+                                                                        "SALE"
+                                                                      ? "bg-[#EE5858]!" // 🔹 Green for Sale
+                                                                      : product.badge.includes(
+                                                                            "% OFF",
+                                                                          )
+                                                                        ? "bg-[#EFD33D]! text-[#191C1F]!"
+                                                                        : "bg-[#FA8232]"
+                                                            }`}
+                    >
+                      {product.badge}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="col-span-12 text-center py-10">
+              <p className="text-lg text-gray-500">No product found.</p>
+            </div>
+          )}
+          {/* custom pagination */}
+          <div className="py-10 flex items-center justify-center">
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        </div>
+        {/* Product Details Dialog Component */}
+        <ProductDetailsDialog
+          openDialog={openDialog}
+          setOpenDialog={setOpenDialog}
+        />
+      </div>
+    </>
+  );
+};
+
+export default ShopProducts;
