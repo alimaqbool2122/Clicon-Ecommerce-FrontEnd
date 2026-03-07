@@ -154,8 +154,12 @@ import star_half from "../../public/image/svg/star_half.svg";
 import CheckCircleSuccess from "../../public/image/svg/CheckCircleSuccess.svg";
 import Stack from "../../public/image/svg/Stack.svg";
 import Stack_White from "../../public/image/svg/Stack_White.svg";
+import Google from "../../public/image/svg/Google.svg";
+import Apple from "../../public/image/svg/Apple.svg";
 
 export const assets = {
+  Google,
+  Apple,
   Stack_White,
   Stack,
   CheckCircleSuccess,

@@ -4,6 +4,7 @@ import { assets } from "../../constants/assets";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "../svg/Icons";
+import ROUTES from "@/constants/routes";
 
 const UserForm = () => {
   const [userActive, setUserActive] = useState(false);
@@ -73,7 +74,7 @@ const UserForm = () => {
               </label>
               <input
                 type="text"
-                className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75"
+                className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -81,6 +82,7 @@ const UserForm = () => {
                     message: "Enter a valid email address including @",
                   },
                 })}
+                placeholder="Email"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
@@ -89,43 +91,53 @@ const UserForm = () => {
               )}
             </div>
             {/* Password */}
-            <div className="relative col-span-12">
-              <label
-                htmlFor="password"
-                className="text-[14px] font-normal leading-5 text-[#191C1F] text-start mt-4.5"
-              >
-                Password
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 pr-10"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters",
-                  },
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/,
-                    message:
-                      "Must contain uppercase, lowercase, number & special character",
-                  },
-                })}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-11.25 flex items-center justify-center"
-              >
-                <Image
-                  src={showPassword ? assets.EyeSlash : assets.Eye_Black}
-                  alt="eye-icon"
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
+            <div className="col-span-12">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-normal leading-5 text-[#191C1F]"
+                >
+                  Password
+                </label>
+                <Link
+                  href={ROUTES.FORGET_PASSWORD}
+                  className="text-sm font-semibold leading-5 text-[#2DA5F3]"
+                >
+                  Forget Password
+                </Link>
+              </div>
+              <div className="w-full h-11 flex items-center rounded-xs border border-[#E4E7E9] mt-2 text-[#191C1F] px-3.75">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full outline-0 text-[#191C1F] placeholder-text"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/,
+                      message:
+                        "Must contain uppercase, lowercase, number & special character",
+                    },
+                  })}
+                  placeholder="Password"
                 />
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer"
+                >
+                  <Image
+                    src={showPassword ? assets.EyeSlash : assets.Eye_Black}
+                    alt="eye-icon"
+                    width={20}
+                    height={20}
+                  />
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.password.message}
