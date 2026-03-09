@@ -94,7 +94,7 @@ const Footer = () => {
                     <ul key={index}>
                       <li className="py-1.25">
                         <Link
-                          href="#"
+                          href={link.href}
                           className='text-[#929FA5] text-[14px] font-medium leading-5 relative before:content-[""] before:absolute before:top-1/2 before:left-0 before:-translate-y-1/2 before:w-0 before:h-0.5 before:duration-300 before:ease-linear before:rounded-[30px] before:bg-[#F3DE6D] duration-300 ease-linear hover:text-white hover:pl-8 hover:before:w-6'
                         >
                           {link.footerLink}

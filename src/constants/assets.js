@@ -6,6 +6,7 @@ import apple_accessories from "../../public/image/add/apple-accessories.webp";
 import mobile from "../../public/image/add/mobile.webp";
 import soundbox from "../../public/image/add/soundbox.webp";
 import x_box from "../../public/image/banner/x-box.webp";
+import support_header_bg from "../../public/image/banner/support-header-bg.webp";
 import cproduct_9 from "../../public/image/category/product-9.webp";
 import cproduct_10 from "../../public/image/category/product-10.webp";
 import cproduct_11 from "../../public/image/category/product-11.webp";
@@ -156,8 +157,47 @@ import Stack from "../../public/image/svg/Stack.svg";
 import Stack_White from "../../public/image/svg/Stack_White.svg";
 import Google from "../../public/image/svg/Google.svg";
 import Apple from "../../public/image/svg/Apple.svg";
+import Plus_faq from "../../public/image/svg/Plus_faq.svg";
+import Minus_faq from "../../public/image/svg/Minus_faq.svg";
+import Info_Black from "../../public/image/svg/Info_Black.svg";
+import search_customer from "../../public/image/svg/search-customer.svg";
+import LockOpen from "../../public/image/svg/LockOpen.svg";
+import Storefront from "../../public/image/svg/Storefront.svg";
+import Notepad_yellow from "../../public/image/svg/Notepad_yellow.svg";
+import User_yellow from "../../public/image/svg/User_yellow.svg";
+import PhoneCall from "../../public/image/svg/PhoneCall.svg";
+import ChatCircleDots from "../../public/image/svg/ChatCircleDots.svg";
+import about_banner from "../../public/image/about-us/about_banner.webp";
+import member_1 from "../../public/image/about-us/member_1.webp";
+import member_2 from "../../public/image/about-us/member_2.webp";
+import member_3 from "../../public/image/about-us/member_3.webp";
+import member_4 from "../../public/image/about-us/member_4.webp";
+import member_5 from "../../public/image/about-us/member_5.webp";
+import member_6 from "../../public/image/about-us/member_6.webp";
+import member_7 from "../../public/image/about-us/member_7.webp";
+import member_8 from "../../public/image/about-us/member_8.webp";
 
 export const assets = {
+  member_1,
+  member_2,
+  member_3,
+  member_4,
+  member_5,
+  member_6,
+  member_7,
+  member_8,
+  about_banner,
+  PhoneCall,
+  ChatCircleDots,
+  LockOpen,
+  Storefront,
+  Notepad_yellow,
+  User_yellow,
+  support_header_bg,
+  search_customer,
+  Info_Black,
+  Minus_faq,
+  Plus_faq,
   Google,
   Apple,
   Stack_White,

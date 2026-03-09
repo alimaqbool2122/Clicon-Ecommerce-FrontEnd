@@ -41,12 +41,12 @@ export const homepageContent = {
       },
       {
         label: "Customer Support",
-        href: "#",
+        href: ROUTES.CUSTOMER_SUPPORT,
         icon: <Info />,
       },
       {
         label: "Need Help",
-        href: "#",
+        href: ROUTES.FAQ,
         icon: <NeedHelp />,
       },
     ],
@@ -652,13 +652,13 @@ export const homepageContent = {
       { footerLink: "TV & Homes" },
     ],
     shopLinksCol: [
-      { footerLink: "Shop Product" },
-      { footerLink: "Shopping Cart" },
-      { footerLink: "Wishlist" },
-      { footerLink: "Compare" },
-      { footerLink: "Track Order" },
-      { footerLink: "Customer Help" },
-      { footerLink: "About Us" },
+      { footerLink: "Shop Product", href: ROUTES.SHOP },
+      { footerLink: "Shopping Cart", href: ROUTES.SHOPING_CARD },
+      { footerLink: "Wishlist", href: ROUTES.WISHLIST },
+      { footerLink: "Compare", href: ROUTES.COMPARE },
+      { footerLink: "Track Order", href: ROUTES.TRACK_ORDER },
+      { footerLink: "Customer Help", href: ROUTES.CUSTOMER_SUPPORT },
+      { footerLink: "About Us", href: ROUTES.ABOUT_US },
     ],
     appDownloadLinksCol: [
       {

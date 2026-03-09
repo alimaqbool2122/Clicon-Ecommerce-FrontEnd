@@ -10,7 +10,7 @@ const ROUTES = {
   CHECK_OUT: "/check-out",
   CHECK_OUT_SUCCESS: "/check-out-success",
   CHECK_OUT_FAILED: "/check-out-fail",
-  FAQ: "/faq",
+  FAQ: "/faqs",
   ABOUT_US: "/about-us",
   CUSTOMER_SUPPORT: "/customer-support",
   BLOG: "/blog",
