@@ -13,7 +13,7 @@ const ROUTES = {
   FAQ: "/faqs",
   ABOUT_US: "/about-us",
   CUSTOMER_SUPPORT: "/customer-support",
-  BLOG: "/blog",
+  BLOG: "/blogs",
   BLOG_DETAILS: (id) => `/blog-detail/${id}`,
   SIGIN: "/login",
   SIGNUP: "/signup",

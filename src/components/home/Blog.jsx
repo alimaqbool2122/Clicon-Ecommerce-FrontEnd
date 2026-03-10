@@ -1,11 +1,15 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { homepageContent } from "../../data/home/home";
 import { ArrowRight, Calender, Chat, UserCircle } from "../svg/Icons";
+import ROUTES from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 const Blog = () => {
   const blogContent = homepageContent.blog;
+  const router = useRouter();
   return (
     <>
       <div className="bg-[#F2F4F5] py-18">
@@ -22,7 +26,10 @@ const Blog = () => {
                 key={blog.id}
                 className="col-span-12 md:col-span-6 group xl:col-span-4 bg-white border border-[#E4E7E9] rounded-sm py-7.5 px-5 lg:p-8"
               >
-                <div className="relative mb-6 overflow-hidden rounded-sm aspect-360/248">
+                <div
+                  className="relative mb-6 overflow-hidden rounded-sm aspect-360/248"
+                  onClick={() => router.push(ROUTES.BLOG_DETAILS(blog.id))}
+                >
                   <Image
                     src={blog.image}
                     alt={blog.title}
@@ -57,7 +64,7 @@ const Blog = () => {
 
                   <div>
                     <Link
-                      href="#"
+                      href={ROUTES.BLOG_DETAILS(blog.id)}
                       className="text-[18px] leading-6 font-medium mb-3 mt-2 line-clamp-2 duration-400 ease-linear hover:text-[#FA8232]"
                     >
                       {blog.title}
@@ -70,7 +77,7 @@ const Blog = () => {
 
                   <div className="Blog-btn mt-6">
                     <Link
-                      href={blog.btnLink}
+                      href={ROUTES.BLOG_DETAILS(blog.id)}
                       className="inline-flex items-center gap-2 border-2 border-[#FA8232] bg-transparent text-[#FA8232] py-3.5 px-6 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear  hover:bg-[#FA8232] hover:text-white"
                     >
                       {blog.btnText}

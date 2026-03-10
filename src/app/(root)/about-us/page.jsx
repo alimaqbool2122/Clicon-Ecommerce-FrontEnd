@@ -21,7 +21,7 @@ const page = () => {
       />
       <div className="container">
         {/* About Us Header */}
-        <div className="grid grid-cols-12 gap-6 pt-18 pb-18 lg:pb-24">
+        <div className="grid grid-cols-12 items-center gap-6 pt-18 pb-18 lg:pb-24">
           {/* about header data */}
           <div className="col-span-12 lg:col-span-6 w-full max-w-134 space-y-8">
             <div className="space-y-6">
@@ -61,6 +61,51 @@ const page = () => {
       </div>
       {/* our team */}
       <OurTeam />
+      {/* Trusted section */}
+      <div
+        className="relative w-full h-110 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${assets.banner.src})` }}
+      >
+        {/* White overlay */}
+        <div
+          className="absolute inset-0 md:hidden"
+          style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
+        />
+        <div className="relative z-10 container flex flex-col items-center md:items-start justify-center text-center md:text-start py-22 space-y-7">
+          <div className="space-y-3 ">
+            <h1 className="text-3xl sm:text-[32px] font-semibold text-[#191C1F] sm:leading-10 md:max-w-92">
+              Your trusted and reliable retail shop
+            </h1>
+            <p className="text-lg text-[#191C1F] leading-6 max-w-106 mx-auto">
+              Praesent sed semper metus. Nunc aliquet dolor mauris, et fringilla
+              elit gravida eget. Nunc consequat auctor urna a placerat.
+            </p>
+          </div>
+          {/* Pulsing ripple play button */}
+          <style>{`
+            @keyframes ripple-pulse {
+              0%   { transform: scale(1);   opacity: 0.6; }
+              100% { transform: scale(2.2); opacity: 0; }
+            }
+            .play-ripple-1 {
+              animation: ripple-pulse 2s ease-out infinite;
+            }
+            .play-ripple-2 {
+              animation: ripple-pulse 2s ease-out infinite 0.7s;
+            }
+          `}</style>
+          <div className="relative flex items-center justify-center w-18 h-18 cursor-pointer">
+            {/* Ripple ring 1 */}
+            <span className="play-ripple-1 absolute inset-0 rounded-full bg-[#FA8232]" />
+            {/* Ripple ring 2 */}
+            <span className="play-ripple-2 absolute inset-0 rounded-full bg-[#FA8232]" />
+            {/* Orange play button */}
+            <div className="relative z-10 size-18 bg-[#FA8232] rounded-full grid place-content-center shadow-lg">
+              <Image src={assets.Play} alt="play-icon" width={24} height={24} />
+            </div>
+          </div>
+        </div>
+      </div>
       {/*  Showcase product*/}
       <ProductShowCase />
       {/* NewsLetter */}

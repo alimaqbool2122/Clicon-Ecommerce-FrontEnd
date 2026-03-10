@@ -594,7 +594,7 @@ export const homepageContent = {
   blog: [
     {
       id: 1,
-      image: assets.news_3,
+      image: assets.news_11,
       usertext: "Kristin",
       calendertext: "19Dec, 2013",
       smstext: "453",
@@ -607,7 +607,7 @@ export const homepageContent = {
     },
     {
       id: 2,
-      image: assets.news_2,
+      image: assets.news_10,
       usertext: "Robert",
       calendertext: "28 Nov, 2015",
       smstext: "738",
@@ -620,7 +620,7 @@ export const homepageContent = {
     },
     {
       id: 3,
-      image: assets.news_1,
+      image: assets.news_9,
       usertext: "Arlene",
       calendertext: "9 May, 2014",
       smstext: "826",

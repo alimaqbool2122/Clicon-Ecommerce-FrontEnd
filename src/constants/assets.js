@@ -35,6 +35,14 @@ import newsleter_1 from "../../public/image/modal/newsleter-1.webp";
 import news_1 from "../../public/image/news/1.webp";
 import news_2 from "../../public/image/news/2.webp";
 import news_3 from "../../public/image/news/3.webp";
+import news_4 from "../../public/image/news/4.webp";
+import news_5 from "../../public/image/news/5.webp";
+import news_6 from "../../public/image/news/6.webp";
+import news_7 from "../../public/image/news/7.webp";
+import news_8 from "../../public/image/news/8.webp";
+import news_9 from "../../public/image/news/9.webp";
+import news_10 from "../../public/image/news/10.webp";
+import news_11 from "../../public/image/news/11.webp";
 import favicon from "../../public/image/favicon.webp";
 import payment_method from "../../public/image/payment-method.webp";
 import gallery_01 from "../../public/image/product/gallery/gallery_01.png";
@@ -176,8 +184,64 @@ import member_5 from "../../public/image/about-us/member_5.webp";
 import member_6 from "../../public/image/about-us/member_6.webp";
 import member_7 from "../../public/image/about-us/member_7.webp";
 import member_8 from "../../public/image/about-us/member_8.webp";
+import banner from "../../public/image/about-us/Banner.webp";
+import Play from "../../public/image/svg/Play.svg";
+import gallery_1 from "../../public/image/news/gallery_1.png";
+import gallery_2 from "../../public/image/news/gallery_2.png";
+import gallery_3 from "../../public/image/news/gallery_3.png";
+import gallery_4 from "../../public/image/news/gallery_4.png";
+import gallery_5 from "../../public/image/news/gallery_5.png";
+import gallery_6 from "../../public/image/news/gallery_6.png";
+import gallery_7 from "../../public/image/news/gallery_7.png";
+import gallery_8 from "../../public/image/news/gallery_8.png";
+import whatsapp from "../../public/image/svg/whatsapp.svg";
+import linkedin from "../../public/image/svg/linkedin.svg";
+import double_quotes from "../../public/image/svg/double-quotes.svg";
+import copy_link from "../../public/image/svg/copy_link.svg";
+import ArrowsClockwise_White from "../../public/image/svg/ArrowsClockwise_White.svg";
+import ArrowsClockwise_Yellow from "../../public/image/svg/ArrowsClockwise_Yellow.svg";
+import Pinterest_white from "../../public/image/svg/Pinterest_white.svg";
+import Facebook_white from "../../public/image/svg/Facebook_white.svg";
+import Twitter_white from "../../public/image/svg/Twitter_white.svg";
+import Blog_detail_banner from "../../public/image/news/Blog_detail_banner.webp";
+import Bitcoin from "../../public/image/news/Bitcoin.webp";
+import Rebort from "../../public/image/news/Rebort.webp";
+import Ellipse1 from "../../public/image/news/Ellipse1.webp";
+import Ellipse2 from "../../public/image/news/Ellipse2.webp";
+import Ellipse3 from "../../public/image/news/Ellipse3.webp";
+import Ellipse4 from "../../public/image/news/Ellipse4.webp";
+import Ellipse5 from "../../public/image/news/Ellipse5.webp";
+import cameron_Williamson from "../../public/image/news/cameron_Williamson.webp";
 
 export const assets = {
+  Ellipse1,
+  Ellipse2,
+  Ellipse3,
+  Ellipse4,
+  Ellipse5,
+  cameron_Williamson,
+  Bitcoin,
+  Rebort,
+  Blog_detail_banner,
+  ArrowsClockwise_Yellow,
+  ArrowsClockwise_White,
+  copy_link,
+  double_quotes,
+  linkedin,
+  Facebook_white,
+  Twitter_white,
+  Pinterest_white,
+  whatsapp,
+  gallery_1,
+  gallery_2,
+  gallery_3,
+  gallery_4,
+  gallery_5,
+  gallery_6,
+  gallery_7,
+  gallery_8,
+  Play,
+  banner,
   member_1,
   member_2,
   member_3,
@@ -300,6 +364,14 @@ export const assets = {
   news_1,
   news_2,
   news_3,
+  news_4,
+  news_5,
+  news_6,
+  news_7,
+  news_8,
+  news_9,
+  news_10,
+  news_11,
   favicon,
   payment_method,
   gallery_01,
