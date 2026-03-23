@@ -6,8 +6,10 @@ import { useForm, Controller } from "react-hook-form";
 import { assets } from "@/constants/assets";
 import { ArrowRight } from "@/components/svg/Icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -18,6 +20,7 @@ const page = () => {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+    router.push(ROUTES.OTP_VERIFICATION);
   };
   return (
     <>

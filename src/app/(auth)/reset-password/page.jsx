@@ -6,8 +6,10 @@ import { useForm, Controller } from "react-hook-form";
 import { assets } from "@/constants/assets";
 import { ArrowRight } from "@/components/svg/Icons";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
@@ -20,6 +22,7 @@ const page = () => {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+    router.push(ROUTES.SIGIN);
   };
   return (
     <>

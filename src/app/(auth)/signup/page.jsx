@@ -1,10 +1,32 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { assets } from "@/constants/assets";
 import ROUTES from "@/constants/routes";
-import Register from "@/components/auth/Register";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { ArrowRight } from "@/components/svg/Icons";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const pathname = usePathname();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log("Form Data:", data);
+    router.push(ROUTES.SIGIN);
+  };
   return (
     <>
       {/* Top Breadcrumb */}
@@ -16,7 +38,274 @@ const page = () => {
         ]}
       />
       {/* Register Form */}
-      <Register />
+      <div className="container py-25">
+        <div className="w-full max-w-106 mx-auto bg-white shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)] border border-[#E4E7E9] rounded-sm">
+          {/* top nav */}
+          <div className="flex items-center justify-center border-b border-[#E4E7E9]">
+            <Link
+              href={ROUTES.SIGIN}
+              className={`text-xl font-semibold h-15 w-53 flex items-center justify-center ${
+                pathname === ROUTES.SIGIN
+                  ? "text-[#191C1F] border-b-4 border-[#FA8232]"
+                  : "text-[#77878F]"
+              }`}
+            >
+              Sign In
+            </Link>
+            <Link
+              href={ROUTES.SIGNUP}
+              className={`text-xl font-semibold h-15 w-53 flex items-center justify-center ${
+                pathname === ROUTES.SIGNUP
+                  ? "text-[#191C1F] border-b-4 border-[#FA8232]"
+                  : "text-[#77878F]"
+              }`}
+            >
+              Sign Up
+            </Link>
+          </div>
+          <div className="p-4.5 sm:p-8 sm:pt-5 pt-5">
+            {/* Login Form */}
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="grid grid-cols-12 space-y-5"
+            >
+              {/* first name */}
+              <div className="col-span-12">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-normal leading-5 text-[#191C1F]"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                  {...register("name", {
+                    required: "Name is required",
+                    minLength: {
+                      value: 3,
+                      message: "Name must be at least 3 characters",
+                    },
+                  })}
+                  placeholder="Name"
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+              {/* Email */}
+              <div className="col-span-12">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-normal leading-5 text-[#191C1F] text-start mt-4.5"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="text"
+                  className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Enter a valid email address including @",
+                    },
+                  })}
+                  placeholder="Email"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+              {/* Password */}
+              <div className="col-span-12">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-normal leading-5 text-[#191C1F]"
+                >
+                  Password
+                </label>
+                <div className="w-full h-11 flex items-center rounded-xs border border-[#E4E7E9] mt-2 text-[#191C1F] px-3.75">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="w-full outline-0 text-[#191C1F] placeholder-text"
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                      pattern: {
+                        value:
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/,
+                        message:
+                          "Must contain uppercase, lowercase, number & special character",
+                      },
+                    })}
+                    placeholder="8+ characters"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="cursor-pointer"
+                  >
+                    <Image
+                      src={showPassword ? assets.EyeSlash : assets.Eye_Black}
+                      alt="eye-icon"
+                      width={20}
+                      height={20}
+                    />
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+              {/* Confirm Password */}
+              <div className="col-span-12">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-normal leading-5 text-[#191C1F]"
+                >
+                  Confirm Password
+                </label>
+                <div className="w-full h-11 flex items-center rounded-xs border border-[#E4E7E9] mt-2 text-[#191C1F] px-3.75">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    className="w-full outline-0 text-[#191C1F] placeholder-text"
+                    {...register("confirm_password", {
+                      required: "Confirm Password is required",
+                      minLength: {
+                        value: 8,
+                        message:
+                          "Confirm Password must be at least 8 characters",
+                      },
+                      pattern: {
+                        value:
+                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/,
+                        message:
+                          "Must contain uppercase, lowercase, number & special character",
+                      },
+                      validate: (value) =>
+                        value === watch("password") || "Passwords do not match",
+                    })}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="cursor-pointer"
+                  >
+                    <Image
+                      src={
+                        showConfirmPassword ? assets.EyeSlash : assets.Eye_Black
+                      }
+                      alt="eye-icon"
+                      width={20}
+                      height={20}
+                    />
+                  </button>
+                </div>
+                {errors.confirm_password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.confirm_password.message}
+                  </p>
+                )}
+              </div>
+              {/* agree to terms */}
+              <div className="col-span-12">
+                <div className="space-y-3">
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      {...register("terms", {
+                        required: "Please agree to the terms and conditions",
+                      })}
+                      className="hidden!"
+                    />
+
+                    {/* Custom checkbox */}
+                    <div
+                      className={`w-5 h-5 border rounded-xs shrink-0 flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                        watch("terms")
+                          ? "bg-[#FA8232] border-[#FA8232]"
+                          : "bg-transparent border-[#C9CFD2]"
+                      }`}
+                    >
+                      {watch("terms") && (
+                        <Image
+                          src={assets.Check_white}
+                          alt="check-icon"
+                          width={14}
+                          height={14}
+                        />
+                      )}
+                    </div>
+
+                    <span className="text-sm text-[#475156]">
+                      Are you agree to Clicon{" "}
+                      <Link href={"#"} className="text-[#2DA5F3] font-medium">
+                        Terms of Condition
+                      </Link>{" "}
+                      and{" "}
+                      <Link href={"#"} className="text-[#2DA5F3] font-medium">
+                        Privacy Policy.
+                      </Link>
+                    </span>
+                  </label>
+                  {errors.terms && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.terms.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {/* submit button */}
+              <button
+                type="submit"
+                className="col-span-12 flex items-center justify-center gap-2 border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] mb-4 mt-1 duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer"
+              >
+                Sign up
+                <ArrowRight />
+              </button>
+            </form>
+            {/* Divider Separator */}
+            <div className="after:border-[#e4e7e9] relative text-center after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+              <p className="text-[#77878F] text-sm! bg-white inline-block px-2.5 font-normal leading-5 relative z-10">
+                or
+              </p>
+            </div>
+            {/* login with other  */}
+            <div className="mt-3 space-y-3">
+              <button className="text-[#475156] text-sm border border-[#E4E7E9] rounded-xs w-full h-11 cursor-pointer relative">
+                Sign up with Google
+                <Image
+                  src={assets.Google}
+                  alt="google-icon"
+                  width={20}
+                  height={20}
+                  className="absolute top-3 left-4"
+                />
+              </button>
+              <button className="text-[#475156] text-sm border border-[#E4E7E9] rounded-xs w-full h-11 cursor-pointer relative">
+                Sign up with Apple
+                <Image
+                  src={assets.Apple}
+                  alt="apple-icon"
+                  width={20}
+                  height={20}
+                  className="absolute top-3 left-4"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

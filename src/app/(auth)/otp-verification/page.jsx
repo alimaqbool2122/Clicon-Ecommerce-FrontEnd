@@ -5,10 +5,10 @@ import ROUTES from "@/constants/routes";
 import { useForm, Controller } from "react-hook-form";
 import { assets } from "@/constants/assets";
 import { ArrowRight } from "@/components/svg/Icons";
-import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(0);
   const inputRefs = useRef([]);
@@ -76,6 +76,7 @@ const page = () => {
       return;
     }
     console.log("Form Data:", { ...data, otp: finalOtp });
+    router.push(ROUTES.RESET_PASSWORD);
   };
   return (
     <>

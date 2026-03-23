@@ -22,9 +22,9 @@ const page = () => {
           {/* Main Content */}
           <div className="py-18">
             <div className="container">
-              <div className="grid grid-cols-12 gap-6 2xl:gap-12">
+              <div className="grid grid-cols-12 gap-6 2xl:gap-0">
                 {/* Blog Category Sidebar */}
-                <div className="col-span-12 xl:col-span-4">
+                <div className="col-span-12 xl:col-span-4 2xl:pr-10">
                   <BlogCategory />
                 </div>
 

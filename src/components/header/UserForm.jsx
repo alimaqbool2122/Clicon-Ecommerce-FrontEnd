@@ -162,7 +162,7 @@ const UserForm = () => {
             </div>
 
             <Link
-              href="#"
+              href={ROUTES.SIGNUP}
               className="flex items-center justify-center border-2 border-[#FFE7D6] bg-white! text-[#FA8232] py-[12.6px] px-[22.4px] text-[14px] leading-px uppercase font-bold rounded-[3px] h-12 duration-500 ease-linear hover:bg-[#FA8232]! hover:text-white hover:border-[#FA8232]"
             >
               Create account
