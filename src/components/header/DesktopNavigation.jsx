@@ -21,6 +21,7 @@ import {
 import { assets } from "../../constants/assets";
 import ROUTES from "../../constants/routes";
 import Cart from "./Cart";
+import { useSelector } from "react-redux";
 import UserForm from "./UserForm";
 
 const DesktopNavigation = () => {
@@ -33,6 +34,7 @@ const DesktopNavigation = () => {
   const languageRef = useRef(null);
   const currencyRef = useRef(null);
   const router = useRouter();
+  const wishlistCount = useSelector((state) => state.wishlist.items.length);
   useEffect(() => {
     function handleClickOutside(e) {
       if (btnRef.current && !btnRef.current.contains(e.target)) {
@@ -132,31 +134,28 @@ const DesktopNavigation = () => {
                       alt="caret-down"
                       width={14}
                       height={14}
-                      className={`transition-transform duration-300 ${
-                        language ? "" : "rotate-180"
-                      }`}
+                      className={`transition-transform duration-300 ${language ? "" : "rotate-180"
+                        }`}
                     />
                   </span>
                   {/* language dropdown */}
                   <div
                     className={`w-45 absolute top-7.5 right-8 py-2 bg-white border border-[#E4E7E9] rounded-sm z-10 shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)]
                     transition-all duration-400 ease-out origin-top
-                    ${
-                      language
+                    ${language
                         ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
                         : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                    }
+                      }
                   `}
                   >
                     <div>
                       {languages.map((language) => (
                         <div
                           key={language.id}
-                          className={`py-2 px-4 flex items-center justify-between cursor-pointer ${
-                            selectedLanguage !== language.language
-                              ? "hover:bg-[#f2f4f5]"
-                              : ""
-                          }`}
+                          className={`py-2 px-4 flex items-center justify-between cursor-pointer ${selectedLanguage !== language.language
+                            ? "hover:bg-[#f2f4f5]"
+                            : ""
+                            }`}
                           onClick={() => {
                             setSelectedLanguage(language.language);
                             setLanguage(false);
@@ -171,11 +170,10 @@ const DesktopNavigation = () => {
                               className="border border-[#E4E7E9] rounded-full shrink-0"
                             />
                             <span
-                              className={`text-sm font-medium ${
-                                selectedLanguage === language.language
-                                  ? "text-[#191C1F]"
-                                  : "text-[#5F6C72]"
-                              }`}
+                              className={`text-sm font-medium ${selectedLanguage === language.language
+                                ? "text-[#191C1F]"
+                                : "text-[#5F6C72]"
+                                }`}
                             >
                               {language.language}
                             </span>
@@ -207,31 +205,28 @@ const DesktopNavigation = () => {
                       alt="caret-down"
                       width={14}
                       height={14}
-                      className={`transition-transform duration-300 ${
-                        currency ? "" : "rotate-180"
-                      }`}
+                      className={`transition-transform duration-300 ${currency ? "" : "rotate-180"
+                        }`}
                     />
                   </span>
                   {/* currency dropdown */}
                   <div
                     className={`w-45 absolute top-7.5 left-0 xl:left-6 py-2 bg-white border border-[#E4E7E9] rounded-sm z-10 shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)]
                     transition-all duration-400 ease-out origin-top
-                    ${
-                      currency
+                    ${currency
                         ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
                         : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                    }
+                      }
                   `}
                   >
                     <div>
                       {currencies.map((curency) => (
                         <div
                           key={curency.id}
-                          className={`py-2 px-4 flex items-center justify-between cursor-pointer ${
-                            selectedCurrency !== curency.currency
-                              ? "hover:bg-[#f2f4f5]"
-                              : ""
-                          }`}
+                          className={`py-2 px-4 flex items-center justify-between cursor-pointer ${selectedCurrency !== curency.currency
+                            ? "hover:bg-[#f2f4f5]"
+                            : ""
+                            }`}
                           onClick={() => {
                             setSelectedCurrency(curency.currency);
                             setCurrency(false);
@@ -239,11 +234,10 @@ const DesktopNavigation = () => {
                         >
                           <div className="">
                             <span
-                              className={`text-sm font-medium ${
-                                selectedCurrency === curency.currency
-                                  ? "text-[#FA8232]"
-                                  : "text-[#5F6C72]"
-                              }`}
+                              className={`text-sm font-medium ${selectedCurrency === curency.currency
+                                ? "text-[#FA8232]"
+                                : "text-[#5F6C72]"
+                                }`}
                             >
                               {curency.currency}
                             </span>
@@ -311,21 +305,24 @@ const DesktopNavigation = () => {
               {/* Wishlist */}
               <div>
                 <button
+                  type="button"
                   className="relative cursor-pointer"
                   onClick={() => router.push(ROUTES.WISHLIST)}
                 >
                   <Image
                     src={assets.Heart_White}
-                    alt="cart-white"
+                    alt="wishlist"
                     width={32}
                     height={32}
                     className=""
                   />
-                  {/* <div className="size-5 bg-white py-0.5 flex items-center justify-center rounded-full absolute -top-1 left-4">
-                    <span className="text-[#1B6392] text-[12px] font-semibold">
-                      2
-                    </span>
-                  </div> */}
+                  {wishlistCount > 0 && (
+                    <div className="size-5 bg-white py-0.5 flex items-center justify-center rounded-full absolute -top-1 left-4">
+                      <span className="text-[#1B6392] text-[12px] font-semibold">
+                        {wishlistCount}
+                      </span>
+                    </div>
+                  )}
                 </button>
               </div>
               {/* user */}
@@ -346,11 +343,10 @@ const DesktopNavigation = () => {
                   ref={btnRef}
                   onClick={() => setActive(!active)}
                   className={`flex items-center gap-1.5 py-3.5 px-6 rounded-sm text-sm! font-medium leading-5 cursor-pointer
-                                    ${
-                                      active
-                                        ? "bg-[#FA8232]! text-white!"
-                                        : "bg-[#F2F4F5]! text-[#191C1F]!"
-                                    }
+                                    ${active
+                      ? "bg-[#FA8232]! text-white!"
+                      : "bg-[#F2F4F5]! text-[#191C1F]!"
+                    }
                                     transition-colors duration-300`}
                 >
                   All Category
@@ -369,11 +365,10 @@ const DesktopNavigation = () => {
                                             bg-white border border-[#E4E7E9] rounded-[3px] shadow-[0px_8px_40px_rgba(0,0,0,0.12)]
                                             transition-all duration-400 ease-out origin-top
 
-                                            ${
-                                              active
-                                                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                                                : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                                            }
+                                            ${active
+                      ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                    }
                                             `}
                 >
                   <ul className="py-3">
@@ -499,11 +494,10 @@ const DesktopNavigation = () => {
                         href={item.href}
                         className={`flex items-center gap-1.25 text-sm leading-6 
                                                 font-normal duration-300 ease-linear 
-                                                hover:text-[#FA8232] ${
-                                                  pathname === item.href
-                                                    ? "text-[#FA8232]"
-                                                    : "text-[#5F6C72]"
-                                                }`}
+                                                hover:text-[#FA8232] ${pathname === item.href
+                            ? "text-[#FA8232]"
+                            : "text-[#5F6C72]"
+                          }`}
                       >
                         {item.icon}
                         {item.label}

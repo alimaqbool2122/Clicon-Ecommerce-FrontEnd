@@ -10,6 +10,15 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { assets } from "../../constants/assets.js";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { addToCart, updateQuantity } from "@/redux/services/cartSlice";
+import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
+import {
+  toggleCompareItem,
+  MAX_COMPARE_ITEMS,
+} from "@/redux/services/compareSlice";
+import ROUTES from "@/constants/routes";
 
 const ProductDetails = () => {
   const {
@@ -21,7 +30,9 @@ const ProductDetails = () => {
     paymentMethod,
     options,
   } = shopDetailData;
-  const { title, rating, facts, price } = product;
+  const { id: productId, title, rating, facts, price } = product;
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(images.mainImage);
   const [isFading, setIsFading] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -37,6 +48,39 @@ const ProductDetails = () => {
   const sizeBtnRef = useRef(null);
   const memoryBtnRef = useRef(null);
   const storageBtnRef = useRef(null);
+  const prevVariantKeyRef = useRef("");
+
+  const variantSize = useMemo(
+    () => `${selectedSize} · ${selectedMemory} · ${selectedStorage}`,
+    [selectedSize, selectedMemory, selectedStorage],
+  );
+  const colorName = useMemo(
+    () => options.colors[selectedColor]?.name ?? "",
+    [options.colors, selectedColor],
+  );
+
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const compareItems = useSelector((state) => state.compare.items);
+
+  useEffect(() => {
+    const key = `${productId}|${variantSize}|${colorName}`;
+    const variantChanged = prevVariantKeyRef.current !== key;
+    prevVariantKeyRef.current = key;
+
+    const line = cartItems.find(
+      (i) =>
+        i.id === productId &&
+        i.selectedSize === variantSize &&
+        i.selectedColor === colorName,
+    );
+    if (variantChanged) {
+      setQuantity(line ? Math.max(1, Number(line.quantity) || 1) : 1);
+      return;
+    }
+    if (line) {
+      setQuantity(Math.max(1, Number(line.quantity) || 1));
+    }
+  }, [cartItems, productId, variantSize, colorName]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -55,12 +99,51 @@ const ProductDetails = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleIncrement = () => {
-    setQuantity((prev) => prev + 1);
+  const handleIncrement = (e) => {
+    e?.stopPropagation?.();
+    e?.preventDefault?.();
+    const next = quantity + 1;
+    setQuantity(next);
+    const line = cartItems.find(
+      (i) =>
+        i.id === productId &&
+        i.selectedSize === variantSize &&
+        i.selectedColor === colorName,
+    );
+    if (line) {
+      dispatch(
+        updateQuantity({
+          id: productId,
+          selectedSize: variantSize,
+          selectedColor: colorName,
+          quantity: next,
+        }),
+      );
+    }
   };
 
-  const handleDecrement = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const handleDecrement = (e) => {
+    e?.stopPropagation?.();
+    e?.preventDefault?.();
+    if (quantity <= 1) return;
+    const next = quantity - 1;
+    setQuantity(next);
+    const line = cartItems.find(
+      (i) =>
+        i.id === productId &&
+        i.selectedSize === variantSize &&
+        i.selectedColor === colorName,
+    );
+    if (line) {
+      dispatch(
+        updateQuantity({
+          id: productId,
+          selectedSize: variantSize,
+          selectedColor: colorName,
+          quantity: next,
+        }),
+      );
+    }
   };
 
   const handleSizeSelect = (size) => {
@@ -88,6 +171,87 @@ const ProductDetails = () => {
         setIsFading(false);
       });
     }, 300);
+  };
+
+  const handleAddToCart = () => {
+    const priceStr = `$${Number(price.current).toLocaleString("en-US")}`;
+    const priceOldStr = price.original
+      ? `$${parseFloat(price.original).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : undefined;
+    dispatch(
+      addToCart({
+        id: productId,
+        image: selectedImage,
+        title,
+        price: priceStr,
+        priceOld: priceOldStr,
+        quantity: Number(quantity) || 1,
+        selectedSize: variantSize,
+        selectedColor: colorName,
+      }),
+    );
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push(ROUTES.SHOPING_CARD);
+  };
+
+  const handleToggleWishlist = () => {
+    const priceStr = `$${Number(price.current).toLocaleString("en-US")}`;
+    const priceOldStr = price.original
+      ? `$${parseFloat(price.original).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : undefined;
+    const availabilityTitle =
+      facts.find((f) => f.label === "Availability:")?.title ?? "";
+    const inStock = !availabilityTitle.toLowerCase().includes("out");
+    dispatch(
+      toggleWishlistItem({
+        id: productId,
+        image: selectedImage,
+        title,
+        price: priceStr,
+        priceOld: priceOldStr,
+        inStock,
+      }),
+    );
+  };
+
+  const handleToggleCompare = () => {
+    const exists = compareItems.some((i) => i.id === productId);
+    if (!exists && compareItems.length >= MAX_COMPARE_ITEMS) {
+      window.alert(
+        `You can compare up to ${MAX_COMPARE_ITEMS} products. Remove one on the compare page to add another.`,
+      );
+      return;
+    }
+    const priceStr = `$${Number(price.current).toLocaleString("en-US")}`;
+    const priceOldStr = price.original
+      ? `$${parseFloat(price.original).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : undefined;
+    dispatch(
+      toggleCompareItem({
+        id: productId,
+        image: selectedImage,
+        title,
+        price: priceStr,
+        priceOld: priceOldStr,
+        facts: facts.map((f) => ({ label: f.label, title: f.title })),
+        ratingStars: rating.stars,
+        ratingReviews: rating.totalReviews,
+        variantSummary: variantSize,
+        colorName,
+      }),
+    );
   };
 
   const handleThumbnailClick = (image, index) => {
@@ -465,9 +629,10 @@ const ProductDetails = () => {
               </div>
               {/* Add to cart button */}
               <div className="col-span-12 sm:col-span-6">
-                <Link
-                  href="#"
-                  className="group/icon relative flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white h-14 text-base leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F]"
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className="group/icon relative w-full flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white h-14 text-base leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F] cursor-pointer"
                 >
                   Add to Cart
                   <div className="relative w-6 h-6">
@@ -486,16 +651,17 @@ const ProductDetails = () => {
                       className="absolute top-0 left-0 transition-opacity duration-500 opacity-0 group-hover/icon:opacity-100"
                     />
                   </div>
-                </Link>
+                </button>
               </div>
               {/* buy now button */}
               <div className="col-span-12 sm:col-span-3">
-                <Link
-                  href="#"
-                  className="flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-transparent text-[#FA8232] h-14 text-base leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear  hover:bg-[#FA8232] hover:text-white"
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  className="w-full flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-transparent text-[#FA8232] h-14 text-base leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-[#FA8232] hover:text-white cursor-pointer"
                 >
                   Buy Now
-                </Link>
+                </button>
               </div>
             </div>
             {/* Action Buttons */}
@@ -504,7 +670,16 @@ const ProductDetails = () => {
                 {actions.map((action, index) => (
                   <button
                     key={index}
+                    type="button"
                     className="flex items-center gap-1.5 cursor-pointer"
+                    onClick={() => {
+                      if (action.label === "Add to Wishlist") {
+                        handleToggleWishlist();
+                      }
+                      if (action.label === "Add to Compare") {
+                        handleToggleCompare();
+                      }
+                    }}
                   >
                     <Image
                       src={action.icon}

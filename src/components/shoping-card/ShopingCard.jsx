@@ -1,83 +1,94 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { assets } from "@/constants/assets";
 import { ArrowLeft, ArrowRight } from "../svg/Icons";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  removeFromCart,
+  updateQuantity,
+} from "@/redux/services/cartSlice";
+
+const parsePrice = (value) =>
+  parseFloat(String(value ?? "0").replace(/[^0-9.]/g, "")) || 0;
+
+const formatMoney = (n) =>
+  `$${n.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
+const itemLineKey = (item) =>
+  `${item.id}-${item.selectedSize ?? ""}-${item.selectedColor ?? ""}`;
 
 const ShopingCard = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      image: assets.product_20,
-      title: "4K UHD LED Smart TV with Chromecast Built-in",
-      price: 70,
-      oldPrice: 99,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      image: assets.product_23,
-      title: "Wired Over-Ear Gaming Headphones with USB",
-      price: 250,
-      oldPrice: null,
-      quantity: 1,
-    },
-  ]);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
 
-  const handleIncrement = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+  const subtotalValue = useMemo(
+    () =>
+      cartItems.reduce(
+        (acc, item) => acc + parsePrice(item.price) * item.quantity,
+        0,
       ),
+    [cartItems],
+  );
+
+  const cartTotal = useMemo(
+    () => [
+      { id: 1, title: "Subtotal", price: formatMoney(subtotalValue) },
+      { id: 2, title: "Shipping", price: "Free" },
+      { id: 3, title: "Discount", price: formatMoney(0) },
+      { id: 4, title: "Tax", price: formatMoney(0) },
+    ],
+    [subtotalValue],
+  );
+
+  const handleIncrement = (item) => {
+    dispatch(
+      updateQuantity({
+        id: item.id,
+        selectedSize: item.selectedSize,
+        selectedColor: item.selectedColor,
+        quantity: item.quantity + 1,
+      }),
     );
   };
 
-  const handleDecrement = (id) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item,
-      ),
+  const handleDecrement = (item) => {
+    if (item.quantity <= 1) return;
+    dispatch(
+      updateQuantity({
+        id: item.id,
+        selectedSize: item.selectedSize,
+        selectedColor: item.selectedColor,
+        quantity: item.quantity - 1,
+      }),
     );
   };
+
+  const handleRemove = (item) => {
+    dispatch(
+      removeFromCart({
+        id: item.id,
+        selectedSize: item.selectedSize,
+        selectedColor: item.selectedColor,
+      }),
+    );
+  };
+
   const {
     register,
     handleSubmit,
-    watch,
-    control,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
   };
-  //   cart total
-  const cartTotal = [
-    {
-      id: 1,
-      title: "Subtotal",
-      price: "$320",
-    },
-    {
-      id: 2,
-      title: "Shipping",
-      price: "Free",
-    },
-    {
-      id: 3,
-      title: "Discount",
-      price: "$24",
-    },
-    {
-      id: 4,
-      title: "Tax",
-      price: "$61.99",
-    },
-  ];
   return (
     <>
       <div className="container py-18">
@@ -108,81 +119,107 @@ const ShopingCard = () => {
                 </thead>
                 {/* table body */}
                 <tbody className="flex flex-col border-b border-[#E4E7E9] p-6 space-y-6">
-                  {cartItems.map((item) => (
-                    <tr key={item.id} className="flex items-center gap-4.5">
-                      <td className="w-95">
-                        <div className="flex items-center gap-3">
-                          <button className="cursor-pointer shrink-0">
-                            <Image
-                              src={assets.XCircle}
-                              alt="XCircle"
-                              width={24}
-                              height={24}
-                            />
-                          </button>
-                          <div className="relative w-18 h-18 shrink-0">
-                            <Image
-                              src={item.image}
-                              alt="product"
-                              fill
-                              className="object-contain"
-                            />
-                          </div>
-                          <h6 className="text-sm text-[#191C1F]">
-                            {item.title}
-                          </h6>
-                        </div>
-                      </td>
-                      <td className="w-22">
-                        <p className="text-[#191C1F] text-[14px] leading-5">
-                          {item.oldPrice && (
-                            <del className="text-[#929FA5] mr-1">
-                              ${item.oldPrice}
-                            </del>
-                          )}
-                          ${item.price}
-                        </p>
-                      </td>
-                      <td className="w-43 pr-6">
-                        <div className="flex items-center justify-between h-14 py-3 px-5 border-2! border-[#E4E7E9]! rounded-[3px]!">
-                          <button
-                            type="button"
-                            onClick={() => handleDecrement(item.id)}
-                            className="cursor-pointer"
-                            disabled={item.quantity <= 1}
-                          >
-                            <Image
-                              src={assets.Minus}
-                              alt="decrease quantity"
-                              width={16}
-                              height={16}
-                              className={item.quantity <= 1 ? "opacity-50" : ""}
-                            />
-                          </button>
-                          <span className="text-base text-[#475156]">
-                            {item.quantity.toString().padStart(2, "0")}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleIncrement(item.id)}
-                            className="cursor-pointer"
-                          >
-                            <Image
-                              src={assets.Plus}
-                              alt="increase quantity"
-                              width={16}
-                              height={16}
-                            />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="w-28">
-                        <p className="text-[#191C1F] text-[14px] leading-5">
-                          ${item.price * item.quantity}
-                        </p>
+                  {cartItems.length === 0 ? (
+                    <tr className="flex">
+                      <td className="w-full py-8 text-center text-sm text-[#6c757d]">
+                        Your cart is empty.{" "}
+                        <Link
+                          href={ROUTES.SHOP}
+                          className="text-[#2DA5F3] font-medium"
+                        >
+                          Continue shopping
+                        </Link>
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    cartItems.map((item) => (
+                      <tr
+                        key={itemLineKey(item)}
+                        className="flex items-center gap-4.5"
+                      >
+                        <td className="w-95">
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => handleRemove(item)}
+                              className="cursor-pointer shrink-0"
+                              aria-label="Remove item"
+                            >
+                              <Image
+                                src={assets.XCircle}
+                                alt="Remove"
+                                width={24}
+                                height={24}
+                              />
+                            </button>
+                            <div className="relative w-18 h-18 shrink-0">
+                              <Image
+                                src={item.image}
+                                alt={item.title ?? "Product"}
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
+                            <h6 className="text-sm text-[#191C1F] line-clamp-2">
+                              {item.title}
+                            </h6>
+                          </div>
+                        </td>
+                        <td className="w-22">
+                          <p className="text-[#191C1F] text-[14px] leading-5">
+                            {item.priceOld && (
+                              <del className="text-[#929FA5] mr-1">
+                                {item.priceOld}
+                              </del>
+                            )}
+                            {item.price}
+                          </p>
+                        </td>
+                        <td className="w-43 pr-6">
+                          <div className="flex items-center justify-between h-14 py-3 px-5 border-2! border-[#E4E7E9]! rounded-[3px]!">
+                            <button
+                              type="button"
+                              onClick={() => handleDecrement(item)}
+                              className="cursor-pointer"
+                              disabled={item.quantity <= 1}
+                            >
+                              <Image
+                                src={assets.Minus}
+                                alt="decrease quantity"
+                                width={16}
+                                height={16}
+                                className={
+                                  item.quantity <= 1 ? "opacity-50" : ""
+                                }
+                              />
+                            </button>
+                            <span className="text-base text-[#475156]">
+                              {item.quantity.toString().padStart(2, "0")}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleIncrement(item)}
+                              className="cursor-pointer"
+                            >
+                              <Image
+                                src={assets.Plus}
+                                alt="increase quantity"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                          </div>
+                        </td>
+                        <td className="w-28">
+                          <p className="text-[#191C1F] text-[14px] leading-5">
+                            {formatMoney(
+                              parsePrice(item.price) * item.quantity,
+                            )}
+                          </p>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
                 {/* table footer */}
                 <tfoot>
@@ -236,7 +273,7 @@ const ShopingCard = () => {
                     Total
                   </span>
                   <span className="text-[#191C1F] text-sm leading-5 font-medium">
-                    $357.99 USD
+                    {formatMoney(subtotalValue)} USD
                   </span>
                 </div>
               </div>

@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Cross } from "../svg/Icons";
 import ROUTES from "@/constants/routes";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart } from "@/redux/services/cartSlice";
 
 const Cart = () => {
   const [cartActive, setCartActive] = useState(false);
@@ -18,23 +20,27 @@ const Cart = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  // card dummy data
-  const cartData = [
-    {
-      id: 1,
-      image: assets.product_10,
-      title: "Canon EOS 1500D DSLR Camera Body+ 18-55 mm",
-      price: "$1,500",
-      quantity: "1 x",
-    },
-    {
-      id: 2,
-      image: assets.product_14,
-      title: "Simple Mobile 5G LTE Galexy 12 Mini 512GB Gaming Phone",
-      price: "$269",
-      quantity: "2 x",
-    },
-  ];
+  // get cart items from redux
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
+  const subtotal = cartItems.reduce(
+    (acc, item) =>
+      acc +
+      parseFloat(String(item.price ?? "0").replace(/[^0-9.]/g, "")) *
+        item.quantity,
+    0,
+  );
+  const handleRemove = (id, selectedSize, selectedColor) => {
+    dispatch(removeFromCart({ id, selectedSize, selectedColor }));
+  };
+  const totalQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
+  const subtotalFormatted = subtotal.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
   return (
     <>
       <div className="relative" ref={cartBtnRef}>
@@ -49,70 +55,90 @@ const Cart = () => {
             height={32}
             className=""
           />
-          <div className="size-5 bg-white py-0.5 flex items-center justify-center rounded-full absolute -top-1 left-4">
-            <span className="text-[#1B6392] text-[12px] font-semibold">2</span>
-          </div>
+          {totalQuantity > 0 && (
+            <div className="size-5 bg-white py-0.5 flex items-center justify-center rounded-full absolute -top-1 left-4">
+
+              <span className="text-[#1B6392] text-[12px] font-semibold">{totalQuantity}</span>
+
+            </div>
+          )}
         </button>
         {/* cart */}
         <div
           className={`w-94 absolute top-12 right-0 z-10 bg-white border border-[#E4E7E9] rounded-sm shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)]
                     transition-all duration-400 ease-out origin-top
-                    ${
-                      cartActive
-                        ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                    }
+                    ${cartActive
+              ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+            }
                   `}
         >
           <div>
             {/* card Title */}
             <div className="border-b border-[#e4e7e9] py-4 px-6">
               <h6 className="text-base text-[#191C1F] leading-6 font-medium">
-                Shopping Cart <span className="text-[#6c757d]">(02)</span>
+                Shopping Cart <span className="text-[#6c757d]">({totalQuantity})</span>
               </h6>
             </div>
             {/* cart item */}
             <div className="border-b border-[#e4e7e9] py-6 px-5">
               <div
                 className={
-                  cartData.length > 2 ? "max-h-48 overflow-y-auto" : ""
+                  cartItems.length > 2 ? "max-h-48 overflow-y-auto" : ""
                 }
               >
                 <div className="grid grid-cols-12 gap-4">
-                  {cartData.map((cart) => (
-                    <div
-                      key={cart.id}
-                      className="col-span-12 flex items-center"
-                    >
-                      <div className="relative w-20 h-20 mr-4 shrink-0 border-2 border-[#E4E7E9]">
-                        <Image
-                          src={cart.image}
-                          alt={cart.title}
-                          fill
-                          className="shrink-0 p-1"
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between w-full">
-                        <div>
-                          <p className="text-sm leading-5 text-[#212529] font-normal pr-4">
-                            {cart.title}
-                          </p>
-                          <span>
-                            <span className="text-[#5F6C72] text-sm leading-5 font-normal">
-                              {cart.quantity}
-                            </span>
-                            <span className="text-sm leading-5 font-semibold text-[#2DA5F3] ml-1">
-                              {cart.price}
-                            </span>
-                          </span>
+                  {cartItems.length === 0 ? (
+                    <p className="col-span-12 text-sm text-[#6c757d] text-center py-2">
+                      Your cart is empty
+                    </p>
+                  ) : (
+                    cartItems.map((item) => (
+                      <div
+                        key={`${item.id}-${item.selectedSize ?? ""}-${item.selectedColor ?? ""}`}
+                        className="col-span-12 flex items-center"
+                      >
+                        <div className="relative w-20 h-20 mr-4 shrink-0 border-2 border-[#E4E7E9]">
+                          <Image
+                            src={item.image}
+                            alt={item.title ?? "Product"}
+                            fill
+                            className="shrink-0 object-contain p-1"
+                          />
                         </div>
-                        <Link href="#">
-                          <Cross fill="#929FA5" />
-                        </Link>
+
+                        <div className="flex items-center justify-between w-full">
+                          <div>
+                            <p className="text-sm leading-5 text-[#212529] font-normal pr-4 line-clamp-2">
+                              {item.title}
+                            </p>
+                            <span>
+                              <span className="text-[#5F6C72] text-sm leading-5 font-normal">
+                                {item.quantity} x
+                              </span>
+                              <span className="text-sm leading-5 font-semibold text-[#2DA5F3] ml-1">
+                                {item.price}
+                              </span>
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleRemove(
+                                item.id,
+                                item.selectedSize,
+                                item.selectedColor,
+                              )
+                            }
+                            className="shrink-0 p-1 cursor-pointer hover:opacity-70"
+                            aria-label="Remove from cart"
+                          >
+                            <Cross fill="#929FA5" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -122,7 +148,7 @@ const Cart = () => {
                 Sub-Total:
               </span>
               <span className="text-[#191C1F] text-sm leading-5 font-medium">
-                $2038.00 USD
+                ${subtotalFormatted} USD
               </span>
             </div>
             {/* cart buttons */}

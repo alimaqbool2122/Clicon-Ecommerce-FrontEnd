@@ -3,6 +3,7 @@ import { assets } from "../../constants/assets";
 
 export const shopDetailData = {
   product: {
+    id: "product-macbook-pro-m1-detail",
     title:
       "2020 Apple MacBook Pro with Apple M1 Chip (13-inch, 8GB RAM, 256GB SSD Storage) - Space Gray",
     rating: {
