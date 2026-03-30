@@ -4,9 +4,22 @@ import ROUTES from "@/constants/routes";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { ArrowRight } from "../svg/Icons";
+
+const parsePrice = (value) =>
+  parseFloat(String(value ?? "0").replace(/[^0-9.]/g, "")) || 0;
+
+const formatMoney = (n) =>
+  `$${n.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
+const itemLineKey = (item) =>
+  `${item.id}-${item.selectedSize ?? ""}-${item.selectedColor ?? ""}`;
 
 const CheckOut = () => {
   const router = useRouter();
@@ -36,47 +49,26 @@ const CheckOut = () => {
     setValue("payment_option", option.id, { shouldValidate: true });
   };
 
-  // card dummy data
-  const cartData = [
-    {
-      id: 1,
-      image: assets.product_14,
-      title: "Canon EOS 1500D DSLR Camera Body+ 18-55 mm",
-      price: "$70",
-      quantity: "1 x",
-    },
-    {
-      id: 2,
-      image: assets.product_23,
-      title: "Wired Over-Ear Gaming Headphones with USB",
-      price: "$250",
-      quantity: "3 x",
-    },
-  ];
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
-  //   cart total
-  const cartTotal = [
-    {
-      id: 1,
-      title: "Subtotal",
-      price: "$320",
-    },
-    {
-      id: 2,
-      title: "Shipping",
-      price: "Free",
-    },
-    {
-      id: 3,
-      title: "Discount",
-      price: "$24",
-    },
-    {
-      id: 4,
-      title: "Tax",
-      price: "$61.99",
-    },
-  ];
+  const subtotalValue = useMemo(
+    () =>
+      cartItems.reduce(
+        (acc, item) => acc + parsePrice(item.price) * item.quantity,
+        0,
+      ),
+    [cartItems],
+  );
+
+  const cartTotal = useMemo(
+    () => [
+      { id: 1, title: "Subtotal", price: formatMoney(subtotalValue) },
+      { id: 2, title: "Shipping", price: "Free" },
+      { id: 3, title: "Discount", price: formatMoney(0) },
+      { id: 4, title: "Tax", price: formatMoney(0) },
+    ],
+    [subtotalValue],
+  );
   const onSubmit = (data) => {
     console.log("Form Data:", data);
     router.push(ROUTES.CHECK_OUT_SUCCESS);
@@ -516,9 +508,9 @@ const CheckOut = () => {
               </h2>
               {/* cart item */}
               <div className="grid grid-cols-12 gap-4">
-                {cartData.map((cart) => (
+                {cartItems.map((cart) => (
                   <div
-                    key={cart.id}
+                    key={itemLineKey(cart)}
                     className="col-span-12 flex items-center gap-4"
                   >
                     <div className="relative w-16 h-16 shrink-0">
@@ -536,7 +528,7 @@ const CheckOut = () => {
                       </p>
                       <span>
                         <span className="text-[#5F6C72] text-sm leading-5 font-normal">
-                          {cart.quantity}
+                          {cart.quantity} x
                         </span>
                         <span className="text-sm leading-5 font-semibold text-[#2DA5F3] ml-1">
                           {cart.price}
@@ -569,7 +561,7 @@ const CheckOut = () => {
                     Total
                   </span>
                   <span className="text-[#191C1F] text-sm leading-5 font-medium">
-                    $357.99 USD
+                    {formatMoney(subtotalValue)} USD
                   </span>
                 </div>
               </div>

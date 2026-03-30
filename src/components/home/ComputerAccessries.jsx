@@ -4,17 +4,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { homepageContent } from "../../data/home/home";
-import { ArrowRight } from "../svg/Icons";
+import { ArrowRight, Star } from "../svg/Icons";
 import { assets } from "../../constants/assets";
 import ProductDetailsDialog from "../product-details/ProductDetailsDialog";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/services/cartSlice";
+import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
+import ROUTES from "@/constants/routes";
 
 const ComputerAccessries = () => {
   // For Active state.
   const [activeIndex, setActiveIndex] = useState(0);
-
+  const dispatch = useDispatch();
   const tabs = homepageContent.computerAccessories.tabs;
   const products = homepageContent.computerAccessories.products;
-  const Discount = homepageContent.featuredProducts.discountSection;
   const salesone = homepageContent.computerAccessories.sales_one;
   const salestwo = homepageContent.computerAccessories.sales_two;
   const [openDialog, setOpenDialog] = useState(false);
@@ -143,7 +146,7 @@ const ComputerAccessries = () => {
 
                   <div className="mt-2 lg:mt-0 lg:ml-2">
                     <Link
-                      href="#"
+                      href={ROUTES.SHOP}
                       className='relative py-1 inline-flex items-center gap-2 justify-center text-[#FA8232] text-[14px] font-semibold before:content-[""] before:absolute before:left-1/2 before:bottom-0 before:-translate-x-1/2 before:h-0.5 before:w-[0%] before:bg-[#FA8232] before:duration-400 hover:before:w-full'
                     >
                       Browse All Product
@@ -210,7 +213,18 @@ const ComputerAccessries = () => {
                           />
                         </div>
                         <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 bg-black/20 flex items-center justify-center w-full h-full duration-500 ease-linear opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-                          <button className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white">
+                          {/* wishlist */}
+                          <button
+                            className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                            onClick={() =>
+                              dispatch(
+                                toggleWishlistItem({
+                                  ...product,
+                                  inStock: product.badge !== "SOLD OUT",
+                                }),
+                              )
+                            }
+                          >
                             <Image
                               src={assets.Heart_Black}
                               alt="cart-white"
@@ -226,8 +240,18 @@ const ComputerAccessries = () => {
                               className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
                             />
                           </button>
-
-                          <button className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white">
+                          {/* cart */}
+                          <button
+                            className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                            onClick={() =>
+                              dispatch(
+                                addToCart({
+                                  ...product,
+                                  quantity: 1,
+                                }),
+                              )
+                            }
+                          >
                             <Image
                               src={assets.Cart_Black}
                               alt="cart-white"
@@ -243,7 +267,7 @@ const ComputerAccessries = () => {
                               className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
                             />
                           </button>
-
+                          {/* view */}
                           <button
                             onClick={() => setOpenDialog(true)}
                             className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
@@ -271,7 +295,9 @@ const ComputerAccessries = () => {
                         {Array(5)
                           .fill(null)
                           .map((_, i) => (
-                            <li key={i}>{product.startIcon}</li>
+                            <li key={i}>
+                              <Star />
+                            </li>
                           ))}
                         <li className="text-[12px] leading-4 font-normal text-[#77878F] ml-1 mt-0.5">
                           {product.rating}
@@ -280,7 +306,7 @@ const ComputerAccessries = () => {
 
                       {/* Product Title + Price */}
                       <Link
-                        href="#"
+                        href={ROUTES.PRODUCT_DETAILS(product.id)}
                         className="text-[14px] line-clamp-2 leading-5 text-[#191C1F] font-normal mb-2 text-center sm:text-start duration-400 ease-linear hover:text-[#2DA5F3]"
                       >
                         {product.title}

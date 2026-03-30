@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -77,8 +76,9 @@ const CopmareTable = () => {
       case "config":
         return (
           <span className="text-sm">
-            {[item.colorName, item.variantSummary].filter(Boolean).join(" · ") ||
-              "—"}
+            {[item.colorName, item.variantSummary]
+              .filter(Boolean)
+              .join(" · ") || "—"}
           </span>
         );
       case "weight":
@@ -123,10 +123,7 @@ const CopmareTable = () => {
       <div className="container py-18">
         <div className="border border-[#E4E7E9] rounded-sm p-12 text-center text-sm text-[#6c757d]">
           No products to compare.{" "}
-          <Link
-            href={ROUTES.SHOP}
-            className="text-[#2DA5F3] font-medium"
-          >
+          <Link href={ROUTES.SHOP} className="text-[#2DA5F3] font-medium">
             Return to shop
           </Link>
         </div>

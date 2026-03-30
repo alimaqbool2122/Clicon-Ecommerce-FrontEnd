@@ -281,7 +281,6 @@ export const homepageContent = {
       {
         id: "1",
         image: assets.product_15,
-        startIcon: <Star />,
         title: "TOZO T6 True Wireless Earbuds Bluetooth Headphon...",
         price: "$2,300",
         badge: "HOT",
@@ -291,7 +290,6 @@ export const homepageContent = {
       {
         id: "2",
         image: assets.product_16,
-        startIcon: <Star />,
         title: "Samsung Electronics Samsung Galexy S21 5G",
         price: "$220",
         rating: "(536)",
@@ -300,7 +298,6 @@ export const homepageContent = {
       {
         id: "3",
         image: assets.product_17,
-        startIcon: <Star />,
         title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
         priceOld: "$865",
         price: "$150",
@@ -311,7 +308,6 @@ export const homepageContent = {
       {
         id: "4",
         image: assets.product_18,
-        startIcon: <Star />,
         title: "Portable Washing Machine, 11lbs capacity Model 18NMF...",
         price: "$1,200",
         rating: "(816)",
@@ -320,7 +316,6 @@ export const homepageContent = {
       {
         id: "5",
         image: assets.product_19,
-        startIcon: <Star />,
         title: "Wired Over-Ear Gaming Headphones with USB",
         price: "$299",
         rating: "(647)",
@@ -329,7 +324,6 @@ export const homepageContent = {
       {
         id: "6",
         image: assets.product_20,
-        startIcon: <Star />,
         title: "Polaroid 57-Inch Photo/Video Tripod Deluxe Tripod Ca...",
         priceOld: "$865.99",
         price: "$70",
@@ -340,7 +334,6 @@ export const homepageContent = {
       {
         id: "7",
         image: assets.product_21,
-        startIcon: <Star />,
         title: "Dell Optiplex 7000x7480 All-in-One Computer Monitor",
         price: "$150",
         rating: "(426)",
@@ -349,7 +342,6 @@ export const homepageContent = {
       {
         id: "8",
         image: assets.product_22,
-        startIcon: <Star />,
         title: "4K UHD LED Smart TV with Chromecast Built-in",
         priceOld: "$360",
         price: "$250",
@@ -378,7 +370,6 @@ export const homepageContent = {
       {
         id: "1",
         image: assets.product_23,
-        startIcon: <Star />,
         title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
         price: "$2,300",
         badge: "BEST DEALS",
@@ -388,7 +379,6 @@ export const homepageContent = {
       {
         id: "2",
         image: assets.product_24,
-        startIcon: <Star />,
         title: "Portable Wshing Machine, 11lbs capacity Model 18NMF...",
         price: "$220",
         rating: "(798)",
@@ -397,7 +387,6 @@ export const homepageContent = {
       {
         id: "3",
         image: assets.product_25,
-        startIcon: <Star />,
         title: "TOZO T6 True Wireless Earbuds Bluetooth Headphon...",
         priceOld: "$865",
         price: "$150",
@@ -408,7 +397,6 @@ export const homepageContent = {
       {
         id: "4",
         image: assets.product_26,
-        startIcon: <Star />,
         title: "Dell Optiplex 7000x7480 All-in-One Computer Monitor",
         price: "$1,200",
         rating: "(492)",
@@ -417,7 +405,6 @@ export const homepageContent = {
       {
         id: "5",
         image: assets.product_27,
-        startIcon: <Star />,
         title: "Samsung Electronics Samsung Galexy S21 5G",
         price: "$299",
         rating: "(740)",
@@ -426,7 +413,6 @@ export const homepageContent = {
       {
         id: "6",
         image: assets.product_28,
-        startIcon: <Star />,
         title: "4K UHD LED Smart TV with Chromecast Built-in",
         priceOld: "$865.99",
         price: "$70",
@@ -437,7 +423,6 @@ export const homepageContent = {
       {
         id: "7",
         image: assets.product_29,
-        startIcon: <Star />,
         title: "Wired Over-Ear Gaming Headphones with USB",
         price: "$150",
         rating: "(536)",
@@ -446,7 +431,6 @@ export const homepageContent = {
       {
         id: "8",
         image: assets.product_30,
-        startIcon: <Star />,
         title: "Polaroid 57-Inch Photo/Video Tripod with Deluxe Tripod Ca...",
         priceOld: "$360",
         price: "$250",

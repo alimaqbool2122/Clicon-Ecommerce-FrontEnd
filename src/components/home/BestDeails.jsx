@@ -128,7 +128,7 @@ const BestDeails = () => {
 
             <div className="flex items-center justify-center py-3">
               <Link
-                href=""
+                href={ROUTES.SHOP}
                 className='relative py-1 inline-flex items-center gap-2 justify-center text-[#2DA5F3] font-medium before:content-[""] before:absolute before:left-1/2 before:bottom-0! before:-translate-x-1/2 before:h-0.5 before:w-[0%] before:bg-[#2DA5F3] before:duration-400 hover:before:w-full'
               >
                 Browse All Product
@@ -149,7 +149,10 @@ const BestDeails = () => {
                       key={index}
                       className="flex flex-col items-center justify-center"
                     >
-                      <Link href={ROUTES.PRODUCT_DETAILS(deals.id)} className="w-70 h-67 relative cursor-pointer">
+                      <Link
+                        href={ROUTES.PRODUCT_DETAILS(deals.id)}
+                        className="w-70 h-67 relative cursor-pointer"
+                      >
                         <Image src={deals.image} alt={deals.title} fill />
                       </Link>
 
@@ -285,135 +288,138 @@ const BestDeails = () => {
             {/* Right Column */}
             <div className="grid grid-cols-12 gap-6 md:gap-0">
               {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 group p-4 bg-white border border-[#E4E7E9] mx-7.5 sm:mx-0 relative"
-                  >
-                    <div className="mb-2 relative">
-                      <div className="aspect-216/188 relative">
+                <div
+                  key={product.id}
+                  className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 group p-4 bg-white border border-[#E4E7E9] mx-7.5 sm:mx-0 relative"
+                >
+                  <div className="mb-2 relative">
+                    <div className="aspect-216/188 relative">
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        fill
+                        className="mx-auto"
+                      />
+                    </div>
+                    {/* Action button */}
+                    <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 bg-black/20 flex items-center justify-center w-full h-full duration-500 ease-linear opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+                      <button
+                        type="button"
+                        className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                        onClick={() =>
+                          dispatch(
+                            toggleWishlistItem({
+                              ...product,
+                              inStock: product.badge !== "SOLD OUT",
+                            }),
+                          )
+                        }
+                      >
                         <Image
-                          src={product.image}
-                          alt={product.title}
-                          fill
-                          className="mx-auto"
+                          src={assets.Heart_Black}
+                          alt="Add to wishlist"
+                          width={24}
+                          height={24}
+                          className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
                         />
-                      </div>
+                        <Image
+                          src={assets.Heart_White}
+                          alt="Add to wishlist"
+                          width={24}
+                          height={24}
+                          className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
+                        />
+                      </button>
 
-                      <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 bg-black/20 flex items-center justify-center w-full h-full duration-500 ease-linear opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-                        <button
-                          type="button"
-                          className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
-                          onClick={() =>
-                            dispatch(
-                              toggleWishlistItem({
-                                ...product,
-                                inStock: product.badge !== "SOLD OUT",
-                              }),
-                            )
-                          }
-                        >
-                          <Image
-                            src={assets.Heart_Black}
-                            alt="Add to wishlist"
-                            width={24}
-                            height={24}
-                            className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
-                          />
-                          <Image
-                            src={assets.Heart_White}
-                            alt="Add to wishlist"
-                            width={24}
-                            height={24}
-                            className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
-                          />
-                        </button>
-
-                        <button
-                          className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
-                          onClick={() =>
-                            dispatch(
-                              addToCart({
-                                ...product,
-                                quantity: 1,
-                              }),
-                            )
-                          }
-                        >
-                          <Image
-                            src={assets.Cart_Black}
-                            alt="cart-white"
-                            width={24}
-                            height={24}
-                            className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
-                          />
-                          <Image
-                            src={assets.Cart_White}
-                            alt="cart-white"
-                            width={24}
-                            height={24}
-                            className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
-                          />
-                        </button>
-
-                        <button
-                          onClick={() => setOpenDialog(true)}
-                          className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
-                        >
-                          <Image
-                            src={assets.Eye_Black}
-                            alt="cart-white"
-                            width={24}
-                            height={24}
-                            className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
-                          />
-                          <Image
-                            src={assets.Eye_White}
-                            alt="cart-white"
-                            width={24}
-                            height={24}
-                            className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
-                          />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="">
-                      <Link
-                        href={ROUTES.PRODUCT_DETAILS(product.id)}
-                        className="text-[14px] line-clamp-2 leading-5 text-[#191C1F] font-normal mb-2 text-center sm:text-start duration-400 ease-linear hover:text-[#2DA5F3]"
+                      <button
+                        className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                        onClick={() =>
+                          dispatch(
+                            addToCart({
+                              ...product,
+                              quantity: 1,
+                            }),
+                          )
+                        }
                       >
-                        {product.title}
-                      </Link>
-                      <p className="text-[#2DA5F3] text-[14px] leading-5 font-semibold text-center sm:text-start">
-                        <del className="text-[#929FA5] mr-1">
-                          {product.priceOld}
-                        </del>
-                        {product.price}
-                      </p>
-                    </div>
+                        <Image
+                          src={assets.Cart_Black}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
+                        />
+                        <Image
+                          src={assets.Cart_White}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
+                        />
+                      </button>
 
-                    {/* ✅ Only render badge if present */}
-                    {product.badge && (
-                      <p
-                        className={`absolute top-3 left-3 py-1.25 px-2.5 text-white bg-[#EE5858] text-[12px] leading-4 font-semibold rounded-[3px] uppercase
-                                        ${product.badge === "SOLD OUT"
-                            ? "bg-[#929FA5]!"
-                            : ""
-                          }
-                                        ${product.badge === "HOT"
-                            ? "bg-[#EE5858]!"
-                            : ""
-                          }
-                                        ${product.badge.includes("% OFF")
-                            ? "bg-[#EFD33D] text-[#191C1F]!"
-                            : ""
-                          }
-                                        `}
+                      <button
+                        onClick={() => setOpenDialog(true)}
+                        className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
                       >
-                        {product.badge}
-                      </p>
-                    )}
+                        <Image
+                          src={assets.Eye_Black}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="transition-opacity duration-300 opacity-100 group-hover/icon:opacity-0"
+                        />
+                        <Image
+                          src={assets.Eye_White}
+                          alt="cart-white"
+                          width={24}
+                          height={24}
+                          className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
+                        />
+                      </button>
+                    </div>
                   </div>
+
+                  <div className="">
+                    <Link
+                      href={ROUTES.PRODUCT_DETAILS(product.id)}
+                      className="text-[14px] line-clamp-2 leading-5 text-[#191C1F] font-normal mb-2 text-center sm:text-start duration-400 ease-linear hover:text-[#2DA5F3]"
+                    >
+                      {product.title}
+                    </Link>
+                    <p className="text-[#2DA5F3] text-[14px] leading-5 font-semibold text-center sm:text-start">
+                      <del className="text-[#929FA5] mr-1">
+                        {product.priceOld}
+                      </del>
+                      {product.price}
+                    </p>
+                  </div>
+
+                  {/* ✅ Only render badge if present */}
+                  {product.badge && (
+                    <p
+                      className={`absolute top-3 left-3 py-1.25 px-2.5 text-white bg-[#EE5858] text-[12px] leading-4 font-semibold rounded-[3px] uppercase
+                                        ${
+                                          product.badge === "SOLD OUT"
+                                            ? "bg-[#929FA5]!"
+                                            : ""
+                                        }
+                                        ${
+                                          product.badge === "HOT"
+                                            ? "bg-[#EE5858]!"
+                                            : ""
+                                        }
+                                        ${
+                                          product.badge.includes("% OFF")
+                                            ? "bg-[#EFD33D] text-[#191C1F]!"
+                                            : ""
+                                        }
+                                        `}
+                    >
+                      {product.badge}
+                    </p>
+                  )}
+                </div>
               ))}
             </div>
           </div>

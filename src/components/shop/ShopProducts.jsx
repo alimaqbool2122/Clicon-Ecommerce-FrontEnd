@@ -3,9 +3,12 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SearchFilter from "./SearchFilter";
-import { ArrowLeft, ArrowRight, Cross } from "../svg/Icons";
+import { ArrowLeft, ArrowRight, Cross, Star } from "../svg/Icons";
 import { assets } from "../../constants/assets";
 import { shoppageContent } from "../../data/shop/shop";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/services/cartSlice";
+import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
 import ROUTES from "../../constants/routes";
 import CustomPagination from "../ui/CustomPagination";
 import { useShopFilter } from "@/contexts/ShopFilterContext";
@@ -17,6 +20,7 @@ const ShopProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
+  const dispatch = useDispatch();
   const {
     selectedCategories,
     selectedPriceRanges,
@@ -210,7 +214,18 @@ const ShopProducts = () => {
                       />
                     </div>
                     <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 bg-black/20 flex items-center justify-center w-full h-full duration-500 ease-linear opacity-0 invisible group-hover:opacity-100 group-hover:visible">
-                      <button className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white">
+                      {/* wishlist */}
+                      <button
+                        className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                        onClick={() =>
+                          dispatch(
+                            toggleWishlistItem({
+                              ...product,
+                              inStock: product.badge !== "SOLD OUT",
+                            }),
+                          )
+                        }
+                      >
                         <Image
                           src={assets.Heart_Black}
                           alt="cart-white"
@@ -226,8 +241,18 @@ const ShopProducts = () => {
                           className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
                         />
                       </button>
-
-                      <button className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white">
+                      {/* cart */}
+                      <button
+                        className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
+                        onClick={() =>
+                          dispatch(
+                            addToCart({
+                              ...product,
+                              quantity: 1,
+                            }),
+                          )
+                        }
+                      >
                         <Image
                           src={assets.Cart_Black}
                           alt="cart-white"
@@ -243,7 +268,7 @@ const ShopProducts = () => {
                           className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
                         />
                       </button>
-
+                      {/* view */}
                       <button
                         onClick={() => setOpenDialog(true)}
                         className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
@@ -271,7 +296,9 @@ const ShopProducts = () => {
                     {Array(5)
                       .fill(null)
                       .map((_, i) => (
-                        <li key={i}>{product.startIcon}</li>
+                        <li key={i}>
+                          <Star />
+                        </li>
                       ))}
                     <li className="text-[12px] leading-4 font-normal text-[#77878F] ml-1 mt-0.5">
                       {product.rating}

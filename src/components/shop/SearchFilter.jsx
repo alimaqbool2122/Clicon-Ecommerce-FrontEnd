@@ -96,7 +96,7 @@ const SearchFilter = ({ searchQuery, setSearchQuery, onSearch }) => {
                     <button
                       type="button"
                       onClick={() => handleOptionSelect(option)}
-                      className={`w-full text-left text-sm! font-medium leading-5 py-2.5 px-5 flex items-center justify-between hover:bg-[#F2F4F5]! ${
+                      className={`w-full text-left text-sm! font-medium leading-5 py-2.5 px-5 flex items-center justify-between hover:bg-[#F2F4F5]! cursor-pointer ${
                         selectedOption === option
                           ? "bg-[#F2F4F5]! font-semibold! text-[#212529]!"
                           : "text-[#6c757d]! hover:text-[#212529]!"

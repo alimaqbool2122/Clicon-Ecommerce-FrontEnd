@@ -7,7 +7,6 @@ export const shoppageContent = {
     {
       id: "1",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "TOZO T6 True Wireless Earbuds Bluetooth Headphon...",
       price: "$70",
       badge: "HOT",
@@ -18,7 +17,6 @@ export const shoppageContent = {
     {
       id: "2",
       image: assets.product_46,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       rating: "(994)",
@@ -28,7 +26,6 @@ export const shoppageContent = {
     {
       id: "3",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -39,7 +36,6 @@ export const shoppageContent = {
     {
       id: "4",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -50,7 +46,6 @@ export const shoppageContent = {
     {
       id: "5",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -61,7 +56,6 @@ export const shoppageContent = {
     {
       id: "6",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -72,7 +66,6 @@ export const shoppageContent = {
     {
       id: "7",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -83,7 +76,6 @@ export const shoppageContent = {
     {
       id: "8",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -94,7 +86,6 @@ export const shoppageContent = {
     {
       id: "9",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -105,7 +96,6 @@ export const shoppageContent = {
     {
       id: "10",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -116,7 +106,6 @@ export const shoppageContent = {
     {
       id: "11",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -127,7 +116,6 @@ export const shoppageContent = {
     {
       id: "12",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -138,7 +126,6 @@ export const shoppageContent = {
     {
       id: "13",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -149,7 +136,6 @@ export const shoppageContent = {
     {
       id: "14",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -160,7 +146,6 @@ export const shoppageContent = {
     {
       id: "15",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -171,7 +156,6 @@ export const shoppageContent = {
     {
       id: "16",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -182,7 +166,6 @@ export const shoppageContent = {
     {
       id: "17",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -193,7 +176,6 @@ export const shoppageContent = {
     {
       id: "18",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -204,7 +186,6 @@ export const shoppageContent = {
     {
       id: "19",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -215,7 +196,6 @@ export const shoppageContent = {
     {
       id: "20",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -226,7 +206,6 @@ export const shoppageContent = {
     {
       id: "21",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -237,7 +216,6 @@ export const shoppageContent = {
     {
       id: "22",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -248,7 +226,6 @@ export const shoppageContent = {
     {
       id: "23",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
@@ -259,7 +236,6 @@ export const shoppageContent = {
     {
       id: "24",
       image: assets.product_45,
-      startIcon: <Star />,
       title: "Amazon Basics High-Speed HDMI Cable (18 Gbps, 4K/6...",
       price: "$2,300",
       badge: "BEST DEALS",
