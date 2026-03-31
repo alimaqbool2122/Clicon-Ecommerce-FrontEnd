@@ -4,13 +4,12 @@ import Image from "next/image";
 import { assets } from "@/constants/assets";
 import { ArrowLeft, ArrowRight } from "../svg/Icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ROUTES from "@/constants/routes";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  removeFromCart,
-  updateQuantity,
-} from "@/redux/services/cartSlice";
+import { removeFromCart, updateQuantity } from "@/redux/services/cartSlice";
+import { toast } from "react-toastify";
 
 const parsePrice = (value) =>
   parseFloat(String(value ?? "0").replace(/[^0-9.]/g, "")) || 0;
@@ -25,6 +24,7 @@ const itemLineKey = (item) =>
   `${item.id}-${item.selectedSize ?? ""}-${item.selectedColor ?? ""}`;
 
 const ShopingCard = () => {
+  const router = useRouter();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
 
@@ -78,6 +78,7 @@ const ShopingCard = () => {
         selectedColor: item.selectedColor,
       }),
     );
+    toast.success("Product removed from cart");
   };
 
   const {
@@ -89,6 +90,19 @@ const ShopingCard = () => {
   const onSubmit = (data) => {
     console.log("Form Data:", data);
   };
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty!");
+      setTimeout(() => {
+        router.push(ROUTES.SHOP);
+      }, 2000);
+    } else {
+      router.push(ROUTES.CHECK_OUT);
+    }
+  };
+
   return (
     <>
       <div className="container py-18">
@@ -277,13 +291,13 @@ const ShopingCard = () => {
                   </span>
                 </div>
               </div>
-              <Link
-                href={ROUTES.CHECK_OUT}
-                className="flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white h-12 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F] hover:border-[#FA8232]"
+              <button
+                onClick={handleCheckout}
+                className="w-full flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white h-12 text-[14px] leading-px uppercase font-bold rounded-[3px] cursor-pointer duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F] hover:border-[#FA8232]"
               >
                 Proceed to Checkout
                 <ArrowRight />
-              </Link>
+              </button>
             </div>
             {/* card coupon */}
             <div className="border border-[#E4E7E9] rounded-sm">

@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import ROUTES from "@/constants/routes";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "@/redux/services/cartSlice";
 import { removeFromWishlist } from "@/redux/services/wishlistSlice";
+import { toast } from "react-toastify";
 
 const WishListTable = () => {
   const items = useSelector((state) => state.wishlist.items);
@@ -16,6 +16,11 @@ const WishListTable = () => {
   const handleAddToCart = (item) => {
     const { inStock: _inStock, ...product } = item;
     dispatch(addToCart({ ...product, quantity: 1 }));
+    toast.success("Product added to cart");
+  };
+  const handleRemove = (id) => {
+    dispatch(removeFromWishlist(id));
+    toast.success("Product removed from wishlist");
   };
 
   return (
@@ -124,11 +129,8 @@ const WishListTable = () => {
                           </button>
                           <button
                             type="button"
-                            onClick={() =>
-                              dispatch(removeFromWishlist(item.id))
-                            }
+                            onClick={() => handleRemove(item.id)}
                             className="cursor-pointer shrink-0"
-                            aria-label="Remove from wishlist"
                           >
                             <Image
                               src={assets.XCircle}

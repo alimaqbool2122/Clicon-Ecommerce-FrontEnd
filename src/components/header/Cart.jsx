@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { assets } from "../../constants/assets";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Cross } from "../svg/Icons";
 import ROUTES from "@/constants/routes";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "@/redux/services/cartSlice";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const [cartActive, setCartActive] = useState(false);
@@ -23,6 +25,25 @@ const Cart = () => {
   // get cart items from redux
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleRemove = (id, selectedSize, selectedColor) => {
+    dispatch(removeFromCart({ id, selectedSize, selectedColor }));
+    toast.success("Product removed from cart");
+  };
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    setCartActive(false);
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty!");
+      setTimeout(() => {
+        router.push(ROUTES.SHOP);
+      }, 2000);
+    } else {
+      router.push(ROUTES.CHECK_OUT);
+    }
+  };
   const subtotal = cartItems.reduce(
     (acc, item) =>
       acc +
@@ -30,9 +51,6 @@ const Cart = () => {
         item.quantity,
     0,
   );
-  const handleRemove = (id, selectedSize, selectedColor) => {
-    dispatch(removeFromCart({ id, selectedSize, selectedColor }));
-  };
   const totalQuantity = cartItems.reduce(
     (total, item) => total + item.quantity,
     0,
@@ -57,9 +75,9 @@ const Cart = () => {
           />
           {totalQuantity > 0 && (
             <div className="size-5 bg-white py-0.5 flex items-center justify-center rounded-full absolute -top-1 left-4">
-
-              <span className="text-[#1B6392] text-[12px] font-semibold">{totalQuantity}</span>
-
+              <span className="text-[#1B6392] text-[12px] font-semibold">
+                {totalQuantity}
+              </span>
             </div>
           )}
         </button>
@@ -67,17 +85,19 @@ const Cart = () => {
         <div
           className={`w-94 absolute top-12 right-0 z-10 bg-white border border-[#E4E7E9] rounded-sm shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)]
                     transition-all duration-400 ease-out origin-top
-                    ${cartActive
-              ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-            }
+                    ${
+                      cartActive
+                        ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                    }
                   `}
         >
           <div>
             {/* card Title */}
             <div className="border-b border-[#e4e7e9] py-4 px-6">
               <h6 className="text-base text-[#191C1F] leading-6 font-medium">
-                Shopping Cart <span className="text-[#6c757d]">({totalQuantity})</span>
+                Shopping Cart{" "}
+                <span className="text-[#6c757d]">({totalQuantity})</span>
               </h6>
             </div>
             {/* cart item */}
@@ -153,13 +173,13 @@ const Cart = () => {
             </div>
             {/* cart buttons */}
             <div className="p-6 pt-0 flex flex-col gap-3">
-              <Link
-                href={ROUTES.CHECK_OUT}
-                className="flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white h-12 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F] hover:border-[#FA8232]"
+              <button
+                onClick={handleCheckout}
+                className="cursor-pointer flex items-center justify-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] text-white h-12 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F] hover:border-[#FA8232]"
               >
                 Checkout now
                 <ArrowRight />
-              </Link>
+              </button>
 
               <Link
                 href={ROUTES.SHOPING_CARD}

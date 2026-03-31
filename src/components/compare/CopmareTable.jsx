@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeFromCompare } from "@/redux/services/compareSlice";
 import { addToCart } from "@/redux/services/cartSlice";
 import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
+import { toast } from "react-toastify";
 
 function getFact(item, needle) {
   return item.facts?.find((f) => String(f.label).includes(needle))?.title;
@@ -101,6 +102,7 @@ const CopmareTable = () => {
         selectedColor: item.colorName,
       }),
     );
+    toast.success("Product added to cart");
   };
 
   const handleAddToWishlist = (item) => {
@@ -116,6 +118,12 @@ const CopmareTable = () => {
         inStock,
       }),
     );
+    toast.success("Product added to wishlist");
+  };
+
+  const handleRemove = (id) => {
+    dispatch(removeFromCompare(id));
+    toast.success("Product removed from compare");
   };
 
   if (items.length === 0) {
@@ -146,9 +154,8 @@ const CopmareTable = () => {
                   <div className="space-y-4 p-8">
                     <button
                       type="button"
-                      onClick={() => dispatch(removeFromCompare(item.id))}
+                      onClick={() => handleRemove(item.id)}
                       className="cursor-pointer"
-                      aria-label="Remove from compare"
                     >
                       <Image
                         src={assets.XCircle}
@@ -197,7 +204,6 @@ const CopmareTable = () => {
                           type="button"
                           onClick={() => handleAddToWishlist(item)}
                           className="group/icon relative w-12 h-12 bg-white grid place-content-center rounded-[3px] border-2 cursor-pointer border-[#FFE7D6] duration-500 ease-linear hover:border-[#FA8232] hover:text-[#FA8232]"
-                          aria-label="Add to wishlist"
                         >
                           <Image
                             src={assets.Heart}

@@ -19,6 +19,7 @@ import {
   MAX_COMPARE_ITEMS,
 } from "@/redux/services/compareSlice";
 import ROUTES from "@/constants/routes";
+import { toast } from "react-toastify";
 
 const ProductDetails = () => {
   const {
@@ -193,11 +194,14 @@ const ProductDetails = () => {
         selectedColor: colorName,
       }),
     );
+    toast.success("Product added to cart");
   };
 
   const handleBuyNow = () => {
     handleAddToCart();
-    router.push(ROUTES.SHOPING_CARD);
+    setTimeout(() => {
+      router.push(ROUTES.SHOPING_CARD);
+    }, 2000);
   };
 
   const handleToggleWishlist = () => {
@@ -221,6 +225,7 @@ const ProductDetails = () => {
         inStock,
       }),
     );
+    toast.success("Product added to wishlist");
   };
 
   const handleToggleCompare = () => {
@@ -252,6 +257,7 @@ const ProductDetails = () => {
         colorName,
       }),
     );
+    toast.success("Product added to compare");
   };
 
   const handleThumbnailClick = (image, index) => {

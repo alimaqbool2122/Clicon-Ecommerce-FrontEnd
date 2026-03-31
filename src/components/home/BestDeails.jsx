@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/services/cartSlice";
 import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
 import ROUTES from "@/constants/routes";
+import { toast } from "react-toastify";
 
 const BestDeails = () => {
   const featureproduct = homepageContent.bestDeals;
@@ -57,6 +58,16 @@ const BestDeails = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    toast.success("Product added to cart");
+  };
+
+  const handleAddToWishlist = (product) => {
+    dispatch(toggleWishlistItem(product));
+    toast.success("Product added to wishlist");
+  };
 
   return (
     <>
@@ -191,16 +202,14 @@ const BestDeails = () => {
                           className="group/icon relative w-12 h-12 grid place-content-center rounded-[3px] border-2 cursor-pointer border-[#FFE7D6] bg-[#FFE7D6] duration-300 hover:border-[#FA8232] hover:text-[#FA8232] tooltip"
                           data-tip="Add To Wishlist"
                           onClick={() =>
-                            dispatch(
-                              toggleWishlistItem({
-                                id: featuredId,
-                                image: deals.image,
-                                title: deals.title,
-                                price: deals.priceNew,
-                                priceOld: deals.priceOld,
-                                inStock: true,
-                              }),
-                            )
+                            handleAddToWishlist({
+                              id: featuredId,
+                              image: deals.image,
+                              title: deals.title,
+                              price: deals.priceNew,
+                              priceOld: deals.priceOld,
+                              inStock: true,
+                            })
                           }
                         >
                           <Image
@@ -222,16 +231,14 @@ const BestDeails = () => {
                           type="button"
                           className="group/icon relative flex items-center gap-2 border-2 border-[#FA8232] bg-[#FA8232] cursor-pointer text-white h-12 px-[22.4px] text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear hover:bg-transparent hover:text-[#191C1F]"
                           onClick={() =>
-                            dispatch(
-                              addToCart({
-                                id: featuredId,
-                                image: deals.image,
-                                title: deals.title,
-                                price: deals.priceNew,
-                                priceOld: deals.priceOld,
-                                quantity: 1,
-                              }),
-                            )
+                            handleAddToCart({
+                              id: featuredId,
+                              image: deals.image,
+                              title: deals.title,
+                              price: deals.priceNew,
+                              priceOld: deals.priceOld,
+                              quantity: 1,
+                            })
                           }
                         >
                           <Image
@@ -303,16 +310,15 @@ const BestDeails = () => {
                     </div>
                     {/* Action button */}
                     <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 bg-black/20 flex items-center justify-center w-full h-full duration-500 ease-linear opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+                      {/* Wishlist */}
                       <button
                         type="button"
                         className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
                         onClick={() =>
-                          dispatch(
-                            toggleWishlistItem({
-                              ...product,
-                              inStock: product.badge !== "SOLD OUT",
-                            }),
-                          )
+                          handleAddToWishlist({
+                            ...product,
+                            inStock: product.badge !== "SOLD OUT",
+                          })
                         }
                       >
                         <Image
@@ -330,16 +336,14 @@ const BestDeails = () => {
                           className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
                         />
                       </button>
-
+                      {/* Cart */}
                       <button
                         className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
                         onClick={() =>
-                          dispatch(
-                            addToCart({
-                              ...product,
-                              quantity: 1,
-                            }),
-                          )
+                          handleAddToCart({
+                            ...product,
+                            quantity: 1,
+                          })
                         }
                       >
                         <Image
@@ -357,7 +361,7 @@ const BestDeails = () => {
                           className="absolute inset-0 m-auto transition-opacity duration-300 opacity-0 group-hover/icon:opacity-100"
                         />
                       </button>
-
+                      {/* View */}
                       <button
                         onClick={() => setOpenDialog(true)}
                         className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"

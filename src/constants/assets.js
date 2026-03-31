@@ -212,8 +212,18 @@ import Ellipse3 from "../../public/image/news/Ellipse3.webp";
 import Ellipse4 from "../../public/image/news/Ellipse4.webp";
 import Ellipse5 from "../../public/image/news/Ellipse5.webp";
 import cameron_Williamson from "../../public/image/news/cameron_Williamson.webp";
+import User_black from "../../public/image/svg/User_black.svg";
+import Dashboard from "../../public/image/svg/Dashboard.svg";
+import SignOut from "../../public/image/svg/SignOut.svg";
+import order from "../../public/image/svg/order.svg";
+import setting from "../../public/image/svg/setting.svg";
 
 export const assets = {
+  User_black,
+  Dashboard,
+  SignOut,
+  order,
+  setting,
   Ellipse1,
   Ellipse2,
   Ellipse3,

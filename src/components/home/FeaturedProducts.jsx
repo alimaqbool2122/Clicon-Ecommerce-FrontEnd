@@ -11,12 +11,22 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/services/cartSlice";
 import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
 import ROUTES from "@/constants/routes";
+import { toast } from "react-toastify";
 
 const FeaturedProducts = () => {
   // For Active state.
   const [activeIndex, setActiveIndex] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useDispatch();
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    toast.success("Product added to cart");
+  };
+
+  const handleAddToWishlist = (product) => {
+    dispatch(toggleWishlistItem(product));
+    toast.success("Product added to wishlist");
+  };
   const tabs = homepageContent.featuredProducts.producttabs;
   const products = homepageContent.featuredProducts.productsData;
   const Discount = homepageContent.featuredProducts.discountSection;
@@ -181,12 +191,10 @@ const FeaturedProducts = () => {
                           <button
                             className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
                             onClick={() =>
-                              dispatch(
-                                toggleWishlistItem({
-                                  ...product,
-                                  inStock: product.badge !== "SOLD OUT",
-                                }),
-                              )
+                              handleAddToWishlist({
+                                ...product,
+                                inStock: product.badge !== "SOLD OUT",
+                              })
                             }
                           >
                             <Image
@@ -208,12 +216,10 @@ const FeaturedProducts = () => {
                           <button
                             className="group/icon relative w-12 h-12 bg-white flex items-center justify-center rounded-[50%] mx-1 cursor-pointer duration-300 ease-linear hover:bg-[#FA8232] hover:text-white"
                             onClick={() =>
-                              dispatch(
-                                addToCart({
-                                  ...product,
-                                  quantity: 1,
-                                }),
-                              )
+                              handleAddToCart({
+                                ...product,
+                                quantity: 1,
+                              })
                             }
                           >
                             <Image
