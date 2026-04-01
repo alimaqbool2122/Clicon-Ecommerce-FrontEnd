@@ -1,4 +1,3 @@
-import { Star } from "../../components/svg/Icons";
 import { assets } from "../../constants/assets";
 
 // ShopPage All Content....

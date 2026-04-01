@@ -23,10 +23,11 @@ const ROUTES = {
   EMAIL_VERIFICATION: "/email-verification",
   DASHBOARD: "/dashboard",
   ORDER_HISTORY: "/order-history",
-  ORDER_HISTORY_DETAILS: (id) => `/order-history-details/${id}`,
+  ORDER_HISTORY_DETAILS: (id) => `/order-history-detail/${id}`,
   CARDS_ADDRESS: "/cards-address",
   BROWSING_HISTORY: "/browsing-history",
   PROFILE_SETTINGS: "/profile-settings",
+  PROFILE: "/profile",
 };
 
 export default ROUTES;

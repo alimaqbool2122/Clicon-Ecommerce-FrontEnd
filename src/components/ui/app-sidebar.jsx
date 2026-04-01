@@ -10,6 +10,7 @@ import {
   NoteBook,
   Setting,
   ShopingCard,
+  UserIcon,
   Wishlist,
 } from "../svg/Icons";
 import ROUTES from "@/constants/routes";
@@ -57,6 +58,11 @@ const sidebarLinks = [
     name: "Browsing History",
     href: ROUTES.BROWSING_HISTORY,
     icon: <ClockClokWise width={20} height={20} />,
+  },
+  {
+    name: "Profile",
+    href: ROUTES.PROFILE,
+    icon: <UserIcon width={20} height={20} />,
   },
   {
     name: "Setting",

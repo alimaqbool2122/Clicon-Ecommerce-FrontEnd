@@ -17,6 +17,11 @@ import {
   CaretDown,
   CaretRight,
   ArrowRight,
+  Dashboard,
+  History,
+  Setting,
+  LogOut,
+  UserIcon,
 } from "../svg/Icons";
 import { assets } from "../../constants/assets";
 import ROUTES from "../../constants/routes";
@@ -99,26 +104,36 @@ const DesktopNavigation = () => {
   ];
 
   const userDropdownLinks = [
-    { id: 1, name: "Profile", href: ROUTES.DASHBOARD, icon: assets.User_black },
+    {
+      id: 1,
+      name: "Profile",
+      href: ROUTES.PROFILE,
+      icon: <UserIcon width={20} height={20} />,
+    },
     {
       id: 2,
       name: "Dashboard",
       href: ROUTES.DASHBOARD,
-      icon: assets.Dashboard,
+      icon: <Dashboard width={20} height={20} />,
     },
     {
       id: 3,
       name: "My Orders",
       href: ROUTES.ORDER_HISTORY,
-      icon: assets.order,
+      icon: <History width={20} height={20} />,
     },
     {
       id: 4,
       name: "Settings",
       href: ROUTES.PROFILE_SETTINGS,
-      icon: assets.setting,
+      icon: <Setting width={20} height={20} />,
     },
-    { id: 5, name: "Logout", href: "#", icon: assets.SignOut },
+    {
+      id: 5,
+      name: "Logout",
+      href: "#",
+      icon: <LogOut width={20} height={20} />,
+    },
   ];
 
   return (
@@ -397,7 +412,7 @@ const DesktopNavigation = () => {
                   onClick={() => setUserDropdown(!userDropdown)}
                 >
                   <Image
-                    src={assets.member_1}
+                    src={assets.member_2}
                     alt="user-img"
                     width={32}
                     height={32}
@@ -414,22 +429,24 @@ const DesktopNavigation = () => {
                   `}
                 >
                   <ul className="py-2">
-                    {userDropdownLinks.map((link) => (
-                      <li key={link.id}>
-                        <Link
-                          href={link.href}
-                          className="flex items-center gap-2.5 py-2 px-4 text-[#191C1F] text-sm font-semibold"
-                        >
-                          <Image
-                            src={link.icon}
-                            alt={link.name}
-                            width={24}
-                            height={24}
-                          />
-                          <span>{link.name}</span>
-                        </Link>
-                      </li>
-                    ))}
+                    {userDropdownLinks.map((link) => {
+                      const isActive = pathname === link.href;
+                      return (
+                        <li key={link.id}>
+                          <Link
+                            href={link.href}
+                            className={`flex items-center gap-2.5 py-2 px-4 text-sm font-medium duration-300 ease-linear ${
+                              isActive
+                                ? "bg-[#FA8232] text-white"
+                                : "bg-white text-[#5F6C72]"
+                            }`}
+                          >
+                            {link.icon}
+                            <span>{link.name}</span>
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>

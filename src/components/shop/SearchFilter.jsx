@@ -55,7 +55,7 @@ const SearchFilter = ({ searchQuery, setSearchQuery, onSearch }) => {
           <button
             type="button"
             onClick={handleSearchClick}
-            className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer z-10 bg-white border-none outline-none"
+            className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer bg-white border-none outline-none"
           >
             <Search />
           </button>

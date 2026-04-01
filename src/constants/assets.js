@@ -217,8 +217,20 @@ import Dashboard from "../../public/image/svg/Dashboard.svg";
 import SignOut from "../../public/image/svg/SignOut.svg";
 import order from "../../public/image/svg/order.svg";
 import setting from "../../public/image/svg/setting.svg";
+import Receipt from "../../public/image/svg/Receipt.svg";
+import Rocket from "../../public/image/svg/Rocket.svg";
+import Visa from "../../public/image/svg/Visa.svg";
+import DotsThree from "../../public/image/svg/DotsThree.svg";
+import mastercard from "../../public/image/svg/mastercard.svg";
+import Copy_White from "../../public/image/svg/Copy_White.svg";
 
 export const assets = {
+  Copy_White,
+  mastercard,
+  DotsThree,
+  Visa,
+  Receipt,
+  Rocket,
   User_black,
   Dashboard,
   SignOut,
