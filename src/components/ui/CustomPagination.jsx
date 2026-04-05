@@ -91,7 +91,7 @@ const CustomPagination = ({
                   className="size-10 bg-white rounded-full border-2! border-[#E4E7E9]! text-[#191C1F] font-semibold text-sm! duration-300 ease-linear cursor-pointer hover:bg-[#FA8232] hover:text-white"
                   style={{
                     backgroundColor: currentPage === item ? "#FA8232" : "white",
-                    borderColor: currentPage === item ? "#FA8232" : "#E4E7E9",
+                    borderColor: currentPage === item ? "#FA8232" : "#s",
                     color: currentPage === item ? "white" : "#191C1F",
                     border:
                       currentPage === item

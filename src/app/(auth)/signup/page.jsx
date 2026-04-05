@@ -72,7 +72,7 @@ const page = () => {
               {/* first name */}
               <div className="col-span-12">
                 <label
-                  htmlFor="email"
+                  htmlFor="name"
                   className="text-sm font-normal leading-5 text-[#191C1F]"
                 >
                   Name

@@ -6,10 +6,17 @@ import Image from "next/image";
 import { assets } from "@/constants/assets";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { ArrowRight } from "@/components/svg/Icons";
+import AddCardModal from "@/components/payment-method/AddCardModal";
+import EditCardModal from "@/components/payment-method/EditCardModal";
+import DeleteCardModal from "@/components/payment-method/DeleteCardModal";
 
 const page = () => {
   const [revealedCard, setRevealedCard] = useState(null);
   const [dropdownCardId, setDropdownCardId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const getMaskedNumber = (cardNumber, cardId) => {
     if (revealedCard === cardId) return cardNumber;
@@ -25,6 +32,28 @@ const page = () => {
     setTimeout(() => {
       setRevealedCard(null);
     }, 2000);
+  };
+  const onSubmit = (data) => {
+    console.log("Form Data:", data);
+    setOpenDialog(false);
+    setOpenEditDialog(false);
+  };
+  const handleEditClick = (item) => {
+    setSelectedCard(item);
+    setOpenEditDialog(true);
+    setDropdownCardId(null);
+  };
+
+  const handleDeleteClick = (item) => {
+    setSelectedCard(item);
+    setOpenDeleteDialog(true);
+    setDropdownCardId(null);
+  };
+
+  const handleDeleteConfirm = () => {
+    console.log("Deleted card:", selectedCard);
+    // add your delete API call here
+    setSelectedCard(null);
   };
   const OrderStatus = [
     {
@@ -59,6 +88,8 @@ const page = () => {
       card_icon: assets.Visa,
       dots_icon: assets.DotsThree,
       copy_icon: assets.Copy_White,
+      expiry_date: "12/25",
+      cvv: "123",
     },
     {
       id: 2,
@@ -68,6 +99,8 @@ const page = () => {
       card_icon: assets.mastercard,
       dots_icon: assets.DotsThree,
       copy_icon: assets.Copy_White,
+      expiry_date: "12/25",
+      cvv: "123",
     },
   ];
 
@@ -282,10 +315,14 @@ const page = () => {
         <div className="border border-[#E4E7E9] rounded-sm">
           <div className="flex items-center justify-between px-6 py-4">
             <h3 className="text-sm font-medium uppercase">Payment Option</h3>
-            <button className="text-sm text-[#FA8232] font-semibold flex items-center gap-2 duration-500 ease-linear cursor-pointer hover:text-[#2DA5F3]">
+            <button
+              className="text-sm text-[#FA8232] font-semibold flex items-center gap-2 duration-500 ease-linear cursor-pointer hover:text-[#2DA5F3]"
+              onClick={() => setOpenDialog(true)}
+            >
               Add Card <ArrowRight />
             </button>
           </div>
+
           <div className="border-t border-[#E4E7E9] p-6 pt-5.5 grid grid-cols-12 gap-6">
             {paymentOption.map((item, index) => (
               <div
@@ -316,17 +353,24 @@ const page = () => {
                         height={24}
                       />
                     </button>
+
                     {dropdownCardId === item.id && (
                       <>
                         <div
                           className="fixed inset-0 z-10"
                           onClick={() => setDropdownCardId(null)}
-                        ></div>
+                        />
                         <div className="absolute right-0 top-8 w-36 bg-white rounded shadow-[0px_4px_16px_rgba(0,0,0,0.08)] z-20 py-2">
-                          <button className="w-full text-left px-4 py-2 text-sm text-[#5F6C72] cursor-pointer hover:text-black hover:bg-gray-50 transition-colors">
+                          <button
+                            className="w-full text-left px-4 py-2 text-sm text-[#5F6C72] cursor-pointer hover:text-black hover:bg-gray-50 transition-colors"
+                            onClick={() => handleEditClick(item)}
+                          >
                             Edit Card
                           </button>
-                          <button className="w-full text-left px-4 py-2 text-sm text-[#5F6C72] cursor-pointer hover:text-black hover:bg-gray-50 transition-colors">
+                          <button
+                            className="w-full text-left px-4 py-2 text-sm text-[#5F6C72] cursor-pointer hover:text-black hover:bg-gray-50 transition-colors"
+                            onClick={() => handleDeleteClick(item)}
+                          >
                             Delete Card
                           </button>
                         </div>
@@ -334,6 +378,7 @@ const page = () => {
                     )}
                   </div>
                 </div>
+
                 <div className="flex flex-col gap-2 mb-2">
                   <span className="text-[11px] text-[#FFFFFF] opacity-75 uppercase">
                     Card number
@@ -362,6 +407,7 @@ const page = () => {
                     </button>
                   </div>
                 </div>
+
                 <div className="flex items-center justify-between">
                   <Image
                     src={item.card_icon}
@@ -453,6 +499,18 @@ const page = () => {
           <div className="border-t border-[#E4E7E9] p-6 pt-5.5"></div>
         </div>
       </div>
+      {/* Modals */}
+      <AddCardModal open={openDialog} onOpenChange={setOpenDialog} />
+      <EditCardModal
+        open={openEditDialog}
+        onOpenChange={setOpenEditDialog}
+        cardData={selectedCard}
+      />
+      <DeleteCardModal
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        onConfirm={handleDeleteConfirm}
+      />
     </>
   );
 };

@@ -56,48 +56,58 @@ const page = () => {
                 </span>
               </p>
               {/* Progress bars */}
-              <div className="relative flex items-center w-full">
-                {progressStages.map((progressStage, index) => {
-                  const nextStage = progressStages[index + 1];
-                  const isLineActive =
-                    progressStage.status === "completed" ||
-                    progressStage.status === "active";
-
+              <div
+                className="relative w-full max-w-178 mx-auto"
+                style={{ height: "24px" }}
+              >
+                {/* Background full line (inactive) */}
+                <div
+                  className="absolute top-1/2 left-3 right-3 -translate-y-1/2 bg-[#FA8232] opacity-30"
+                  style={{ height: "8px" }}
+                />
+                {/* Active line — grows from left based on how many stages are completed/active */}
+                {(() => {
+                  const lastActiveIndex = progressStages.reduce(
+                    (acc, stage, i) =>
+                      stage.status === "completed" || stage.status === "active"
+                        ? i
+                        : acc,
+                    -1,
+                  );
+                  if (lastActiveIndex <= 0) return null;
+                  const pct =
+                    (lastActiveIndex / (progressStages.length - 1)) * 100;
                   return (
-                    <React.Fragment key={progressStage.id}>
-                      {/* Circle indicator */}
-                      <div className="relative z-10 shrink-0">
-                        {progressStage.status === "completed" ? (
-                          <div className="w-6 h-6 bg-[#FA8232] rounded-full flex items-center justify-center">
-                            <Image
-                              src={assets.Check_white}
-                              alt="tick"
-                              width={12}
-                              height={12}
-                            />
-                          </div>
-                        ) : progressStage.status === "active" ? (
-                          <div className="w-6 h-6 bg-[#FA8232] rounded-full"></div>
-                        ) : (
-                          <div className="w-6 h-6 border-2 border-[#FA8232] rounded-full bg-white"></div>
-                        )}
-                      </div>
-                      {/* Connecting line */}
-                      {index < progressStages.length - 1 && (
-                        <div
-                          className={`rounded-full ${
-                            isLineActive
-                              ? "bg-[#FA8232]"
-                              : "bg-[#FA8232] opacity-30"
-                          }`}
-                          style={{
-                            width: "calc((100% - 96px) / 3)",
-                            minWidth: "58.5px",
-                            height: "8px",
-                          }}
-                        ></div>
+                    <div
+                      className="absolute top-1/2 left-3 -translate-y-1/2 bg-[#FA8232]"
+                      style={{ height: "8px", width: `calc(${pct}% - 6px)` }}
+                    />
+                  );
+                })()}
+                {/* Circles absolutely positioned over the line */}
+                {progressStages.map((progressStage, index) => {
+                  const pct = (index / (progressStages.length - 1)) * 100;
+                  return (
+                    <div
+                      key={progressStage.id}
+                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-10"
+                      style={{ left: `${pct}%` }}
+                    >
+                      {progressStage.status === "completed" ? (
+                        <div className="w-6 h-6 bg-[#FA8232] rounded-full flex items-center justify-center">
+                          <Image
+                            src={assets.Check_white}
+                            alt="tick"
+                            width={12}
+                            height={12}
+                          />
+                        </div>
+                      ) : progressStage.status === "active" ? (
+                        <div className="w-6 h-6 bg-[#FA8232] rounded-full" />
+                      ) : (
+                        <div className="w-6 h-6 border-2 border-[#FA8232] rounded-full bg-white" />
                       )}
-                    </React.Fragment>
+                    </div>
                   );
                 })}
               </div>
