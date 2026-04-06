@@ -286,6 +286,7 @@ export const homepageContent = {
         badge: "HOT",
         rating: "(738)",
         category: "Headphone",
+        date: "17 Oct, 2020",
       },
       {
         id: "2",
@@ -294,6 +295,7 @@ export const homepageContent = {
         price: "$220",
         rating: "(536)",
         category: "Smart Phone",
+        date: "17 Oct, 2020",
       },
       {
         id: "3",
@@ -304,6 +306,7 @@ export const homepageContent = {
         badge: "BEST DEALS",
         rating: "(423)",
         category: "TV",
+        date: "17 Oct, 2020",
       },
       {
         id: "4",
@@ -312,6 +315,7 @@ export const homepageContent = {
         price: "$1,200",
         rating: "(816)",
         category: "Laptop",
+        date: "17 Oct, 2020",
       },
       {
         id: "5",

@@ -223,8 +223,12 @@ import Visa from "../../public/image/svg/Visa.svg";
 import DotsThree from "../../public/image/svg/DotsThree.svg";
 import mastercard from "../../public/image/svg/mastercard.svg";
 import Copy_White from "../../public/image/svg/Copy_White.svg";
+import Profile_img from "../../public/image/Profile_img.webp";
+import UploadSimple from "../../public/image/svg/UploadSimple.svg";
 
 export const assets = {
+  UploadSimple,
+  Profile_img,
   Copy_White,
   mastercard,
   DotsThree,
