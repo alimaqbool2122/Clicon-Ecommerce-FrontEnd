@@ -26,7 +26,7 @@ const AddCardModal = ({ open, onOpenChange }) => {
         className="w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:w-[calc(100%-4rem)] xl:max-w-118 rounded-sm"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E4E7E9]">
+        <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-[#E4E7E9]">
           <h1 className="text-[#191C1F] text-sm font-medium uppercase">
             Add New Card
           </h1>
@@ -36,7 +36,7 @@ const AddCardModal = ({ open, onOpenChange }) => {
         </div>
 
         {/* Body */}
-        <div className="p-6">
+        <div className="p-5 sm:p-6">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

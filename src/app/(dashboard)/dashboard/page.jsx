@@ -5,10 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { assets } from "@/constants/assets";
 import AnimatedCounter from "@/components/AnimatedCounter";
-import { ArrowRight } from "@/components/svg/Icons";
 import AddCardModal from "@/components/payment-method/AddCardModal";
 import EditCardModal from "@/components/payment-method/EditCardModal";
 import DeleteCardModal from "@/components/payment-method/DeleteCardModal";
+import { homepageContent } from "@/data/home/home";
+import { Navigation, Pagination } from "swiper/modules";
+import ReusableSwiper from "@/components/common/ReusableSwiper";
+import { ArrowLeft, ArrowRight, Star } from "@/components/svg/Icons";
 
 const page = () => {
   const [revealedCard, setRevealedCard] = useState(null);
@@ -17,6 +20,8 @@ const page = () => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const products = homepageContent.featuredProducts.productsData;
+  const swiperRef = useRef(null);
 
   const getMaskedNumber = (cardNumber, cardId) => {
     if (revealedCard === cardId) return cardNumber;
@@ -195,11 +200,11 @@ const page = () => {
         {/* account and Billing */}
         <div className="grid grid-cols-12 gap-6">
           {/* account info */}
-          <div className="col-span-4 border border-[#E4E7E9] rounded-sm">
-            <div className="px-6 py-4">
+          <div className="col-span-12 md:col-span-6 lg:col-span-4 border border-[#E4E7E9] rounded-sm">
+            <div className="p-4 md:px-6 md:py-4">
               <h3 className="text-sm font-medium uppercase">Account Info</h3>
             </div>
-            <div className="border-t border-[#E4E7E9] p-6 pt-5.5">
+            <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5">
               <div className="flex items-center gap-4 mb-5">
                 <div className="relative w-12 h-12">
                   <Image
@@ -247,11 +252,11 @@ const page = () => {
             </div>
           </div>
           {/* Billing Address */}
-          <div className="col-span-4 border border-[#E4E7E9] rounded-sm">
-            <div className="px-6 py-4">
+          <div className="col-span-12 md:col-span-6 lg:col-span-4 border border-[#E4E7E9] rounded-sm">
+            <div className="p-4 md:px-6 md:py-4">
               <h3 className="text-sm font-medium uppercase">Billing address</h3>
             </div>
-            <div className="border-t border-[#E4E7E9] p-6 pt-5.5">
+            <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5">
               <ul className="mb-5.5 space-y-1">
                 <li className="flex  flex-col space-y-2">
                   <span className="text-sm text-[#191C1F] font-medium">
@@ -284,10 +289,13 @@ const page = () => {
             </div>
           </div>
           {/* Total orders */}
-          <div className="col-span-4">
+          <div className="col-span-12 lg:col-span-4">
             <ul className="grid grid-cols-12 gap-6">
               {OrderStatus.map((item) => (
-                <li key={item.id} className="col-span-12">
+                <li
+                  key={item.id}
+                  className="col-span-12 sm:col-span-6 lg:col-span-12"
+                >
                   <div
                     className={`flex items-center gap-4 p-4.25 rounded-sm ${item.bg}`}
                   >
@@ -313,7 +321,7 @@ const page = () => {
         </div>
         {/* payment options */}
         <div className="border border-[#E4E7E9] rounded-sm">
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center justify-between p-4 md:px-6 md:py-4">
             <h3 className="text-sm font-medium uppercase">Payment Option</h3>
             <button
               className="text-sm text-[#FA8232] font-semibold flex items-center gap-2 duration-500 ease-linear cursor-pointer hover:text-[#2DA5F3]"
@@ -323,11 +331,11 @@ const page = () => {
             </button>
           </div>
 
-          <div className="border-t border-[#E4E7E9] p-6 pt-5.5 grid grid-cols-12 gap-6">
+          <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5 grid grid-cols-12 gap-6">
             {paymentOption.map((item, index) => (
               <div
                 key={item.id}
-                className={`col-span-4 rounded-sm w-74 h-49 p-6 ${
+                className={`col-span-12 md:col-span-6 lg:col-span-4 rounded-sm w-74 h-49 p-6 mx-auto lg:mx-0 ${
                   index % 2 === 0
                     ? "bg-[radial-gradient(98.14%_214.97%_at_0%_0%,#1B6392_0%,#124261_100%)]"
                     : "bg-[radial-gradient(98.14%_214.97%_at_0%_0%,#248E1D_0%,#2DB324_100%)]"
@@ -425,7 +433,7 @@ const page = () => {
         </div>
         {/* resent orders */}
         <div className="border border-[#E4E7E9] rounded-sm">
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center justify-between p-4 md:px-6 md:py-4">
             <h3 className="text-sm font-medium uppercase">Recent Orders</h3>
             <Link
               href={ROUTES.ORDER_HISTORY}
@@ -438,7 +446,7 @@ const page = () => {
             <table className="w-full">
               {/* table header */}
               <thead>
-                <tr className="flex items-center gap-6 bg-[#F2F4F5] border-t border-b border-[#E4E7E9] py-2.5 px-6">
+                <tr className="flex items-center gap-6 bg-[#F2F4F5] border-t border-b border-[#E4E7E9] py-2.5 px-4 md:px-6">
                   <th className="w-31 text-left text-[#475156] text-[12px] font-medium uppercase">
                     Order ID
                   </th>
@@ -457,7 +465,7 @@ const page = () => {
                 </tr>
               </thead>
               {/* table body */}
-              <tbody className="flex flex-col px-6 py-3">
+              <tbody className="flex flex-col px-4 md:px-6 py-3">
                 {orderHistory.map((item) => (
                   <tr key={item.id} className="flex items-center gap-6 py-3">
                     <td className="w-31 text-sm text-[#191C1F] font-medium">
@@ -487,7 +495,7 @@ const page = () => {
         </div>
         {/* browsing histroy */}
         <div className="border border-[#E4E7E9] rounded-sm">
-          <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center justify-between p-4 md:px-6 md:py-4">
             <h3 className="text-sm font-medium uppercase">Browsing history</h3>
             <Link
               href={ROUTES.BROWSING_HISTORY}
@@ -496,7 +504,114 @@ const page = () => {
               View All <ArrowRight />
             </Link>
           </div>
-          <div className="border-t border-[#E4E7E9] p-6 pt-5.5"></div>
+          <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5">
+            <div className="relative hidden">
+              <ReusableSwiper
+                slides={products}
+                className="browse-product"
+                swiperProps={{
+                  modules: [Navigation, Pagination],
+                  spaceBetween: 0,
+                  slidesPerView: 1,
+                  navigation: false,
+                  pagination: {
+                    clickable: true,
+                    el: ".browse-pagination",
+                  },
+                  speed: 800,
+                  loop: true,
+                  onSwiper: (swiper) => (swiperRef.current = swiper),
+                  breakpoints: {
+                    640: { slidesPerView: 2, spaceBetween: 20 },
+                    768: { slidesPerView: 3, spaceBetween: 20 },
+                    1024: { slidesPerView: 4, spaceBetween: 20 },
+                    1200: { slidesPerView: 4, spaceBetween: 20 },
+                  },
+                }}
+                renderSlide={(slide) => (
+                  <div className="relative col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 sm:pr-1 bg-white sm:border-r border-[#E4E7E9] last:border-r-0">
+                    {/* Product Image */}
+                    <div className="aspect-202/172 relative mb-6">
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        className="mx-auto"
+                      />
+                    </div>
+                    {/* Product Rating */}
+                    <ul className="flex items-center mb-2">
+                      {Array(5)
+                        .fill(null)
+                        .map((_, i) => (
+                          <li key={i}>
+                            <Star width={16} height={16} />
+                          </li>
+                        ))}
+                      <li className="text-[12px] leading-4 font-normal text-[#77878F] ml-1 mt-0.5">
+                        {slide.rating}
+                      </li>
+                    </ul>
+                    {/* Product Title + Price */}
+                    <Link
+                      href={ROUTES.PRODUCT_DETAILS(slide.id)}
+                      className="text-[14px] line-clamp-2 leading-5 text-[#191C1F] font-normal mb-2 duration-400 ease-linear hover:text-[#2DA5F3]"
+                    >
+                      {slide.title}
+                    </Link>
+                    <p className="text-[#2DA5F3] text-[14px] leading-5 font-semibold">
+                      {slide.priceOld && (
+                        <del className="text-[#929FA5] mr-1">
+                          {slide.priceOld}
+                        </del>
+                      )}
+                      {slide.price}
+                    </p>
+                    {/* Badge */}
+                    {slide.badge && (
+                      <p
+                        className={`absolute top-3 left-3 py-1.25 px-2.5 text-white bg-[#EE5858] text-[12px] leading-4 font-semibold rounded-[3px] uppercase
+                          ${
+                            slide.badge === "SOLD OUT"
+                              ? "bg-[#929FA5]!"
+                              : slide.badge === "HOT"
+                                ? "bg-[#EE5858]!"
+                                : slide.badge === "BEST DEALS"
+                                  ? "bg-[#2DA5F3]!" // 🔹 Blue for Best Deals
+                                  : slide.badge === "SALE"
+                                    ? "bg-[#EE5858]!" // 🔹 Green for Sale
+                                    : slide.badge.includes("% OFF")
+                                      ? "bg-[#EFD33D]! text-[#191C1F]!"
+                                      : "bg-[#FA8232]"
+                          }`}
+                      >
+                        {slide.badge}
+                      </p>
+                    )}
+                  </div>
+                )}
+              />
+              {/* Navigation Buttons and Pagination */}
+              <div className="browse-product flex items-center justify-center gap-4 mt-6">
+                <div
+                  onClick={() => swiperRef.current.slidePrev()}
+                  className="bg-white border-2 border-[#FA8232] w-12 h-12 flex items-center justify-center rounded-full text-[#FA8232] cursor-pointer hover:bg-[#FA8232] hover:text-white transition-all duration-300"
+                >
+                  <ArrowLeft width={24} height={24} />
+                </div>
+
+                {/* Custom Pagination Container */}
+                <div className="browse-pagination swiper-pagination static! w-auto! mt-0! flex items-center justify-center"></div>
+
+                <div
+                  onClick={() => swiperRef.current.slideNext()}
+                  className="bg-white border-2 border-[#FA8232] w-12 h-12 flex items-center justify-center rounded-full text-[#FA8232] cursor-pointer hover:bg-[#FA8232] hover:text-white transition-all duration-300"
+                >
+                  <ArrowRight width={24} height={24} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {/* Modals */}

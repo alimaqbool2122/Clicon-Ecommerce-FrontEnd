@@ -18,7 +18,7 @@ const DeleteCardModal = ({ open, onOpenChange, onConfirm }) => {
         onInteractOutside={(e) => e.preventDefault()}
         className="w-[calc(100%-2rem)] sm:max-w-[420px] rounded-[8px] border-none p-0 overflow-hidden"
       >
-        <div className="p-8 relative bg-white">
+        <div className="p-5 sm:p-8 relative bg-white">
           <DialogClose className="absolute top-4 right-4 cursor-pointer">
             <Cross fill="#929FA5" width={20} height={20} />
           </DialogClose>

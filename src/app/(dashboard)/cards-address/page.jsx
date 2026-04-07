@@ -91,7 +91,7 @@ const page = () => {
           {paymentOption.map((item, index) => (
             <div
               key={item.id}
-              className={`col-span-4 rounded-sm w-74 h-49 p-6 ${
+              className={`col-span-12 md:col-span-6 lg:col-span-4 rounded-sm w-74 h-49 p-6 mx-auto lg:mx-0 ${
                 index % 2 === 0
                   ? "bg-[radial-gradient(98.14%_214.97%_at_0%_0%,#1B6392_0%,#124261_100%)]"
                   : "bg-[radial-gradient(98.14%_214.97%_at_0%_0%,#248E1D_0%,#2DB324_100%)]"
@@ -191,7 +191,7 @@ const page = () => {
       {/* Billing & Shipping Address */}
       <div className="grid grid-cols-12 gap-6 mt-6">
         {/* Billing Address */}
-        <div className="col-span-6 border border-[#E4E7E9] rounded-sm">
+        <div className="col-span-12 md:col-span-6 border border-[#E4E7E9] rounded-sm">
           <div className="px-6 py-4">
             <h3 className="text-sm font-medium uppercase">Billing address</h3>
           </div>
@@ -227,7 +227,7 @@ const page = () => {
         </div>
 
         {/* Shipping Address */}
-        <div className="col-span-6 border border-[#E4E7E9] rounded-sm">
+        <div className="col-span-12 md:col-span-6 border border-[#E4E7E9] rounded-sm">
           <div className="px-6 py-4">
             <h3 className="text-sm font-medium uppercase">Shipping Address</h3>
           </div>

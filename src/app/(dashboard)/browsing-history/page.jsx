@@ -16,7 +16,7 @@ const page = () => {
     <>
       <div className="space-y-6">
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="space-y-2 sm:space-y-0 flex flex-wrap items-center justify-between">
             <h1 className="text-base sm:text-xl font-semibold text-[#191C1F]">
               Browsing History
             </h1>
@@ -36,9 +36,9 @@ const page = () => {
             </div>
           </div>
           {/* search and filters */}
-          <div className="flex  items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {/* search */}
-            <div className="border border-[#E4E7E9] rounded-xs py-3 px-4 w-full sm:max-w-106! flex items-center gap-3">
+            <div className="border border-[#E4E7E9] rounded-xs py-3 px-4 w-full lg:max-w-106! flex items-center gap-3">
               <button
                 type="button"
                 className="cursor-pointer text-[#FA8232] border-none"
@@ -52,7 +52,7 @@ const page = () => {
               />
             </div>
             {/* calendar */}
-            <div className="border border-[#E4E7E9] rounded-xs py-3 px-4 w-full sm:max-w-78! flex items-center gap-3">
+            <div className="border border-[#E4E7E9] rounded-xs py-3 px-4 w-full lg:max-w-78! flex items-center gap-3">
               <button
                 type="button"
                 className="cursor-pointer text-[#FA8232] border-none"
@@ -76,7 +76,7 @@ const page = () => {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="relative col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 pr-1 bg-white border-r border-[#E4E7E9] last:border-r-0"
+                className="relative col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 sm:pr-1 bg-white sm:border-r border-[#E4E7E9] last:border-r-0"
               >
                 {/* Product Image */}
                 <div className="aspect-202/172 relative mb-6">
@@ -103,7 +103,7 @@ const page = () => {
                 {/* Product Title + Price */}
                 <Link
                   href={ROUTES.PRODUCT_DETAILS(product.id)}
-                  className="text-[14px] line-clamp-2 leading-5 text-[#191C1F] font-normal mb-2 text-center sm:text-start duration-400 ease-linear hover:text-[#2DA5F3]"
+                  className="text-[14px] line-clamp-2 leading-5 text-[#191C1F] font-normal mb-2 duration-400 ease-linear hover:text-[#2DA5F3]"
                 >
                   {product.title}
                 </Link>

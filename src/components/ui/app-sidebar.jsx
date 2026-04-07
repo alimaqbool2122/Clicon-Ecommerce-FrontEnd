@@ -81,7 +81,7 @@ const AppSidebar = () => {
 
   return (
     <>
-      <div>
+      <div className="hidden 2xl:block">
         <ul className="w-66 py-4 bg-white border border-[#E4E7E9] rounded-sm shadow-[0px_8px_40px_0px_rgba(0,0,0,0.08)]">
           {sidebarLinks.map((link) => {
             const isActive = pathname === link.href;
@@ -106,7 +106,7 @@ const AppSidebar = () => {
                       }}
                     />
                   )}
-                  <span className="relative z-10 flex items-center gap-3">
+                  <span className="relative flex items-center gap-3">
                     {link.icon}
                     {link.name}
                   </span>

@@ -34,13 +34,13 @@ const page = () => {
   };
   return (
     <>
-      <div className="col-span-4 border border-[#E4E7E9] rounded-sm">
-        <div className="px-6 py-4">
+      <div className="border border-[#E4E7E9] rounded-sm">
+        <div className="p-4 md:px-6 md:py-4">
           <h3 className="text-sm font-medium uppercase">Profile Setting</h3>
         </div>
-        <div className="border-t border-[#E4E7E9] p-6 pt-5.5 flex gap-6">
+        <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5 flex flex-col items-center lg:items-start lg:flex-row gap-6">
           {/* user img */}
-          <motion.div 
+          <motion.div
             className="relative w-44 h-44 shrink-0 overflow-hidden rounded-full cursor-pointer"
             initial="initial"
             whileHover="hover"
@@ -60,10 +60,10 @@ const page = () => {
               className="rounded-full object-cover"
             />
             {/* upload overlay */}
-            <motion.div 
+            <motion.div
               variants={{
                 initial: { y: "100%", opacity: 0 },
-                hover: { y: 0, opacity: 1 }
+                hover: { y: 0, opacity: 1 },
               }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="absolute top-0 left-0 w-44 h-44 bg-black/50 flex flex-col items-center justify-center space-y-4 rounded-full"
@@ -78,11 +78,11 @@ const page = () => {
             </motion.div>
           </motion.div>
           {/* user info */}
-          <div className="w-full max-w-184">
+          <div className="w-full 2xl:max-w-184">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-12 gap-4">
                 {/* Display name */}
-                <div className="col-span-6">
+                <div className="col-span-12 md:col-span-6">
                   <label
                     htmlFor="displayName"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
@@ -113,7 +113,7 @@ const page = () => {
                   )}
                 </div>
                 {/* Username */}
-                <div className="col-span-6">
+                <div className="col-span-12 md:col-span-6">
                   <label
                     htmlFor="username"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
@@ -144,7 +144,7 @@ const page = () => {
                   )}
                 </div>
                 {/* Full Name */}
-                <div className="col-span-6">
+                <div className="col-span-12 md:col-span-6">
                   <label
                     htmlFor="fullName"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
@@ -175,7 +175,7 @@ const page = () => {
                   )}
                 </div>
                 {/* Email */}
-                <div className="col-span-6">
+                <div className="col-span-12 md:col-span-6">
                   <label
                     htmlFor="email"
                     className="text-sm font-normal leading-5 text-[#191C1F] text-start mt-4.5"
@@ -201,7 +201,7 @@ const page = () => {
                   )}
                 </div>
                 {/* Secondary Email */}
-                <div className="col-span-6">
+                <div className="col-span-12 md:col-span-6">
                   <label
                     htmlFor="secondaryEmail"
                     className="text-sm font-normal leading-5 text-[#191C1F] text-start mt-4.5"
@@ -227,7 +227,7 @@ const page = () => {
                   )}
                 </div>
                 {/* Phone Number */}
-                <div className="col-span-6">
+                <div className="col-span-12 md:col-span-6">
                   <label
                     htmlFor="phoneNumber"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
@@ -259,6 +259,90 @@ const page = () => {
                       {errors.phoneNumber.message}
                     </p>
                   )}
+                </div>
+                <div className="col-span-12">
+                  {/* country, state, zip code */}
+                  <div className="grid grid-cols-12 gap-4">
+                    {/* country name */}
+                    <div className="col-span-12 md:col-span-6">
+                      <label
+                        htmlFor="country"
+                        className="text-sm font-normal leading-5 text-[#191C1F]"
+                      >
+                        Country/Region
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                        {...register("country", {
+                          required: "Country is required",
+                          minLength: {
+                            value: 3,
+                            message: "Country must be at least 3 characters",
+                          },
+                        })}
+                        placeholder="Bangladesh"
+                      />
+                      {errors.country && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.country.message}
+                        </p>
+                      )}
+                    </div>
+                    {/* Region/State */}
+                    <div className="col-span-12 md:col-span-3">
+                      <label
+                        htmlFor="state"
+                        className="text-sm font-normal leading-5 text-[#191C1F]"
+                      >
+                        States
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                        {...register("state", {
+                          required: "State is required",
+                          minLength: {
+                            value: 3,
+                            message: "State must be at least 3 characters",
+                          },
+                        })}
+                        placeholder="Dhaka"
+                      />
+                      {errors.state && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.state.message}
+                        </p>
+                      )}
+                    </div>
+                    {/* Zip Code */}
+                    <div className="col-span-12 md:col-span-3">
+                      <label
+                        htmlFor="zip_code"
+                        className="text-sm font-normal leading-5 text-[#191C1F]"
+                      >
+                        Zip Code
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                        {...register("zip_code", {
+                          required: "Zip code is required",
+                          pattern: {
+                            value: /^\d{5}(?:[-\s]\d{4})?$/,
+                            message:
+                              "Please enter a valid Zip code (e.g., 12345 or 12345-6789)",
+                          },
+                        })}
+                        placeholder="1207"
+                      />
+                      {errors.zip_code && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.zip_code.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
               {/* submit button */}

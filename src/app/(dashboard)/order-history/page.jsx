@@ -100,14 +100,14 @@ const page = () => {
   return (
     <>
       <div className="border border-[#E4E7E9] rounded-sm">
-        <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center justify-between p-4 md:px-6 md:py-4">
           <h3 className="text-sm font-medium uppercase">Order HIstory</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             {/* table header */}
             <thead>
-              <tr className="flex items-center gap-6 bg-[#F2F4F5] border-t border-b border-[#E4E7E9] py-2.5 px-6">
+              <tr className="flex items-center gap-6 bg-[#F2F4F5] border-t border-b border-[#E4E7E9] py-2.5 px-4 md:px-6">
                 <th className="w-31 text-left text-[#475156] text-[12px] font-medium uppercase">
                   Order ID
                 </th>
@@ -126,7 +126,7 @@ const page = () => {
               </tr>
             </thead>
             {/* table body */}
-            <tbody className="flex flex-col px-6 pt-3">
+            <tbody className="flex flex-col px-4 md:px-6 pt-3">
               {orderHistory.map((item) => (
                 <tr key={item.id} className="flex items-center gap-6 py-3">
                   <td className="w-31 text-sm text-[#191C1F] font-medium">

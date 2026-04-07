@@ -180,6 +180,19 @@ body {
   position: relative !important;
 }
 
+.browse-product .swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  background-color: #fa8232 !important;
+  border-radius: 50% !important;
+  margin-inline: 6px !important;
+}
+
+.browse-product .swiper-pagination {
+  margin-top: 24px !important;
+  position: relative !important;
+}
+
 @media (min-width: 640px) {
   .category-product .swiper-pagination {
     display: none;

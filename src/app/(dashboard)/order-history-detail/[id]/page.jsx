@@ -85,7 +85,7 @@ const page = () => {
   return (
     <>
       <div className="border border-[#E4E7E9] rounded-sm">
-        <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center justify-between p-4 md:px-6 md:py-4">
           <Link
             href={ROUTES.ORDER_HISTORY}
             className="text-sm text-[#191C1F] font-semibold flex items-center gap-2.5 uppercase duration-500 ease-linear hover:text-[#FA8232]"
@@ -101,9 +101,9 @@ const page = () => {
             <PlusIcon />
           </button>
         </div>
-        <div className="p-6 space-y-6 border-b border-t border-[#E4E7E9]">
+        <div className="p-4 md:p-6 space-y-6 border-b border-t border-[#E4E7E9]">
           {/* order-details */}
-          <div className="bg-[#FDFAE7] border border-[#F7E99E] p-6 rounded-sm flex flex-wrap items-center justify-between">
+          <div className="bg-[#FDFAE7] border border-[#F7E99E] p-4 md:p-6 rounded-sm flex flex-wrap items-center justify-between">
             <div className="space-y-2">
               <h3 className="text-xl text-[#191C1F]">{orderSummary.orderId}</h3>
               <p className="text-[#475156] text-sm">{orderSummary.details}</p>
@@ -153,7 +153,7 @@ const page = () => {
               return (
                 <div
                   key={progressStage.id}
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-10"
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2"
                   style={{ left: `${pct}%` }}
                 >
                   {progressStage.status === "completed" ? (
@@ -198,7 +198,7 @@ const page = () => {
           </div>
         </div>
         {/* order activity */}
-        <div className="space-y-6 p-6 border-b border-[#E4E7E9]">
+        <div className="space-y-6 p-4 md:p-6 border-b border-[#E4E7E9]">
           <h3 className="text-lg font-medium">Order Activity</h3>
           <div className="grid grid-cols-12 gap-4">
             {orderActivity.map((item) => (
@@ -227,14 +227,14 @@ const page = () => {
         </div>
         {/* Order products */}
         <div className="py-8 border-b border-[#E4E7E9]">
-          <h6 className="text-lg text-[#191C1F] leading-6 font-medium px-6">
+          <h6 className="text-lg text-[#191C1F] leading-6 font-medium px-4 md:px-6">
             Product <span className="text-[#5F6C72] font-normal">(02)</span>
           </h6>
           <div className="overflow-x-auto mt-5">
             <table className="w-full">
               {/* table header */}
               <thead>
-                <tr className="flex items-center gap-6 bg-[#F2F4F5] border-t border-b border-[#E4E7E9] py-2.5 px-6">
+                <tr className="flex items-center gap-6 bg-[#F2F4F5] border-t border-b border-[#E4E7E9] py-2.5 px-4 md:px-6">
                   <th className="w-100 text-left text-[#475156] text-[12px] font-medium uppercase">
                     Products
                   </th>
@@ -250,7 +250,7 @@ const page = () => {
                 </tr>
               </thead>
               {/* table body */}
-              <tbody className="flex flex-col pt-6 px-6">
+              <tbody className="flex flex-col pt-6 px-4 md:px-6">
                 {orderItems.map((item) => (
                   <tr
                     key={item.id}
@@ -298,9 +298,9 @@ const page = () => {
           </div>
         </div>
         {/* order address */}
-        <div className="py-8 px-6 grid grid-cols-12 gap-6">
+        <div className="py-8 px-4 md:px-6 grid grid-cols-12 gap-6">
           {/* Billing Address */}
-          <div className="space-y-3 col-span-4 border-r border-[#E4E7E9] pr-5">
+          <div className="space-y-3 col-span-12 md:col-span-6 lg:col-span-4 md:border-r border-[#E4E7E9] md:pr-5">
             <h3 className="text-lg font-medium capitalize">Billing address</h3>
             <ul className="space-y-1">
               <li className="flex  flex-col space-y-2">
@@ -325,7 +325,7 @@ const page = () => {
             </ul>
           </div>
           {/* Shipping Address */}
-          <div className="space-y-3 col-span-4 border-r border-[#E4E7E9] pr-5">
+          <div className="space-y-3 col-span-12 md:col-span-6 lg:col-span-4 lg:border-r border-[#E4E7E9] lg:pr-5">
             <h3 className="text-lg font-medium capitalize">Shipping Address</h3>
             <ul className="space-y-1">
               <li className="flex  flex-col space-y-2">
@@ -350,7 +350,7 @@ const page = () => {
             </ul>
           </div>
           {/* order notes */}
-          <div className="space-y-3 col-span-4">
+          <div className="space-y-3 col-span-12 lg:col-span-4">
             <h3 className="text-lg font-medium capitalize">Order Notes</h3>
             <ul className="space-y-1">
               <li className="flex  flex-col space-y-2">
@@ -373,7 +373,7 @@ const page = () => {
           }
         >
           {/* Dialog header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[#E4E7E9]">
+          <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-[#E4E7E9]">
             <h1 className="text-[#191C1F] text-sm font-medium uppercase">
               Billing address
             </h1>
@@ -383,7 +383,7 @@ const page = () => {
             </DialogClose>
           </div>
           {/* Dialog Content */}
-          <div className="p-6">
+          <div className="p-5 sm:p-6">
             <motion.div
               initial={{ opacity: 0, y: 30, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
