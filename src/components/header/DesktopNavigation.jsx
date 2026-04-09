@@ -5,6 +5,7 @@ import Link from "next/link";
 import TopBar from "./TopBar";
 import { homepageContent } from "../../data/home/home";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import {
   Facebook,
   Twitter,
@@ -41,6 +42,7 @@ const DesktopNavigation = () => {
   const languageRef = useRef(null);
   const currencyRef = useRef(null);
   const router = useRouter();
+  const token = Cookies.get("TOKEN");
   const wishlistCount = useSelector((state) => state.wishlist.items.length);
   const compareCount = useSelector((state) => state.compare.items.length);
   useEffect(() => {
@@ -403,10 +405,10 @@ const DesktopNavigation = () => {
                   )}
                 </button>
               </div>
-              {/* user form */}
-              <UserForm />
-              {/* user dropdown */}
-              <div ref={userDropdownRef} className="relative">
+              {/* user form - shown only when not logged in */}
+              {!token && <UserForm />}
+              {/* user profile dropdown - shown only when logged in */}
+              {token && <div ref={userDropdownRef} className="relative">
                 <button
                   className="cursor-pointer"
                   onClick={() => setUserDropdown(!userDropdown)}
@@ -449,7 +451,7 @@ const DesktopNavigation = () => {
                     })}
                   </ul>
                 </div>
-              </div>
+              </div>}
             </div>
           </div>
         </div>
@@ -485,7 +487,7 @@ const DesktopNavigation = () => {
                 {/* Animated Dropdown */}
                 <div
                   className={`
-                                            absolute top-16 min-w-60 z-10
+                                            absolute top-16 min-w-60 z-100
                                             bg-white border border-[#E4E7E9] rounded-[3px] shadow-[0px_8px_40px_rgba(0,0,0,0.12)]
                                             transition-all duration-400 ease-out origin-top
 

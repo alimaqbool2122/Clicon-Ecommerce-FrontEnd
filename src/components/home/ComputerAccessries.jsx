@@ -12,17 +12,35 @@ import { addToCart } from "@/redux/services/cartSlice";
 import { toggleWishlistItem } from "@/redux/services/wishlistSlice";
 import ROUTES from "@/constants/routes";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const ComputerAccessries = () => {
   // For Active state.
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const token = Cookies.get("TOKEN");
   const handleAddToCart = (product) => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     dispatch(addToCart(product));
     toast.success("Product added to cart");
   };
 
   const handleAddToWishlist = (product) => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     dispatch(toggleWishlistItem(product));
     toast.success("Product added to wishlist");
   };

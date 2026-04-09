@@ -22,6 +22,7 @@ import {
 } from "@/redux/services/compareSlice";
 import ROUTES from "@/constants/routes";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const ProductDetailsDialog = ({ openDialog, setOpenDialog }) => {
   const {
@@ -52,6 +53,7 @@ const ProductDetailsDialog = ({ openDialog, setOpenDialog }) => {
   const memoryBtnRef = useRef(null);
   const storageBtnRef = useRef(null);
   const prevVariantKeyRef = useRef("");
+  const token = Cookies.get("TOKEN");
 
   const variantSize = useMemo(
     () => `${selectedSize} · ${selectedMemory} · ${selectedStorage}`,
@@ -165,6 +167,13 @@ const ProductDetailsDialog = ({ openDialog, setOpenDialog }) => {
   };
 
   const handleAddToCart = () => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     const priceStr = `$${Number(price.current).toLocaleString("en-US")}`;
     const priceOldStr = price.original
       ? `$${parseFloat(price.original).toLocaleString("en-US", {
@@ -196,6 +205,13 @@ const ProductDetailsDialog = ({ openDialog, setOpenDialog }) => {
   };
 
   const handleToggleWishlist = () => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     const priceStr = `$${Number(price.current).toLocaleString("en-US")}`;
     const priceOldStr = price.original
       ? `$${parseFloat(price.original).toLocaleString("en-US", {
@@ -220,6 +236,13 @@ const ProductDetailsDialog = ({ openDialog, setOpenDialog }) => {
   };
 
   const handleToggleCompare = () => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     const exists = compareItems.some((i) => i.id === productId);
     if (!exists && compareItems.length >= MAX_COMPARE_ITEMS) {
       window.alert(

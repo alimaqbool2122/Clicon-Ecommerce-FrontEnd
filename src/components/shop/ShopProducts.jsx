@@ -14,6 +14,8 @@ import CustomPagination from "../ui/CustomPagination";
 import { useShopFilter } from "@/contexts/ShopFilterContext";
 import ProductDetailsDialog from "../product-details/ProductDetailsDialog";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const ShopProducts = () => {
   const products = shoppageContent.productsList;
@@ -22,12 +24,28 @@ const ShopProducts = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
+  const token = Cookies.get("TOKEN");
   const handleAddToCart = (product) => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     dispatch(addToCart(product));
     toast.success("Product added to cart");
   };
 
   const handleAddToWishlist = (product) => {
+    if (!token) {
+      toast.error("Please login first!");
+      setTimeout(() => {
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+      return;
+    }
     dispatch(toggleWishlistItem(product));
     toast.success("Product added to wishlist");
   };
