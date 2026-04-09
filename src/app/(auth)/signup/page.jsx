@@ -9,12 +9,15 @@ import { useForm, Controller } from "react-hook-form";
 import { ArrowRight } from "@/components/svg/Icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useRegisterMutation } from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
 
 const page = () => {
   const pathname = usePathname();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
+  const [userRegister] = useRegisterMutation();
   const {
     register,
     handleSubmit,
@@ -23,9 +26,21 @@ const page = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    router.push(ROUTES.SIGIN);
+  // user register
+  const onSubmit = async (data) => {
+    try {
+      const response = await userRegister(data).unwrap();
+      console.log("Success Response:", response);
+
+      if (response.success) {
+        toast.success(response.message);
+      }
+    } catch (error) {
+      console.log("Error Response:", error);
+      const message =
+        error?.data?.message || error?.message || "Something went wrong!";
+      toast.error(message);
+    }
   };
   return (
     <>
@@ -72,26 +87,52 @@ const page = () => {
               {/* first name */}
               <div className="col-span-12">
                 <label
-                  htmlFor="name"
+                  htmlFor="first_name"
                   className="text-sm font-normal leading-5 text-[#191C1F]"
                 >
-                  Name
+                  First Name
                 </label>
                 <input
                   type="text"
                   className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                  {...register("name", {
-                    required: "Name is required",
+                  {...register("first_name", {
+                    required: "First Name is required",
                     minLength: {
                       value: 3,
-                      message: "Name must be at least 3 characters",
+                      message: "First Name must be at least 3 characters",
                     },
                   })}
-                  placeholder="Name"
+                  placeholder="First Name"
                 />
-                {errors.name && (
+                {errors.first_name && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.name.message}
+                    {errors.first_name.message}
+                  </p>
+                )}
+              </div>
+              {/* last name */}
+              <div className="col-span-12">
+                <label
+                  htmlFor="last_name"
+                  className="text-sm font-normal leading-5 text-[#191C1F]"
+                >
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                  {...register("last_name", {
+                    required: "Last Name is required",
+                    minLength: {
+                      value: 3,
+                      message: "Last Name must be at least 3 characters",
+                    },
+                  })}
+                  placeholder="Last Name"
+                />
+                {errors.last_name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.last_name.message}
                   </p>
                 )}
               </div>
@@ -170,7 +211,7 @@ const page = () => {
               {/* Confirm Password */}
               <div className="col-span-12">
                 <label
-                  htmlFor="password"
+                  htmlFor="password_confirmation"
                   className="text-sm font-normal leading-5 text-[#191C1F]"
                 >
                   Confirm Password
@@ -179,7 +220,7 @@ const page = () => {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     className="w-full outline-0 text-[#191C1F] placeholder-text"
-                    {...register("confirm_password", {
+                    {...register("password_confirmation", {
                       required: "Confirm Password is required",
                       minLength: {
                         value: 8,
@@ -211,9 +252,9 @@ const page = () => {
                     />
                   </button>
                 </div>
-                {errors.confirm_password && (
+                {errors.password_confirmation && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.confirm_password.message}
+                    {errors.password_confirmation.message}
                   </p>
                 )}
               </div>

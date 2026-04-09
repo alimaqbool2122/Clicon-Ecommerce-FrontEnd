@@ -4,11 +4,13 @@ import wishlistReducer from "./services/wishlistSlice";
 import compareReducer from "./services/compareSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { apiReducer, apiMiddleware } from "./ApiController";
 
 const rootReducer = combineReducers({
   cart: cartReducer,
   wishlist: wishlistReducer,
   compare: compareReducer,
+  ...apiReducer,
 });
 
 const persistConfig = {
@@ -26,7 +28,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
-    }),
+    }).concat(...apiMiddleware),
 });
 
 export const persistor = persistStore(store);

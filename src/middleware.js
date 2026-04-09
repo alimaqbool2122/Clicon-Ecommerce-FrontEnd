@@ -4,10 +4,10 @@ import ROUTES from "./constants/routes";
 export function middleware(req) {
   const { pathname } = req.nextUrl;
 
-  // Get auth token from cookies and strip surrounding quotes (js-cookie adds them)
-  const rawToken = req.cookies.get("TOKEN")?.value;
-  const authToken = rawToken?.replace(/^"|"$/g, ""); // ← sync with customBaseQuery
+  // ACCESS_TOKEN cookie
+  const authToken = req.cookies.get("ACCESS_TOKEN")?.value;
 
+  // 1. PROTECTED routes — require authentication
   const protectedRoutes = [
     ROUTES.DASHBOARD,
     ROUTES.ORDER_HISTORY,
@@ -28,11 +28,26 @@ export function middleware(req) {
     pathname.startsWith(route),
   );
 
+  // Not logged in → redirect to login
   if (isProtectedRoute && !authToken) {
     const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
+  // 2. AUTH-ONLY routes
+  const authOnlyRoutes = [ROUTES.SIGIN, ROUTES.SIGNUP];
+
+  const isAuthOnlyRoute = authOnlyRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+
+  // Already logged in → redirect to home
+  if (isAuthOnlyRoute && authToken) {
+    return NextResponse.redirect(new URL(ROUTES.HOME, req.url));
+  }
+
+  // Allow everything
   return NextResponse.next();
 }
 

@@ -9,11 +9,16 @@ import { ArrowRight } from "@/components/svg/Icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLoginMutation } from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
+import { useAuth } from "@/contexts/authProvider";
 
 const page = () => {
   const pathname = usePathname();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const [loginRegistration, { isLoading }] = useLoginMutation();
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -22,10 +27,28 @@ const page = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    router.push(ROUTES.HOME);
+  // user Login
+  const onSubmit = async (data) => {
+    try {
+      const response = await loginRegistration(data).unwrap();
+      console.log("Login Response:", response);
+
+      if (response.success) {
+        toast.success(response.message);
+        // pass token and user data to login function
+        login(response);
+        setTimeout(() => {
+          router.push(ROUTES.HOME);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      const message =
+        error?.data?.message || error?.message || "Something went wrong!";
+      toast.error(message);
+    }
   };
+
   return (
     <>
       {/* Top Breadcrumb */}

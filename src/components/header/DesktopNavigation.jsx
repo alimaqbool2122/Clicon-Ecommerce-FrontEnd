@@ -29,6 +29,7 @@ import ROUTES from "../../constants/routes";
 import Cart from "./Cart";
 import { useSelector } from "react-redux";
 import UserForm from "./UserForm";
+import { useAuth } from "@/contexts/authProvider";
 
 const DesktopNavigation = () => {
   const [active, setActive] = useState(false);
@@ -42,7 +43,7 @@ const DesktopNavigation = () => {
   const languageRef = useRef(null);
   const currencyRef = useRef(null);
   const router = useRouter();
-  const token = Cookies.get("TOKEN");
+  const { user, loading, logout } = useAuth();
   const wishlistCount = useSelector((state) => state.wishlist.items.length);
   const compareCount = useSelector((state) => state.compare.items.length);
   useEffect(() => {
@@ -405,23 +406,27 @@ const DesktopNavigation = () => {
                   )}
                 </button>
               </div>
-              {/* user form - shown only when not logged in */}
-              {!token && <UserForm />}
-              {/* user profile dropdown - shown only when logged in */}
-              {token && <div ref={userDropdownRef} className="relative">
-                <button
-                  className="cursor-pointer"
-                  onClick={() => setUserDropdown(!userDropdown)}
-                >
-                  <Image
-                    src={assets.member_2}
-                    alt="user-img"
-                    width={32}
-                    height={32}
-                  />
-                </button>
-                <div
-                  className={`w-45 absolute top-12 right-0 z-10 bg-white border border-[#E4E7E9] rounded-sm shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)]
+              {/* user form & profile dropdown */}
+              {loading ? (
+                <div className="size-8 rounded-full bg-white/20 animate-pulse"></div>
+              ) : !user ? (
+                <UserForm />
+              ) : (
+                <div ref={userDropdownRef} className="relative">
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => setUserDropdown(!userDropdown)}
+                  >
+                    <Image
+                      src={user?.image || assets.member_2}
+                      alt="user-img"
+                      width={32}
+                      height={32}
+                      className="rounded-full object-cover"
+                    />
+                  </button>
+                  <div
+                    className={`w-45 absolute top-12 right-0 z-10 bg-white border border-[#E4E7E9] rounded-sm shadow-[0px_8px_40px_0px_rgba(0,0,0,0.12)]
                     transition-all duration-400 ease-out origin-top
                     ${
                       userDropdown
@@ -429,29 +434,50 @@ const DesktopNavigation = () => {
                         : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                     }
                   `}
-                >
-                  <ul className="py-2">
-                    {userDropdownLinks.map((link) => {
-                      const isActive = pathname === link.href;
-                      return (
-                        <li key={link.id}>
-                          <Link
-                            href={link.href}
-                            className={`flex items-center gap-2.5 py-2 px-4 text-sm font-medium duration-300 ease-linear ${
-                              isActive
-                                ? "bg-[#FA8232] text-white"
-                                : "bg-white text-[#5F6C72]"
-                            }`}
-                          >
-                            {link.icon}
-                            <span>{link.name}</span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  >
+                    <ul className="py-2">
+                      {userDropdownLinks.map((link) => {
+                        const isActive = pathname === link.href;
+                        const isLogout = link.name === "Logout";
+
+                        const handleClick = () => {
+                          if (isLogout) {
+                            logout();
+                          }
+                          setUserDropdown(false);
+                        };
+
+                        return (
+                          <li key={link.id}>
+                            {isLogout ? (
+                              <button
+                                onClick={handleClick}
+                                className="w-full flex items-center gap-2.5 py-2 px-4 text-sm font-medium duration-300 ease-linear bg-white text-[#5F6C72] hover:bg-red-50 hover:text-red-500"
+                              >
+                                {link.icon}
+                                <span>{link.name}</span>
+                              </button>
+                            ) : (
+                              <Link
+                                href={link.href}
+                                onClick={() => setUserDropdown(false)}
+                                className={`flex items-center gap-2.5 py-2 px-4 text-sm font-medium duration-300 ease-linear ${
+                                  isActive
+                                    ? "bg-[#FA8232] text-white"
+                                    : "bg-white text-[#5F6C72] hover:bg-[#f2f4f5]"
+                                }`}
+                              >
+                                {link.icon}
+                                <span>{link.name}</span>
+                              </Link>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
                 </div>
-              </div>}
+              )}
             </div>
           </div>
         </div>

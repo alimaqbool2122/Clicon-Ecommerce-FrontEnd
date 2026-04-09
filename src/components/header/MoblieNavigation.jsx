@@ -11,9 +11,13 @@ import {
   Instragram,
 } from "../svg/Icons";
 import ROUTES from "../../constants/routes";
+import { useAuth } from "@/contexts/authProvider";
+
 
 const MoblieNavigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, loading, logout } = useAuth();
+
 
   const socialLinks = [
     { name: "Twitter", url: "#", icon: <Twitter fill="#FA8232" /> },
@@ -96,6 +100,70 @@ const MoblieNavigation = () => {
                   </Link>
                 </li>
               ))}
+
+              {/* Account Section */}
+              <li className="py-4 px-2.5 border-b border-black/10">
+                {loading ? (
+                  <div className="h-6 w-24 bg-gray-100 animate-pulse rounded"></div>
+                ) : user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Image
+                        src={user?.image || assets.member_2}
+                        alt="user-img"
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover border border-gray-200"
+                      />
+                      <div>
+                        <p className="text-sm font-bold text-black leading-tight">
+                          {user?.name || "User"}
+                        </p>
+                        <p className="text-xs text-gray-500">{user?.email}</p>
+                      </div>
+                    </div>
+                    <Link
+                      href={ROUTES.DASHBOARD}
+                      onClick={() => setMenuOpen(false)}
+                      className="block text-base font-medium text-[#1B6392]"
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href={ROUTES.PROFILE}
+                      onClick={() => setMenuOpen(false)}
+                      className="block text-base font-medium text-black"
+                    >
+                      My Profile
+                    </Link>
+                    <Link
+                      href={ROUTES.ORDER_HISTORY}
+                      onClick={() => setMenuOpen(false)}
+                      className="block text-base font-medium text-black"
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setMenuOpen(false);
+                      }}
+                      className="block text-base font-bold text-red-500 pt-2"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href={ROUTES.SIGIN}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between text-base font-bold text-black"
+                  >
+                    <span>Sign In / Register</span>
+                    <span className="text-[#FA8232]">→</span>
+                  </Link>
+                )}
+              </li>
             </ul>
 
             {/* Social icons */}
