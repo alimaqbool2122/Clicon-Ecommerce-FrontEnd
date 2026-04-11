@@ -84,55 +84,29 @@ const page = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="grid grid-cols-12 space-y-5"
             >
-              {/* first name */}
+              {/* name */}
               <div className="col-span-12">
                 <label
-                  htmlFor="first_name"
+                  htmlFor="name"
                   className="text-sm font-normal leading-5 text-[#191C1F]"
                 >
-                  First Name
+                  Name
                 </label>
                 <input
                   type="text"
                   className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                  {...register("first_name", {
-                    required: "First Name is required",
+                  {...register("name", {
+                    required: "Name is required",
                     minLength: {
                       value: 3,
-                      message: "First Name must be at least 3 characters",
+                      message: "Name must be at least 3 characters",
                     },
                   })}
-                  placeholder="First Name"
+                  placeholder="Name"
                 />
-                {errors.first_name && (
+                {errors.name && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.first_name.message}
-                  </p>
-                )}
-              </div>
-              {/* last name */}
-              <div className="col-span-12">
-                <label
-                  htmlFor="last_name"
-                  className="text-sm font-normal leading-5 text-[#191C1F]"
-                >
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                  {...register("last_name", {
-                    required: "Last Name is required",
-                    minLength: {
-                      value: 3,
-                      message: "Last Name must be at least 3 characters",
-                    },
-                  })}
-                  placeholder="Last Name"
-                />
-                {errors.last_name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.last_name.message}
+                    {errors.name.message}
                   </p>
                 )}
               </div>

@@ -4,36 +4,28 @@ import { toast } from "react-toastify";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-/** Read ACCESS_TOKEN cookie */
-const getAccessToken = () => {
-  const raw = Cookies.get("ACCESS_TOKEN");
-  return raw ? raw.replace(/"/g, "") : null;
-};
-
-/** Read REFRESH_TOKEN cookie */
-const getRefreshToken = () => {
-  const raw = Cookies.get("REFRESH_TOKEN");
+/** Read TOKEN cookie */
+const getToken = () => {
+  const raw = Cookies.get("TOKEN");
   return raw ? raw.replace(/"/g, "") : null;
 };
 
 /** Clear cookies on logout */
 const clearAuthCookies = () => {
-  Cookies.remove("ACCESS_TOKEN");
-  Cookies.remove("REFRESH_TOKEN");
-  Cookies.remove("USER");
   Cookies.remove("TOKEN");
+  Cookies.remove("USER");
 };
 
-/** Persist a new access token after a silent refresh */
-const saveNewAccessToken = (token) => {
-  Cookies.set("ACCESS_TOKEN", token, { expires: 1, sameSite: "strict" });
+/** Persist a token */
+const saveToken = (token) => {
+  Cookies.set("TOKEN", token, { expires: 7, sameSite: "strict" });
 };
 
 // Base query
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   prepareHeaders: (headers) => {
-    const token = getAccessToken();
+    const token = getToken();
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -41,64 +33,26 @@ const rawBaseQuery = fetchBaseQuery({
     return headers;
   },
 });
-
-// Silent token refresh — called when API returns 401
-let isRefreshing = false;
-
-const silentRefresh = async () => {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) return null;
-
-  try {
-    const res = await fetch(`${BASE_URL}/refresh-token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-
-    if (!res.ok) return null;
-
-    const json = await res.json();
-    const newToken = json?.accessToken ?? json?.token ?? null;
-    return newToken;
-  } catch {
-    return null;
-  }
-};
-
-// Custom base query with auto-refresh on 401
+// Custom base query
 export const customBaseQuery = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions);
 
   if (result.error) {
     const { status } = result.error;
 
-    // ------- 401: try silent refresh then retry -------
-    if (status === 401 && !isRefreshing) {
-      isRefreshing = true;
-
-      const newAccessToken = await silentRefresh();
-      isRefreshing = false;
-
-      if (newAccessToken) {
-        saveNewAccessToken(newAccessToken);
-        result = await rawBaseQuery(args, api, extraOptions);
-      } else {
-        clearAuthCookies();
-        toast.error("Session expired. Please sign in again.");
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
-        return {
-          error: {
-            status: 401,
-            data: { message: "Session expired. Please sign in again." },
-          },
-        };
+    // ------- 401: Unauthorized (expired or invalid token) -------
+    if (status === 401) {
+      clearAuthCookies();
+      toast.error("Session expired. Please sign in again.");
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
       }
+      return {
+        error: {
+          status: 401,
+          data: { message: "Session expired. Please sign in again." },
+        },
+      };
     }
 
     // ------- 403: Forbidden -------

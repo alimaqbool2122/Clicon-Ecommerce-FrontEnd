@@ -4,8 +4,8 @@ import ROUTES from "./constants/routes";
 export function middleware(req) {
   const { pathname } = req.nextUrl;
 
-  // ACCESS_TOKEN cookie
-  const authToken = req.cookies.get("ACCESS_TOKEN")?.value;
+  // TOKEN cookie
+  const authToken = req.cookies.get("TOKEN")?.value;
 
   // 1. PROTECTED routes — require authentication
   const protectedRoutes = [

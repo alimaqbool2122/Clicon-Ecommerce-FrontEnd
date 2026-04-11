@@ -20,7 +20,7 @@ const ROUTES = {
   FORGET_PASSWORD: "/forget-password",
   RESET_PASSWORD: "/reset-password",
   OTP_VERIFICATION: "/otp-verification",
-  EMAIL_VERIFICATION: "/email-verification",
+  EMAIL_VERIFICATION: "/verify-email",
   DASHBOARD: "/dashboard",
   ORDER_HISTORY: "/order-history",
   ORDER_HISTORY_DETAILS: (id) => `/order-history-detail/${id}`,
