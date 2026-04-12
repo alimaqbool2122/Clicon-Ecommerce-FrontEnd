@@ -13,11 +13,9 @@ import {
 import ROUTES from "../../constants/routes";
 import { useAuth } from "@/contexts/authProvider";
 
-
 const MoblieNavigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, loading, logout } = useAuth();
-
 
   const socialLinks = [
     { name: "Twitter", url: "#", icon: <Twitter fill="#FA8232" /> },
@@ -130,7 +128,7 @@ const MoblieNavigation = () => {
                       Dashboard
                     </Link>
                     <Link
-                      href={ROUTES.PROFILE}
+                      href={ROUTES.DASHBOARD}
                       onClick={() => setMenuOpen(false)}
                       className="block text-base font-medium text-black"
                     >

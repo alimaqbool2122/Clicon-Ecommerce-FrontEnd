@@ -7,9 +7,12 @@ import { assets } from "@/constants/assets";
 import { ArrowRight } from "@/components/svg/Icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useForgetPasswordMutation } from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
 
 const page = () => {
   const router = useRouter();
+  const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
   const {
     register,
     handleSubmit,
@@ -18,9 +21,22 @@ const page = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    router.push(ROUTES.OTP_VERIFICATION);
+  const onSubmit = async (data) => {
+    try {
+      const response = await forgetPassword(data).unwrap();
+      console.log("Success Response:", response);
+
+      if (response.success) {
+        toast.success(response.message);
+        localStorage.setItem("resetEmail", data.email);
+        setTimeout(() => {
+          router.push(ROUTES.OTP_VERIFICATION);
+        }, 2000);
+      }
+    } catch (error) {
+      console.log("Error Response:", error);
+      toast.error(error.data.message);
+    }
   };
   return (
     <>
@@ -65,7 +81,7 @@ const page = () => {
               </label>
               <input
                 type="text"
-                className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-0 mt-2 text-[#191C1F] px-3.75 placeholder-text"
+                className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -85,9 +101,10 @@ const page = () => {
             {/* submit button */}
             <button
               type="submit"
+              disabled={isLoading}
               className="col-span-12 flex items-center justify-center gap-2 border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] mt-1 duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer"
             >
-              Send Code
+              {isLoading ? "Sending Code" : "Send Code"}
               <ArrowRight />
             </button>
           </form>

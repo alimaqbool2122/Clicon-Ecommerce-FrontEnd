@@ -27,7 +27,7 @@ const ROUTES = {
   CARDS_ADDRESS: "/cards-address",
   BROWSING_HISTORY: "/browsing-history",
   PROFILE_SETTINGS: "/profile-settings",
-  PROFILE: "/profile",
+  PROFILE: (id) => `/profile/${id}`,
 };
 
 export default ROUTES;

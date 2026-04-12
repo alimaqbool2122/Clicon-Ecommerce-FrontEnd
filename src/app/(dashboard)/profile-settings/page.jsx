@@ -4,6 +4,11 @@ import Image from "next/image";
 import { assets } from "@/constants/assets";
 import { useForm, Controller } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useChangePasswordMutation } from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
+import { useAuth } from "@/contexts/authProvider";
+import ROUTES from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [profileImage, setProfileImage] = useState(assets.Profile_img);
@@ -11,6 +16,10 @@ const page = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const { logout } = useAuth();
+  const router = useRouter();
+  const [changePassword, { isLoading: isChangingPassword }] =
+    useChangePasswordMutation();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -49,18 +58,36 @@ const page = () => {
     formState: { errors: errorsShipping },
   } = useForm();
 
+  // profile update
   const onSubmit = (data) => {
     console.log("Form Data:", data);
   };
 
-  const handleChangePassword = (data) => {
-    console.log("Password Data:", data);
-  };
+  // change password
+  const handleChangePassword = async (data) => {
+    try {
+      const response = await changePassword(data).unwrap();
+      console.log("Success Response:", response);
 
+      if (response.success) {
+        toast.success(response.message);
+        setInterval(() => {
+          logout();
+          router.push(ROUTES.SIGIN);
+        }, 2000);
+      }
+    } catch (error) {
+      const message =
+        error?.data?.message || error?.message || "Something went wrong!";
+      toast.error(message);
+    }
+  };
+  // billing address
   const handleBillingAddress = (data) => {
     console.log("Billing Address Data:", data);
   };
 
+  // shipping address
   const handleShippingAddress = (data) => {
     console.log("Shipping Address Data:", data);
   };
@@ -984,7 +1011,7 @@ const page = () => {
                 {/* Current Password */}
                 <div className="col-span-12">
                   <label
-                    htmlFor="current_password"
+                    htmlFor="currentPassword"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
                   >
                     Current Password
@@ -993,7 +1020,7 @@ const page = () => {
                     <input
                       type={showCurrentPassword ? "text" : "password"}
                       className="w-full outline-0 text-[#191C1F] placeholder-text"
-                      {...registerPassword("current_password", {
+                      {...registerPassword("currentPassword", {
                         required: "Current Password is required",
                         minLength: {
                           value: 8,
@@ -1027,16 +1054,16 @@ const page = () => {
                       />
                     </button>
                   </div>
-                  {errorsPassword.current_password && (
+                  {errorsPassword.currentPassword && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errorsPassword.current_password.message}
+                      {errorsPassword.currentPassword.message}
                     </p>
                   )}
                 </div>
                 {/* New Password */}
                 <div className="col-span-12">
                   <label
-                    htmlFor="new_password"
+                    htmlFor="newPassword"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
                   >
                     New Password
@@ -1045,7 +1072,7 @@ const page = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       className="w-full outline-0 text-[#191C1F] placeholder-text"
-                      {...registerPassword("new_password", {
+                      {...registerPassword("newPassword", {
                         required: "New Password is required",
                         minLength: {
                           value: 8,
@@ -1073,16 +1100,16 @@ const page = () => {
                       />
                     </button>
                   </div>
-                  {errorsPassword.new_password && (
+                  {errorsPassword.newPassword && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errorsPassword.new_password.message}
+                      {errorsPassword.newPassword.message}
                     </p>
                   )}
                 </div>
                 {/* Confirm Password */}
                 <div className="col-span-12">
                   <label
-                    htmlFor="password"
+                    htmlFor="confirmPassword"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
                   >
                     Confirm Password
@@ -1091,7 +1118,7 @@ const page = () => {
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       className="w-full outline-0 text-[#191C1F] placeholder-text"
-                      {...registerPassword("confirm_password", {
+                      {...registerPassword("confirmPassword", {
                         required: "Confirm Password is required",
                         minLength: {
                           value: 8,
@@ -1105,7 +1132,7 @@ const page = () => {
                             "Must contain uppercase, lowercase, number & special character",
                         },
                         validate: (value) =>
-                          value === watchPassword("new_password") ||
+                          value === watchPassword("newPassword") ||
                           "Passwords do not match",
                       })}
                     />
@@ -1128,9 +1155,9 @@ const page = () => {
                       />
                     </button>
                   </div>
-                  {errorsPassword.confirm_password && (
+                  {errorsPassword.confirmPassword && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errorsPassword.confirm_password.message}
+                      {errorsPassword.confirmPassword.message}
                     </p>
                   )}
                 </div>
@@ -1138,9 +1165,10 @@ const page = () => {
               {/* submit button */}
               <button
                 type="submit"
+                disabled={isChangingPassword}
                 className="border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer"
               >
-                Change Password
+                {isChangingPassword ? "Changing Password" : "Change Password"}
               </button>
             </form>
           </div>

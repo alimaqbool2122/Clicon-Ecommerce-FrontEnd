@@ -1,13 +1,61 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { assets } from "@/constants/assets";
 import { useForm, Controller } from "react-hook-form";
 import { motion } from "framer-motion";
+import {
+  useUpdateProfileMutation,
+  useDeleteAccountMutation,
+  useGetProfileQuery,
+} from "@/redux/services/auth/authApiSlice";
+import { useAuth } from "@/contexts/authProvider";
+import { toast } from "react-toastify";
+import ROUTES from "@/constants/routes";
 
 const page = () => {
   const [profileImage, setProfileImage] = useState(assets.Profile_img);
+  const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
+  const { user, logout } = useAuth();
+  const userId = user?._id || user?.id;
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  // Update profile mutation
+  const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
+  // Delete account mutation
+  const [deleteAccount, { isLoading: isDeleting }] = useDeleteAccountMutation();
+  // Get profile mutation
+  const { data: profile, isLoading } = useGetProfileQuery(userId);
+  const userData = profile?.data || user;
+
+  // set profile data
+  useEffect(() => {
+    if (!userData) return;
+
+    reset({
+      name: userData.name || "",
+      username: userData.username || "",
+      full_name: userData.name || "",
+      email: userData.email || "",
+      secondary_email: userData.secondary_email || "",
+      phone_number: userData.phone_number || "",
+      country: userData.country || "",
+      state: userData.state || "",
+      zipcode: userData.zipcode || "",
+    });
+
+    if (userData.profile_image) {
+      setProfileImage(userData.profile_image);
+    }
+  }, [profile, user, reset]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -16,22 +64,64 @@ const page = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setSelectedFile(file);
       const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl);
     }
   };
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    formState: { errors },
-  } = useForm();
+  // update profile
+  const onSubmit = async (data) => {
+    try {
+      const formData = new FormData();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+      // append normal fields safely
+      formData.append("name", data.name || "");
+      formData.append("username", data.username || "");
+      formData.append("email", data.email || "");
+      formData.append("secondary_email", data.secondary_email || "");
+      formData.append("phone_number", data.phone_number || "");
+      formData.append("country", data.country || "");
+      formData.append("state", data.state || "");
+      formData.append("zipcode", data.zipcode || "");
+
+      // IMPORTANT: match backend field name
+      formData.append("profile_image", selectedFile || "");
+
+      const response = await updateProfile({
+        id: userId,
+        data: formData,
+      }).unwrap();
+
+      if (response.success) {
+        toast.success(response.message);
+        setSelectedFile(null);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || "Something went wrong!");
+    }
   };
+  // delete account
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await deleteAccount(userId).unwrap();
+      console.log("Success Response:", response);
+
+      if (response.success) {
+        toast.success(response.message);
+        setTimeout(() => {
+          logout();
+          router.push(ROUTES.SIGIN);
+        }, 1000);
+      }
+    } catch (error) {
+      console.log("Error Response:", error);
+      const message =
+        error?.data?.message || error?.message || "Something went wrong!";
+      toast.error(message);
+    }
+  };
+
   return (
     <>
       <div className="border border-[#E4E7E9] rounded-sm">
@@ -84,7 +174,7 @@ const page = () => {
                 {/* Display name */}
                 <div className="col-span-12 md:col-span-6">
                   <label
-                    htmlFor="displayName"
+                    htmlFor="name"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
                   >
                     Display Name
@@ -92,7 +182,7 @@ const page = () => {
                   <input
                     type="text"
                     className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                    {...register("displayName", {
+                    {...register("name", {
                       required: "Display Name is required",
                       minLength: {
                         value: 3,
@@ -104,11 +194,10 @@ const page = () => {
                           "Display Name can only contain letters and spaces",
                       },
                     })}
-                    placeholder="Kevin"
                   />
-                  {errors.displayName && (
+                  {errors.name && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.displayName.message}
+                      {errors.name.message}
                     </p>
                   )}
                 </div>
@@ -135,7 +224,6 @@ const page = () => {
                           "Username can only contain letters, numbers, and underscores",
                       },
                     })}
-                    placeholder="Display name"
                   />
                   {errors.username && (
                     <p className="text-red-500 text-sm mt-1">
@@ -146,7 +234,7 @@ const page = () => {
                 {/* Full Name */}
                 <div className="col-span-12 md:col-span-6">
                   <label
-                    htmlFor="fullName"
+                    htmlFor="full_name"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
                   >
                     Full Name
@@ -154,7 +242,7 @@ const page = () => {
                   <input
                     type="text"
                     className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                    {...register("fullName", {
+                    {...register("full_name", {
                       required: "Full Name is required",
                       minLength: {
                         value: 3,
@@ -166,11 +254,10 @@ const page = () => {
                           "Full Name can only contain letters and spaces",
                       },
                     })}
-                    placeholder="Kevin Gilbert"
                   />
-                  {errors.fullName && (
+                  {errors.full_name && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.fullName.message}
+                      {errors.full_name.message}
                     </p>
                   )}
                 </div>
@@ -192,7 +279,6 @@ const page = () => {
                         message: "Enter a valid email address including @",
                       },
                     })}
-                    placeholder="Kevin.gilbert@gmail.com"
                   />
                   {errors.email && (
                     <p className="text-red-500 text-sm mt-1">
@@ -203,7 +289,7 @@ const page = () => {
                 {/* Secondary Email */}
                 <div className="col-span-12 md:col-span-6">
                   <label
-                    htmlFor="secondaryEmail"
+                    htmlFor="secondary_email"
                     className="text-sm font-normal leading-5 text-[#191C1F] text-start mt-4.5"
                   >
                     Secondary Email
@@ -211,25 +297,24 @@ const page = () => {
                   <input
                     type="text"
                     className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                    {...register("secondaryEmail", {
+                    {...register("secondary_email", {
                       required: "Secondary Email is required",
                       pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                         message: "Enter a valid email address including @",
                       },
                     })}
-                    placeholder="kevin12345@gmail.com"
                   />
-                  {errors.secondaryEmail && (
+                  {errors.secondary_email && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.secondaryEmail.message}
+                      {errors.secondary_email.message}
                     </p>
                   )}
                 </div>
                 {/* Phone Number */}
                 <div className="col-span-12 md:col-span-6">
                   <label
-                    htmlFor="phoneNumber"
+                    htmlFor="phone_number"
                     className="text-sm font-normal leading-5 text-[#191C1F]"
                   >
                     Phone Number
@@ -237,7 +322,7 @@ const page = () => {
                   <input
                     type="text"
                     className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                    {...register("phoneNumber", {
+                    {...register("phone_number", {
                       required: "Phone Number is required",
                       minLength: {
                         value: 11,
@@ -252,11 +337,10 @@ const page = () => {
                         message: "Phone Number can only contain numbers",
                       },
                     })}
-                    placeholder="+1-202-555-0118"
                   />
-                  {errors.phoneNumber && (
+                  {errors.phone_number && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.phoneNumber.message}
+                      {errors.phone_number.message}
                     </p>
                   )}
                 </div>
@@ -281,7 +365,6 @@ const page = () => {
                             message: "Country must be at least 3 characters",
                           },
                         })}
-                        placeholder="Bangladesh"
                       />
                       {errors.country && (
                         <p className="text-red-500 text-sm mt-1">
@@ -307,7 +390,6 @@ const page = () => {
                             message: "State must be at least 3 characters",
                           },
                         })}
-                        placeholder="Dhaka"
                       />
                       {errors.state && (
                         <p className="text-red-500 text-sm mt-1">
@@ -318,7 +400,7 @@ const page = () => {
                     {/* Zip Code */}
                     <div className="col-span-12 md:col-span-3">
                       <label
-                        htmlFor="zip_code"
+                        htmlFor="zipcode"
                         className="text-sm font-normal leading-5 text-[#191C1F]"
                       >
                         Zip Code
@@ -326,7 +408,7 @@ const page = () => {
                       <input
                         type="text"
                         className="w-full h-11 rounded-xs border border-[#E4E7E9] outline-[#FA8232] mt-2 text-[#191C1F] px-3.75 placeholder-text"
-                        {...register("zip_code", {
+                        {...register("zipcode", {
                           required: "Zip code is required",
                           pattern: {
                             value: /^\d{5}(?:[-\s]\d{4})?$/,
@@ -334,11 +416,10 @@ const page = () => {
                               "Please enter a valid Zip code (e.g., 12345 or 12345-6789)",
                           },
                         })}
-                        placeholder="1207"
                       />
-                      {errors.zip_code && (
+                      {errors.zipcode && (
                         <p className="text-red-500 text-sm mt-1">
-                          {errors.zip_code.message}
+                          {errors.zipcode.message}
                         </p>
                       )}
                     </div>
@@ -346,12 +427,23 @@ const page = () => {
                 </div>
               </div>
               {/* submit button */}
-              <button
-                type="submit"
-                className="border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer"
-              >
-                Save Changes
-              </button>
+              <div className="flex flex-wrap items-center gap-4">
+                <button
+                  type="submit"
+                  disabled={isUpdating}
+                  className="border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isUpdating ? "Saving" : "Save Changes"}
+                </button>
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={handleDeleteAccount}
+                  className="border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDeleting ? "Deleting" : "Delete Account"}
+                </button>
+              </div>
             </form>
           </div>
         </div>

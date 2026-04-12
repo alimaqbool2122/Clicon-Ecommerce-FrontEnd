@@ -12,13 +12,13 @@ const getToken = () => {
 
 /** Clear cookies on logout */
 const clearAuthCookies = () => {
-  Cookies.remove("TOKEN");
-  Cookies.remove("USER");
+  Cookies.remove("TOKEN", { path: "/" });
+  Cookies.remove("USER", { path: "/" });
 };
 
 /** Persist a token */
 const saveToken = (token) => {
-  Cookies.set("TOKEN", token, { expires: 7, sameSite: "strict" });
+  Cookies.set("TOKEN", token, { expires: 7, sameSite: "strict", path: "/" });
 };
 
 // Base query
@@ -42,17 +42,26 @@ export const customBaseQuery = async (args, api, extraOptions) => {
 
     // ------- 401: Unauthorized (expired or invalid token) -------
     if (status === 401) {
-      clearAuthCookies();
-      toast.error("Session expired. Please sign in again.");
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
+      const isLoginRequest =
+        args.url?.includes("/login") ||
+        args?.includes("/login") ||
+        args.url?.includes("/signin") ||
+        args?.includes("/signin");
+
+      if (!isLoginRequest) {
+        clearAuthCookies();
+        toast.error("Session expired. Please sign in again.");
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+        return {
+          error: {
+            status: 401,
+            data: { message: "Session expired. Please sign in again." },
+          },
+        };
       }
-      return {
-        error: {
-          status: 401,
-          data: { message: "Session expired. Please sign in again." },
-        },
-      };
+      // For login requests, we just let the error pass through so the login page can handle it
     }
 
     // ------- 403: Forbidden -------

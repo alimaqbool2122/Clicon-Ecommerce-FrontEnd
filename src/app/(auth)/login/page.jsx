@@ -174,9 +174,10 @@ const page = () => {
               {/* submit button */}
               <button
                 type="submit"
-                className="col-span-12 flex items-center justify-center gap-2 border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] mb-4 mt-1 duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer"
+                disabled={isLoading}
+                className="col-span-12 flex items-center justify-center gap-2 border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] mb-4 mt-1 duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign in
+                {isLoading ? "Signing in..." : "Sign in"}
                 <ArrowRight />
               </button>
             </form>

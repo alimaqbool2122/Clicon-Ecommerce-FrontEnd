@@ -5,7 +5,6 @@ import Link from "next/link";
 import TopBar from "./TopBar";
 import { homepageContent } from "../../data/home/home";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import {
   Facebook,
   Twitter,
@@ -30,6 +29,7 @@ import Cart from "./Cart";
 import { useSelector } from "react-redux";
 import UserForm from "./UserForm";
 import { useAuth } from "@/contexts/authProvider";
+import { toast } from "react-toastify";
 
 const DesktopNavigation = () => {
   const [active, setActive] = useState(false);
@@ -106,38 +106,41 @@ const DesktopNavigation = () => {
     { id: 2, currency: "Euro (EUR)", tick: assets.Check },
   ];
 
-  const userDropdownLinks = [
-    {
-      id: 1,
-      name: "Profile",
-      href: ROUTES.PROFILE,
-      icon: <UserIcon width={20} height={20} />,
-    },
-    {
-      id: 2,
-      name: "Dashboard",
-      href: ROUTES.DASHBOARD,
-      icon: <Dashboard width={20} height={20} />,
-    },
-    {
-      id: 3,
-      name: "My Orders",
-      href: ROUTES.ORDER_HISTORY,
-      icon: <History width={20} height={20} />,
-    },
-    {
-      id: 4,
-      name: "Settings",
-      href: ROUTES.PROFILE_SETTINGS,
-      icon: <Setting width={20} height={20} />,
-    },
-    {
-      id: 5,
-      name: "Logout",
-      href: "#",
-      icon: <LogOut width={20} height={20} />,
-    },
-  ];
+  // Create dynamic user dropdown links with userId
+  const userDropdownLinks = user
+    ? [
+        {
+          id: 1,
+          name: "Profile",
+          href: ROUTES.PROFILE(user?._id),
+          icon: <UserIcon width={20} height={20} />,
+        },
+        {
+          id: 2,
+          name: "Dashboard",
+          href: ROUTES.DASHBOARD,
+          icon: <Dashboard width={20} height={20} />,
+        },
+        {
+          id: 3,
+          name: "My Orders",
+          href: ROUTES.ORDER_HISTORY,
+          icon: <History width={20} height={20} />,
+        },
+        {
+          id: 4,
+          name: "Settings",
+          href: ROUTES.PROFILE_SETTINGS,
+          icon: <Setting width={20} height={20} />,
+        },
+        {
+          id: 5,
+          name: "Logout",
+          href: "#",
+          icon: <LogOut width={20} height={20} />,
+        },
+      ]
+    : [];
 
   return (
     <>
@@ -442,7 +445,16 @@ const DesktopNavigation = () => {
 
                         const handleClick = () => {
                           if (isLogout) {
-                            logout();
+                            try {
+                              logout();
+                              toast.success("Logged out successfully");
+                              setTimeout(() => {
+                                router.push(ROUTES.SIGIN);
+                              }, 1000);
+                            } catch (error) {
+                              console.error("Logout error:", error);
+                              toast.error("Failed to logout");
+                            }
                           }
                           setUserDropdown(false);
                         };
@@ -452,7 +464,7 @@ const DesktopNavigation = () => {
                             {isLogout ? (
                               <button
                                 onClick={handleClick}
-                                className="w-full flex items-center gap-2.5 py-2 px-4 text-sm font-medium duration-300 ease-linear bg-white text-[#5F6C72] hover:bg-red-50 hover:text-red-500"
+                                className="w-full flex items-center gap-2.5 py-2 px-4 text-sm font-medium duration-300 ease-linear bg-white text-[#5F6C72] hover:bg-[#f2f4f5] cursor-pointer"
                               >
                                 {link.icon}
                                 <span>{link.name}</span>

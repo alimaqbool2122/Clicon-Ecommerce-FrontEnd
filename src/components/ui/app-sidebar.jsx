@@ -14,9 +14,11 @@ import {
   Wishlist,
 } from "../svg/Icons";
 import ROUTES from "@/constants/routes";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "motion/react";
+import { useAuth } from "@/contexts/authProvider";
+import Link from "next/link";
+import { toast } from "react-toastify";
 
 const sidebarLinks = [
   {
@@ -60,11 +62,6 @@ const sidebarLinks = [
     icon: <ClockClokWise width={20} height={20} />,
   },
   {
-    name: "Profile",
-    href: ROUTES.PROFILE,
-    icon: <UserIcon width={20} height={20} />,
-  },
-  {
     name: "Setting",
     href: ROUTES.PROFILE_SETTINGS,
     icon: <Setting width={20} height={20} />,
@@ -78,18 +75,42 @@ const sidebarLinks = [
 
 const AppSidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+  const { user } = useAuth();
+  const userId = user?._id || user?.id;
+
+  // Add Profile link with userId
+  const links = [
+    ...sidebarLinks.slice(0, 8),
+    {
+      name: "Profile",
+      href: ROUTES.PROFILE(userId),
+      icon: <UserIcon width={20} height={20} />,
+    },
+    ...sidebarLinks.slice(8),
+  ];
+
+  const handleLogout = () => {
+    logout();
+    toast.success("User logged out successfully");
+    setTimeout(() => {
+      router.push(ROUTES.HOME);
+    }, 2000);
+  };
 
   return (
     <>
       <div className="hidden 2xl:block">
         <ul className="w-66 py-4 bg-white border border-[#E4E7E9] rounded-sm shadow-[0px_8px_40px_0px_rgba(0,0,0,0.08)]">
-          {sidebarLinks.map((link) => {
+          {links.map((link) => {
             const isActive = pathname === link.href;
 
             return (
               <li key={link.name}>
                 <Link
                   href={link.href}
+                  onClick={link.name === "Log-out" ? handleLogout : undefined}
                   className={`relative text-sm py-2.5 px-6 flex items-center gap-3 duration-300 ease-linear ${
                     isActive ? "text-white font-semibold" : "text-[#5F6C72]"
                   }`}

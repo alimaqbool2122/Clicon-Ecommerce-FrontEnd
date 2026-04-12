@@ -5,8 +5,8 @@ import Cookies from "js-cookie";
 
 const AuthContext = createContext(null);
 
-const TOKEN_OPTIONS = { expires: 7, sameSite: "strict" };
-const USER_OPTIONS = { expires: 7, sameSite: "strict" };
+const TOKEN_OPTIONS = { expires: 7, sameSite: "strict", path: "/" };
+const USER_OPTIONS = { expires: 7, sameSite: "strict", path: "/" };
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
       try {
         setUser(JSON.parse(storedUser));
       } catch {
-        Cookies.remove("USER");
+        Cookies.remove("USER", { path: "/" });
         setUser(null);
       }
     }
@@ -60,8 +60,8 @@ export function AuthProvider({ children }) {
 
   /** Clear every auth cookie and reset React state */
   const logout = () => {
-    Cookies.remove("TOKEN");
-    Cookies.remove("USER");
+    Cookies.remove("TOKEN", { path: "/" });
+    Cookies.remove("USER", { path: "/" });
     setUser(null);
   };
 

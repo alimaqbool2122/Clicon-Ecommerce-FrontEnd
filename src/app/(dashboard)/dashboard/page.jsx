@@ -12,6 +12,7 @@ import { homepageContent } from "@/data/home/home";
 import { Navigation, Pagination } from "swiper/modules";
 import ReusableSwiper from "@/components/common/ReusableSwiper";
 import { ArrowLeft, ArrowRight, Star } from "@/components/svg/Icons";
+import { useAuth } from "@/contexts/authProvider";
 
 const page = () => {
   const [revealedCard, setRevealedCard] = useState(null);
@@ -22,6 +23,8 @@ const page = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const products = homepageContent.featuredProducts.productsData;
   const swiperRef = useRef(null);
+  const { user } = useAuth();
+  const userId = user?._id;
 
   const getMaskedNumber = (cardNumber, cardId) => {
     if (revealedCard === cardId) return cardNumber;
@@ -165,7 +168,7 @@ const page = () => {
       <div className="space-y-6">
         {/* personal info */}
         <div className="space-y-3">
-          <h1 className="text-xl font-semibold">Hello, Kevin</h1>
+          <h1 className="text-xl font-semibold">Hello, {user?.name}</h1>
           <p className="text-sm text-[#475156] max-w-106">
             From your account dashboard. you can easily check & view your{" "}
             <Link
@@ -190,7 +193,7 @@ const page = () => {
             </Link>{" "}
             and{" "}
             <Link
-              href={ROUTES.DASHBOARD}
+              href={ROUTES.PROFILE(userId)}
               className="text-[#2DA5F3] font-medium"
             >
               Account Details.
@@ -216,35 +219,33 @@ const page = () => {
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-[#191C1F] text-base font-semibold">
-                    Kevin Gilbert
+                    {user?.name}
                   </h3>
                   <p className="text-sm text-[#5F6C72]">
-                    Dhaka - 1207, Bangladesh
+                    {user?.address || "Not Added"}
                   </p>
                 </div>
               </div>
               <ul className="mb-5.5 space-y-1">
                 <li>
                   <span className="text-sm text-[#191C1F]">Email:</span>{" "}
-                  <span className="text-sm text-[#5F6C72]">
-                    kevin.gilbert@gmail.com
-                  </span>
+                  <span className="text-sm text-[#5F6C72]">{user?.email}</span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Sec Email:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    kevin12345@gmail.com
+                    {user?.secondary_email || "Not Added"}
                   </span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Phone:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    +1-202-555-0118
+                    {user?.phone || "Not Added"}
                   </span>
                 </li>
               </ul>
               <Link
-                href={ROUTES.PROFILE_SETTINGS}
+                href={ROUTES.PROFILE(userId)}
                 className="inline-flex items-center gap-2 border-2 border-[#D5EDFD] bg-transparent text-[#2DA5F3] h-12 px-6 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear  hover:bg-[#2DA5F3] hover:text-white hover:border-[#2DA5F3]"
               >
                 Edit Account
@@ -260,23 +261,22 @@ const page = () => {
               <ul className="mb-5.5 space-y-1">
                 <li className="flex  flex-col space-y-2">
                   <span className="text-sm text-[#191C1F] font-medium">
-                    Kevin Gilbert
+                    {user?.name}
                   </span>
                   <span className="text-sm text-[#5F6C72]">
-                    East Tejturi Bazar, Word No. 04, Road No. 13/x, House no.
-                    1320/C, Flat No. 5D, Dhaka - 1200, Bangladesh
+                    {user?.address || "Not Added"}
                   </span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Phone Number:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    +1-202-555-0118
+                    {user?.phone || "Not Added"}
                   </span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Email:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    kevin.gilbert@gmail.com
+                    {user?.email || "Not Added"}
                   </span>
                 </li>
               </ul>

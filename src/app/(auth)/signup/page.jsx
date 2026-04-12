@@ -34,6 +34,9 @@ const page = () => {
 
       if (response.success) {
         toast.success(response.message);
+        setTimeout(() => {
+          router.push(ROUTES.SIGIN);
+        }, 2000);
       }
     } catch (error) {
       console.log("Error Response:", error);

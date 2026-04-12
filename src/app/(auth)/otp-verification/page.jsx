@@ -5,13 +5,34 @@ import ROUTES from "@/constants/routes";
 import { useForm, Controller } from "react-hook-form";
 import { assets } from "@/constants/assets";
 import { ArrowRight } from "@/components/svg/Icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useOtpVerificationMutation,
+  useResendOtpMutation,
+} from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
 
 const page = () => {
   const router = useRouter();
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [error, setError] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const inputRefs = useRef([]);
+  const [otpVerification, { isLoading }] = useOtpVerificationMutation();
+  const [resendOtp] = useResendOtpMutation();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+
+  // get email.
+  useEffect(() => {
+    const urlEmail = searchParams.get("email");
+    if (urlEmail) {
+      setEmail(urlEmail);
+    } else {
+      const storedEmail = localStorage.getItem("resetEmail");
+      if (storedEmail) setEmail(storedEmail);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (timeLeft === 0) return;
@@ -20,11 +41,6 @@ const page = () => {
     }, 1000);
     return () => clearInterval(intervalId);
   }, [timeLeft]);
-
-  const handleResend = () => {
-    // Trigger actual resend logic here if needed
-    setTimeLeft(60);
-  };
 
   const {
     register,
@@ -69,14 +85,47 @@ const page = () => {
     }
   };
 
-  const onSubmit = (data) => {
-    const finalOtp = otp.join("");
-    if (finalOtp.length < 6) {
-      // Return early or show error
+  // submit otp
+  const onSubmit = async () => {
+    if (otp.some((digit) => digit === "")) {
+      setError(true);
       return;
     }
-    console.log("Form Data:", { ...data, otp: finalOtp });
-    router.push(ROUTES.RESET_PASSWORD);
+    if (!email) {
+      toast.error("Email is missing. Please try again.");
+      return;
+    }
+    const data = {
+      email,
+      otp: otp.join(""),
+    };
+    try {
+      const response = await otpVerification(data).unwrap();
+      toast.success(response?.message);
+      setTimeout(() => {
+        router.push(ROUTES.RESET_PASSWORD);
+      }, 2000);
+    } catch (err) {
+      toast.error(err?.data?.message || "OTP submission failed");
+    }
+  };
+
+  // resend otp
+  const handleResend = async () => {
+    if (!email) {
+      toast.error("Email is missing. Please try again.");
+      return;
+    }
+    const data = {
+      email,
+    };
+    try {
+      const response = await resendOtp(data).unwrap();
+      toast.success(response?.message);
+      setTimeLeft(60);
+    } catch (err) {
+      toast.error(err?.data?.message || "OTP resend failed");
+    }
   };
   return (
     <>
@@ -102,9 +151,7 @@ const page = () => {
             </h1>
             <p className="text-sm text-[#5F6C72]">
               Enter your OTP which send to{" "}
-              <span className="text-[#2DA5F3] font-medium">
-                cas1200@gmil.com
-              </span>
+              <span className="text-[#2DA5F3] font-medium">{email}</span>
             </p>
           </div>
           {/* Login Form */}

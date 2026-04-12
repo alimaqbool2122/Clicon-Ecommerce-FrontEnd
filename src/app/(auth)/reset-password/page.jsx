@@ -1,28 +1,65 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ROUTES from "@/constants/routes";
 import { useForm, Controller } from "react-hook-form";
 import { assets } from "@/constants/assets";
 import { ArrowRight } from "@/components/svg/Icons";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useResetPasswordMutation } from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
 
 const page = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [email, setEmail] = useState("");
+  // get email.
+  useEffect(() => {
+    const urlEmail = searchParams.get("email");
+    if (urlEmail) {
+      setEmail(urlEmail);
+    } else {
+      const storedEmail = localStorage.getItem("resetEmail");
+      if (storedEmail) setEmail(storedEmail);
+    }
+  }, [searchParams]);
   const {
     register,
     handleSubmit,
     watch,
-    control,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    router.push(ROUTES.SIGIN);
+  // handle submit
+  const onSubmit = async (data) => {
+    const token = localStorage.getItem("otpToken");
+    if (!email) {
+      toast.error("Token or email not found");
+      return;
+    }
+    const payload = {
+      email,
+      token,
+      newPassword: data.newPassword,
+      confirmPassword: data.confirmPassword,
+    };
+    try {
+      const response = await resetPassword(payload).unwrap();
+      console.log("Success Response:", response);
+      toast.success(response?.message || "Password reset successfully");
+      setTimeout(() => {
+        localStorage.removeItem("otpToken");
+        localStorage.removeItem("forgetEmail");
+        router.push(ROUTES.SIGIN);
+      }, 2000);
+    } catch (error) {
+      console.error("Error Response:", error);
+      toast.error(error?.data?.message || "Failed to reset password");
+    }
   };
   return (
     <>
@@ -69,7 +106,7 @@ const page = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   className="w-full outline-0 text-[#191C1F] placeholder-text"
-                  {...register("password", {
+                  {...register("newPassword", {
                     required: "Password is required",
                     minLength: {
                       value: 8,
@@ -97,9 +134,9 @@ const page = () => {
                   />
                 </button>
               </div>
-              {errors.password && (
+              {errors.newPassword && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
+                  {errors.newPassword.message}
                 </p>
               )}
             </div>
@@ -115,7 +152,7 @@ const page = () => {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   className="w-full outline-0 text-[#191C1F] placeholder-text"
-                  {...register("confirm_password", {
+                  {...register("confirmPassword", {
                     required: "Confirm Password is required",
                     minLength: {
                       value: 8,
@@ -128,7 +165,8 @@ const page = () => {
                         "Must contain uppercase, lowercase, number & special character",
                     },
                     validate: (value) =>
-                      value === watch("password") || "Passwords do not match",
+                      value === watch("newPassword") ||
+                      "Passwords do not match",
                   })}
                 />
                 <button
@@ -146,9 +184,9 @@ const page = () => {
                   />
                 </button>
               </div>
-              {errors.confirm_password && (
+              {errors.confirmPassword && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.confirm_password.message}
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>

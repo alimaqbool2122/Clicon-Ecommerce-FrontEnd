@@ -5,11 +5,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "../svg/Icons";
 import ROUTES from "@/constants/routes";
+import { useLoginMutation } from "@/redux/services/auth/authApiSlice";
+import { toast } from "react-toastify";
+import { useAuth } from "@/contexts/authProvider";
+import { useRouter } from "next/navigation";
 
 const UserForm = () => {
   const [userActive, setUserActive] = useState(false);
   const userBtnRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginRegistration, { isLoading }] = useLoginMutation();
+  const { login } = useAuth();
+  const router = useRouter();
   useEffect(() => {
     function handleClickOutside(e) {
       if (userBtnRef.current && !userBtnRef.current.contains(e.target)) {
@@ -28,8 +35,26 @@ const UserForm = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  // user Login
+  const onSubmit = async (data) => {
+    try {
+      const response = await loginRegistration(data).unwrap();
+      console.log("Login Response:", response);
+
+      if (response.success) {
+        toast.success(response.message);
+        // pass token and user data to login function
+        login(response);
+        setTimeout(() => {
+          router.push(ROUTES.HOME);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      const message =
+        error?.data?.message || error?.message || "Something went wrong!";
+      toast.error(message);
+    }
   };
   return (
     <>
@@ -68,7 +93,7 @@ const UserForm = () => {
             <div className="col-span-12">
               <label
                 htmlFor="email"
-                className="text-[14px] font-normal leading-5 text-[#191C1F] text-start mt-4.5"
+                className="text-sm font-normal leading-5 text-[#191C1F] text-start mt-4.5"
               >
                 Email Address
               </label>
@@ -147,9 +172,10 @@ const UserForm = () => {
             {/* submit button */}
             <button
               type="submit"
-              className="col-span-12 flex items-center justify-center gap-2 border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] mb-4.5 duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer"
+              disabled={isLoading}
+              className="col-span-12 flex items-center justify-center gap-2 border-2! border-[#FA8232]! bg-[#FA8232]! text-white px-6 h-12 text-sm! leading-px uppercase font-bold! rounded-[3px] mb-4.5 duration-500 ease-linear hover:bg-transparent! hover:text-[#191C1F] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              login
+              {isLoading ? "Logging in..." : "Login"}
               <ArrowRight />
             </button>
           </form>
