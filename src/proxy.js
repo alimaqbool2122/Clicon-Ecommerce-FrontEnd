@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import ROUTES from "./constants/routes";
 
-export function middleware(req) {
+export function proxy(req) {
   const { pathname } = req.nextUrl;
 
   // TOKEN cookie
