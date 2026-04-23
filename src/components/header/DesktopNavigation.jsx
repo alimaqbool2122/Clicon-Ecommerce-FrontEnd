@@ -30,6 +30,7 @@ import { useSelector } from "react-redux";
 import UserForm from "./UserForm";
 import { useAuth } from "@/contexts/authProvider";
 import { toast } from "react-toastify";
+import { useGetProfileQuery } from "@/redux/services/auth/authApiSlice";
 
 const DesktopNavigation = () => {
   const [active, setActive] = useState(false);
@@ -44,6 +45,9 @@ const DesktopNavigation = () => {
   const currencyRef = useRef(null);
   const router = useRouter();
   const { user, loading, logout } = useAuth();
+  const userId = user?._id;
+  const { data: profile } = useGetProfileQuery(userId);
+  const userData = profile?.data;
   const wishlistCount = useSelector((state) => state.wishlist.items.length);
   const compareCount = useSelector((state) => state.compare.items.length);
   useEffect(() => {
@@ -417,15 +421,15 @@ const DesktopNavigation = () => {
               ) : (
                 <div ref={userDropdownRef} className="relative">
                   <button
-                    className="cursor-pointer"
+                    className="relative w-8 h-8 rounded-full overflow-hidden cursor-pointer"
                     onClick={() => setUserDropdown(!userDropdown)}
                   >
                     <Image
-                      src={user?.image || assets.member_2}
+                      src={userData?.profile_image || assets.Profile_img}
                       alt="user-img"
-                      width={32}
-                      height={32}
-                      className="rounded-full object-cover"
+                      fill
+                      priority
+                      className="object-cover"
                     />
                   </button>
                   <div

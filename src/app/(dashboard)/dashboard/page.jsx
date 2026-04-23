@@ -13,6 +13,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import ReusableSwiper from "@/components/common/ReusableSwiper";
 import { ArrowLeft, ArrowRight, Star } from "@/components/svg/Icons";
 import { useAuth } from "@/contexts/authProvider";
+import { useGetProfileQuery } from "@/redux/services/auth/authApiSlice";
 
 const page = () => {
   const [revealedCard, setRevealedCard] = useState(null);
@@ -22,9 +23,11 @@ const page = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const products = homepageContent.featuredProducts.productsData;
-  const swiperRef = useRef(null);
   const { user } = useAuth();
   const userId = user?._id;
+  const { data: profile } = useGetProfileQuery(userId);
+  const userData = profile?.data;
+  const swiperRef = useRef(null);
 
   const getMaskedNumber = (cardNumber, cardId) => {
     if (revealedCard === cardId) return cardNumber;
@@ -168,7 +171,7 @@ const page = () => {
       <div className="space-y-6">
         {/* personal info */}
         <div className="space-y-3">
-          <h1 className="text-xl font-semibold">Hello, {user?.name}</h1>
+          <h1 className="text-xl font-semibold">Hello, {userData?.name}</h1>
           <p className="text-sm text-[#475156] max-w-106">
             From your account dashboard. you can easily check & view your{" "}
             <Link
@@ -209,38 +212,38 @@ const page = () => {
             </div>
             <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5">
               <div className="flex items-center gap-4 mb-5">
-                <div className="relative w-12 h-12">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
                   <Image
-                    src={assets.member_2}
+                    src={userData?.profile_image || assets.Profile_img}
                     alt="user-img"
                     fill
-                    className="object-contain"
+                    className="object-cover"
                   />
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-[#191C1F] text-base font-semibold">
-                    {user?.name}
+                    {userData?.name}
                   </h3>
                   <p className="text-sm text-[#5F6C72]">
-                    {user?.address || "Not Added"}
+                    {userData?.address || "Not Added"}
                   </p>
                 </div>
               </div>
               <ul className="mb-5.5 space-y-1">
                 <li>
                   <span className="text-sm text-[#191C1F]">Email:</span>{" "}
-                  <span className="text-sm text-[#5F6C72]">{user?.email}</span>
+                  <span className="text-sm text-[#5F6C72]">{userData?.email}</span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Sec Email:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    {user?.secondary_email || "Not Added"}
+                    {userData?.secondary_email || "Not Added"}
                   </span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Phone:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    {user?.phone || "Not Added"}
+                    {userData?.phone_number || "Not Added"}
                   </span>
                 </li>
               </ul>
@@ -260,23 +263,23 @@ const page = () => {
             <div className="border-t border-[#E4E7E9] p-4 md:p-6 md:pt-5.5">
               <ul className="mb-5.5 space-y-1">
                 <li className="flex  flex-col space-y-2">
-                  <span className="text-sm text-[#191C1F] font-medium">
-                    {user?.name}
+                  <span className="text-sm text-[#191C1F] font-semibold">
+                    {userData?.name}
                   </span>
                   <span className="text-sm text-[#5F6C72]">
-                    {user?.address || "Not Added"}
+                    {userData?.address || "Not Added"}
                   </span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Phone Number:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    {user?.phone || "Not Added"}
+                    {userData?.phone_number || "Not Added"}
                   </span>
                 </li>
                 <li>
                   <span className="text-sm text-[#191C1F]">Email:</span>{" "}
                   <span className="text-sm text-[#5F6C72]">
-                    {user?.email || "Not Added"}
+                    {userData?.email || "Not Added"}
                   </span>
                 </li>
               </ul>
