@@ -143,7 +143,7 @@ const ComputerAccessries = () => {
               <div className="mb-7.5 xl:flex items-center justify-between">
                 <div className="mb-3.5 text-center lg:mb-0">
                   <h2 className="text-[24px] text-[#212529] leading-8 font-semibold">
-                    Featured Products
+                    Computer Accessories
                   </h2>
                 </div>
 

@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 const ReusableSwiper = ({
-  slides,
+  slides = [],
   renderSlide,
   swiperProps = {},
   className = "",

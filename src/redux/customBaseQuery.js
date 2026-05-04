@@ -41,12 +41,19 @@ export const customBaseQuery = async (args, api, extraOptions) => {
     const { status } = result.error;
 
     if (status === 401) {
-      return {
-        error: {
-          status: 401,
-          data: { message: "Your session has expired. Please login again." },
-        },
-      };
+      const isLogin =
+        typeof args === "string"
+          ? args.includes("/login")
+          : args?.url?.includes("/login");
+
+      if (!isLogin) {
+        return {
+          error: {
+            status: 401,
+            data: { message: "Your session has expired. Please login again." },
+          },
+        };
+      }
     } else if (status === 500) {
       console.log("Server Error (500)");
     } else {

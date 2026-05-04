@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import { homepageContent } from "../../data/home/home";
 import ReusableSwiper from "../common/ReusableSwiper";
 import HeroSlide from "./HeroSlide";
 import PromoBanners from "./PromoBanners";
+import { useGetAllBannersQuery } from "@/redux/services/bannerSlice";
 
 const Banner = () => {
-  const slidesData = homepageContent.heroBanner.bannerSlides;
+  const { data: banners } = useGetAllBannersQuery();
   return (
     <>
       <div className="py-6">
@@ -15,7 +15,7 @@ const Banner = () => {
             {/* Left Column (Main Slider) */}
             <div className="col-span-12 2xl:col-span-8">
               <ReusableSwiper
-                slides={slidesData}
+                slides={banners?.data}
                 swiperProps={{
                   slidesPerView: 1,
                   effect: "fade",

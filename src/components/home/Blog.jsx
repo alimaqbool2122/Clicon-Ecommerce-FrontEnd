@@ -24,10 +24,11 @@ const Blog = () => {
             {blogContent.map((blog) => (
               <div
                 key={blog.id}
-                className="col-span-12 md:col-span-6 group xl:col-span-4 bg-white border border-[#E4E7E9] rounded-sm py-7.5 px-5 lg:p-8"
+                className="col-span-12 md:col-span-6 group xl:col-span-4 grid grid-rows-subgrid row-span-5 gap-0 bg-white border border-[#E4E7E9] rounded-sm py-7.5 px-5 lg:p-8"
               >
+                {/* Blog Image */}
                 <div
-                  className="relative mb-6 overflow-hidden rounded-sm aspect-360/248"
+                  className="relative mb-5.5 overflow-hidden rounded-sm aspect-360/248"
                   onClick={() => router.push(ROUTES.BLOG_DETAILS(blog.id))}
                 >
                   <Image
@@ -38,52 +39,49 @@ const Blog = () => {
                   />
                 </div>
 
-                <div className="">
-                  <div className="flex items-center flex-wrap gap-4">
-                    <div className="flex items-center gap-1.5">
-                      <UserCircle />
-                      <span className="text-[14px] leading-5 text-[#475156] font-medium">
-                        {blog.usertext}
-                      </span>
-                    </div>
-
-                    <Link href="#" className="flex items-center gap-1.5">
-                      <Calender />
-                      <span className="text-[14px] leading-5 text-[#475156] font-medium">
-                        {blog.calendertext}
-                      </span>
-                    </Link>
-
-                    <div className="flex items-center gap-1.5">
-                      <Chat />
-                      <span className="text-[14px] leading-5 text-[#475156] font-medium">
-                        {blog.smstext}
-                      </span>
-                    </div>
+                {/* Blog Meta */}
+                <div className="flex items-center flex-wrap gap-x-4 -mx-5 lg:-mx-8 pl-5 lg:pl-8">
+                  <div className="flex items-center gap-1.5">
+                    <UserCircle />
+                    <span className="text-[14px] leading-5 text-[#475156] font-medium">
+                      {blog.usertext}
+                    </span>
                   </div>
 
-                  <div>
-                    <Link
-                      href={ROUTES.BLOG_DETAILS(blog.id)}
-                      className="text-[18px] leading-6 font-medium mb-3 mt-2 line-clamp-2 duration-400 ease-linear hover:text-[#FA8232]"
-                    >
-                      {blog.title}
-                    </Link>
+                  <Link href="#" className="flex items-center gap-1.5">
+                    <Calender />
+                    <span className="text-[14px] leading-5 text-[#475156] font-medium">
+                      {blog.calendertext}
+                    </span>
+                  </Link>
 
-                    <p className="text-[16px] leading-6 font-normal text-[#77878F] line-clamp-3">
-                      {blog.description}
-                    </p>
+                  <div className="flex items-center gap-1.5">
+                    <Chat />
+                    <span className="text-[14px] leading-5 text-[#475156] font-medium">
+                      {blog.smstext}
+                    </span>
                   </div>
-
-                  <div className="Blog-btn mt-6">
-                    <Link
-                      href={ROUTES.BLOG_DETAILS(blog.id)}
-                      className="inline-flex items-center gap-2 border-2 border-[#FA8232] bg-transparent text-[#FA8232] py-3.5 px-6 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear  hover:bg-[#FA8232] hover:text-white"
-                    >
-                      {blog.btnText}
-                      <ArrowRight />
-                    </Link>
-                  </div>
+                </div>
+                {/* blog title */}
+                <Link
+                  href={ROUTES.BLOG_DETAILS(blog.id)}
+                  className="text-[18px] leading-6 font-medium mb-2.5 mt-2 line-clamp-2 duration-400 ease-linear hover:text-[#FA8232]"
+                >
+                  {blog.title}
+                </Link>
+                {/* blog description */}
+                <p className="text-[16px] leading-6 font-normal text-[#77878F] line-clamp-3">
+                  {blog.description}
+                </p>
+                {/* Blog Button */}
+                <div className="mt-5.5">
+                  <Link
+                    href={ROUTES.BLOG_DETAILS(blog.id)}
+                    className="inline-flex items-center gap-2 border-2 border-[#FA8232] bg-transparent text-[#FA8232] py-3.5 px-6 text-[14px] leading-px uppercase font-bold rounded-[3px] duration-500 ease-linear  hover:bg-[#FA8232] hover:text-white"
+                  >
+                    {blog.btnText}
+                    <ArrowRight />
+                  </Link>
                 </div>
               </div>
             ))}
